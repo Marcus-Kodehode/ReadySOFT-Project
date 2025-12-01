@@ -74,6 +74,8 @@ Lag migrasjoner for tenants, plans, subscriptions tabeller som er grunnlaget for
 
 
 
+
+
 **Testing:**
 ```bash
 php artisan migrate
@@ -138,7 +140,13 @@ Lag migration for å legge til tenant_id og role kolonner i users tabell.
 - `database/migrations/YYYY_MM_DD_000007_add_tenant_fields_to_users_table.php`
 
 **Akseptansekriterier:**
-- [ ] Legger til: tenant_id (nullable, FK), role (enum: 'admin', 'tenant_admin', default 'tenant_admin')
+- [x] Legger til: tenant_id (nullable, FK), role (enum: 'admin', 'tenant_admin', default 'tenant_admin')
+
+
+
+
+
+
 - [ ] Index på tenant_id
 - [ ] Foreign key til tenants.id
 - [ ] `php artisan migrate` kjører uten feil
