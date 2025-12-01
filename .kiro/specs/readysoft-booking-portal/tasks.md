@@ -76,6 +76,12 @@ Lag migrasjoner for tenants, plans, subscriptions tabeller som er grunnlaget for
 
 
 
+
+
+
+
+
+
 **Testing:**
 ```bash
 php artisan migrate
@@ -159,7 +165,7 @@ Lag migration for å legge til tenant_id og role kolonner i users tabell.
 
 
 
-- [ ] `php artisan migrate` kjører uten feil
+- [x] `php artisan migrate` kjører uten feil
 
 ---
 
@@ -181,7 +187,12 @@ Lag Eloquent modeller for alle tabeller med korrekte relasjoner og fillable fiel
 - `app/Models/Booking.php`
 
 **Akseptansekriterier:**
-- [ ] Tenant model: hasMany(subscriptions, resources, users)
+- [x] Tenant model: hasMany(subscriptions, resources, users)
+
+
+
+
+
 - [ ] Plan model: hasMany(subscriptions)
 - [ ] Subscription model: belongsTo(tenant, plan)
 - [ ] Resource model: belongsTo(tenant), hasMany(availabilities, bookings)
