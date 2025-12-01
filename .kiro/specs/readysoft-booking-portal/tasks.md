@@ -199,7 +199,11 @@ Lag Eloquent modeller for alle tabeller med korrekte relasjoner og fillable fiel
 
 
 
-- [ ] Subscription model: belongsTo(tenant, plan)
+- [x] Subscription model: belongsTo(tenant, plan)
+
+
+
+
 
 
 
