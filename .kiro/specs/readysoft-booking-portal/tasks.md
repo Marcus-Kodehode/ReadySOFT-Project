@@ -63,6 +63,10 @@ Lag migrasjoner for tenants, plans, subscriptions tabeller som er grunnlaget for
 
 
 
+
+
+
+
 - [x] `php artisan migrate` kjører uten feil
 
 
@@ -116,8 +120,8 @@ Lag migrasjoner for resources, resource_availabilities, bookings tabeller.
 
 
 
-- [ ] Foreign keys med cascade on delete
-- [ ] `php artisan migrate` kjører uten feil
+- [x] Foreign keys med cascade on delete
+- [x] `php artisan migrate` kjører uten feil
 
 ---
 
