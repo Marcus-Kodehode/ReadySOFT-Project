@@ -35,7 +35,12 @@ Lag migrasjoner for tenants, plans, subscriptions tabeller som er grunnlaget for
 - `database/migrations/YYYY_MM_DD_000003_create_subscriptions_table.php`
 
 **Akseptansekriterier:**
-- [ ] Tenants tabell har: id, name, slug (unique), business_type, description, active, timestamps
+- [x] Tenants tabell har: id, name, slug (unique), business_type, description, active, timestamps
+
+
+
+
+
 - [ ] Plans tabell har: id, name, description, features (json), timestamps
 - [ ] Subscriptions tabell har: id, tenant_id (FK), plan_id (FK), active, active_from, active_to, timestamps
 - [ ] Indexes på: tenants.slug, tenants.active, subscriptions.tenant_id
