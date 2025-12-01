@@ -108,8 +108,58 @@ php artisan db:table bookings  # ✅ Struktur og FK korrekt
 
 ---
 
+## Task 1.3: Utvid users tabell med tenant_id og role ✅
+
+**Status:** Fullført  
+**Tid brukt:** ~10 min (verifisering)
+
+### Hva ble gjort
+Utvidet den eksisterende `users` tabell med multi-tenant funksjonalitet gjennom en ny migrasjon:
+
+#### Nye kolonner
+- **`tenant_id`** (nullable, foreign key)
+  - Kobler brukere til deres tenant
+  - Nullable fordi admin-brukere ikke tilhører en tenant
+  - Foreign key til `tenants.id` med cascade delete
+  
+- **`role`** (enum: 'admin', 'tenant_admin')
+  - Default: `tenant_admin` for vanlige kunder
+  - `admin` for system-administratorer
+  - Brukes av middleware for tilgangskontroll
+
+### Tekniske detaljer
+```sql
+-- Ny kolonne
+users.tenant_id → tenants.id (nullable, cascade)
+users.role ENUM('admin', 'tenant_admin') DEFAULT 'tenant_admin'
+
+-- Index for ytelse
+INDEX idx_tenant_id (tenant_id)
+```
+
+### Cascade-effekt
+```
+Tenant slettet
+  └─> Users slettet (cascade)
+      └─> Alle brukere tilknyttet tenant fjernes
+```
+
+### Verifisering
+```bash
+php artisan migrate:fresh  # ✅ Alle migrasjoner kjørt uten feil
+php artisan migrate:status  # ✅ Migration 1.3 kjørt i batch 1
+```
+
+### Betydning
+Denne migrasjonen gjør det mulig å:
+- Skille mellom admin og tenant_admin roller
+- Isolere brukere per tenant
+- Implementere rollebasert tilgangskontroll
+- Sikre at admin-brukere kan administrere alle tenants
+
+---
+
 ### Neste steg
-- Task 1.3: Utvide users tabell med tenant_id og role
 - Task 1.4: Eloquent modeller med relasjoner
 
 ---
