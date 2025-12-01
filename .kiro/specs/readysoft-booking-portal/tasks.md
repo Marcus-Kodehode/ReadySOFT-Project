@@ -147,7 +147,12 @@ Lag migration for å legge til tenant_id og role kolonner i users tabell.
 
 
 
-- [ ] Index på tenant_id
+- [x] Index på tenant_id
+
+
+
+
+
 - [ ] Foreign key til tenants.id
 - [ ] `php artisan migrate` kjører uten feil
 
