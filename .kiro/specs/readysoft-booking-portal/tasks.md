@@ -200,6 +200,10 @@ Lag Eloquent modeller for alle tabeller med korrekte relasjoner og fillable fiel
 
 
 - [ ] Subscription model: belongsTo(tenant, plan)
+
+
+
+
 - [ ] Resource model: belongsTo(tenant), hasMany(availabilities, bookings)
 - [ ] ResourceAvailability model: belongsTo(resource)
 - [ ] Booking model: belongsTo(resource)
