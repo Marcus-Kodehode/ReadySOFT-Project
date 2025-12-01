@@ -52,7 +52,11 @@ Lag migrasjoner for tenants, plans, subscriptions tabeller som er grunnlaget for
 
 
 
-- [ ] Indexes på: tenants.slug, tenants.active, subscriptions.tenant_id
+- [x] Indexes på: tenants.slug, tenants.active, subscriptions.tenant_id
+
+
+
+
 - [ ] Foreign keys med cascade on delete
 - [ ] `php artisan migrate` kjører uten feil
 
