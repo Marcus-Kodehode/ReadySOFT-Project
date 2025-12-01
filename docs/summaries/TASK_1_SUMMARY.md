@@ -159,8 +159,114 @@ Denne migrasjonen gjør det mulig å:
 
 ---
 
+---
+
+## Task 1.4: Eloquent modeller med relasjoner ✅
+
+**Status:** Fullført  
+**Tid brukt:** ~45 min
+
+### Hva ble gjort
+Opprettet alle Eloquent modeller med korrekte relasjoner, fillable fields, casts, og dokumentasjon. Hver modell har fil-header og footer som forklarer dens rolle i systemet.
+
+#### 1. **Tenant Model** (`app/Models/Tenant.php`)
+- **Fillable:** name, slug, business_type, description, active
+- **Casts:** active → boolean
+- **Relasjoner:**
+  - `hasMany(Subscription)` - En tenant kan ha flere subscriptions
+  - `hasMany(Resource)` - En tenant kan ha flere ressurser
+  - `hasMany(User)` - En tenant kan ha flere brukere
+- **Rolle:** Representerer en kunde/bedrift med egen bookingside (/{slug})
+
+#### 2. **Plan Model** (`app/Models/Plan.php`)
+- **Fillable:** name, description, features
+- **Casts:** features → array (JSON)
+- **Relasjoner:**
+  - `hasMany(Subscription)` - En plan kan ha flere subscriptions
+- **Rolle:** Definerer abonnementsplaner som tenants kan abonnere på
+
+#### 3. **Subscription Model** (`app/Models/Subscription.php`)
+- **Fillable:** tenant_id, plan_id, active, active_from, active_to
+- **Casts:** 
+  - active → boolean
+  - active_from → datetime
+  - active_to → datetime
+- **Relasjoner:**
+  - `belongsTo(Tenant)` - Subscription tilhører en tenant
+  - `belongsTo(Plan)` - Subscription tilhører en plan
+- **Rolle:** Kobler tenants til plans og håndterer aktiv status for tilgangskontroll
+
+#### 4. **Resource Model** (`app/Models/Resource.php`)
+- **Fillable:** tenant_id, name, description, type, capacity, active
+- **Casts:** 
+  - active → boolean
+  - capacity → integer
+- **Relasjoner:**
+  - `belongsTo(Tenant)` - Resource tilhører en tenant
+  - `hasMany(ResourceAvailability)` - En ressurs har flere åpningstider
+  - `hasMany(Booking)` - En ressurs kan ha flere bookinger
+- **Rolle:** Representerer bookbare ressurser (hytter, stoler, rom, etc.)
+
+#### 5. **ResourceAvailability Model** (`app/Models/ResourceAvailability.php`)
+- **Fillable:** resource_id, day_of_week, start_time, end_time
+- **Casts:** day_of_week → integer
+- **Relasjoner:**
+  - `belongsTo(Resource)` - Availability tilhører en ressurs
+- **Rolle:** Definerer åpningstider per ukedag (0=Sunday, 6=Saturday)
+
+#### 6. **Booking Model** (`app/Models/Booking.php`)
+- **Fillable:** resource_id, customer_name, customer_email, customer_phone, booking_date, start_time, end_time, notes, status
+- **Casts:** booking_date → date
+- **Relasjoner:**
+  - `belongsTo(Resource)` - Booking tilhører en ressurs
+- **Rolle:** Representerer bookinger med kunde-info og status (pending/confirmed/cancelled)
+
+#### 7. **User Model** (`app/Models/User.php`)
+- **Fillable:** name, email, password, tenant_id, role
+- **Hidden:** password, remember_token
+- **Casts:** email_verified_at → datetime, password → hashed
+- **Relasjoner:**
+  - `belongsTo(Tenant)` - User tilhører en tenant (nullable for admin)
+- **Rolle:** Representerer brukere med rolle (admin/tenant_admin)
+
+### Relasjonsoversikt
+```
+Tenant (1) ──┬─> (N) Subscriptions ──> (1) Plan
+             ├─> (N) Resources ──┬─> (N) ResourceAvailabilities
+             │                   └─> (N) Bookings
+             └─> (N) Users
+```
+
+### Dokumentasjon
+Alle filer har:
+- ✅ **Header:** `// File: app/Models/ModelName.php`
+- ✅ **PHPDoc:** Beskrivelse av modellens rolle
+- ✅ **Footer:** Norsk kommentar som forklarer modellens funksjon
+
+### Verifisering
+```bash
+php artisan tinker
+>>> App\Models\Tenant::count()  # ✅ Fungerer
+>>> App\Models\Plan::count()    # ✅ Fungerer
+>>> $tenant = App\Models\Tenant::first()
+>>> $tenant->subscriptions      # ✅ Relasjon fungerer
+>>> $tenant->resources          # ✅ Relasjon fungerer
+>>> $tenant->users              # ✅ Relasjon fungerer
+```
+
+### Betydning
+Med disse modellene på plass kan vi nå:
+- Opprette og administrere tenants med subscriptions
+- Håndtere ressurser med åpningstider
+- Lagre og administrere bookinger
+- Implementere tenant-isolasjon gjennom relasjoner
+- Bruke Eloquent for type-safe database-operasjoner
+
+---
+
 ### Neste steg
-- Task 1.4: Eloquent modeller med relasjoner
+- Fase 2: Seed Data og Testing
+- Task 2.1: Database seeder for plans
 
 ---
 
