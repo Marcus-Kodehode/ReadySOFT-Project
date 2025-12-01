@@ -47,7 +47,11 @@ Lag migrasjoner for tenants, plans, subscriptions tabeller som er grunnlaget for
 
 
 
-- [ ] Subscriptions tabell har: id, tenant_id (FK), plan_id (FK), active, active_from, active_to, timestamps
+- [x] Subscriptions tabell har: id, tenant_id (FK), plan_id (FK), active, active_from, active_to, timestamps
+
+
+
+
 - [ ] Indexes på: tenants.slug, tenants.active, subscriptions.tenant_id
 - [ ] Foreign keys med cascade on delete
 - [ ] `php artisan migrate` kjører uten feil
