@@ -98,7 +98,12 @@ Lag migrasjoner for resources, resource_availabilities, bookings tabeller.
 
 
 
-- [ ] Resource_availabilities tabell har: id, resource_id (FK), day_of_week, start_time, end_time, timestamps
+
+- [x] Resource_availabilities tabell har: id, resource_id (FK), day_of_week, start_time, end_time, timestamps
+
+
+
+
 - [ ] Bookings tabell har: id, resource_id (FK), customer_name, customer_email, customer_phone, booking_date, start_time, end_time, notes, status, timestamps
 - [ ] Indexes på: resources.tenant_id, bookings.resource_id, bookings.booking_date
 - [ ] Foreign keys med cascade on delete
