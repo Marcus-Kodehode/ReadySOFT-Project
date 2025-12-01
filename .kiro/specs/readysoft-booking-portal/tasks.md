@@ -242,7 +242,12 @@ Lag Eloquent modeller for alle tabeller med korrekte relasjoner og fillable fiel
 
 
 
-- [ ] Fil-header og footer på alle filer
+
+- [x] Fil-header og footer på alle filer
+
+
+
+
 
 **Testing:**
 ```bash
