@@ -27,6 +27,10 @@ return new class extends Migration
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])
                   ->default('confirmed');
             $table->timestamps();
+
+            // Indexes for performance
+            $table->index('resource_id');
+            $table->index('booking_date');
         });
     }
 

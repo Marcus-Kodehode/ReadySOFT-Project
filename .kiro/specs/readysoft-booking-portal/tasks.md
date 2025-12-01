@@ -110,7 +110,12 @@ Lag migrasjoner for resources, resource_availabilities, bookings tabeller.
 
 
 
-- [ ] Indexes på: resources.tenant_id, bookings.resource_id, bookings.booking_date
+- [x] Indexes på: resources.tenant_id, bookings.resource_id, bookings.booking_date
+
+
+
+
+
 - [ ] Foreign keys med cascade on delete
 - [ ] `php artisan migrate` kjører uten feil
 

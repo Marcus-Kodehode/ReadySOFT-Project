@@ -28,6 +28,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Indexes for performance
+            $table->index('tenant_id');
             $table->index(['tenant_id', 'active']);
         });
     }
