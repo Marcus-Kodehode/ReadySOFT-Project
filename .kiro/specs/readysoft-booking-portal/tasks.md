@@ -231,7 +231,12 @@ Lag Eloquent modeller for alle tabeller med korrekte relasjoner og fillable fiel
 
 
 
-- [ ] Fillable fields definert på alle modeller
+- [x] Fillable fields definert på alle modeller
+
+
+
+
+
 - [ ] Casts definert (active → boolean, features → array, etc.)
 - [ ] Fil-header og footer på alle filer
 
