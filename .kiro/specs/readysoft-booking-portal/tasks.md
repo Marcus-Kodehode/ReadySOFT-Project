@@ -57,7 +57,12 @@ Lag migrasjoner for tenants, plans, subscriptions tabeller som er grunnlaget for
 
 
 
-- [ ] Foreign keys med cascade on delete
+- [x] Foreign keys med cascade on delete
+
+
+
+
+
 - [ ] `php artisan migrate` kjører uten feil
 
 **Testing:**
