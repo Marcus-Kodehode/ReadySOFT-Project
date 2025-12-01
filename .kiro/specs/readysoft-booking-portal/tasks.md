@@ -218,7 +218,13 @@ Lag Eloquent modeller for alle tabeller med korrekte relasjoner og fillable fiel
 
 
 
-- [ ] Booking model: belongsTo(resource)
+
+- [x] Booking model: belongsTo(resource)
+
+
+
+
+
 - [ ] User model: belongsTo(tenant)
 - [ ] Fillable fields definert på alle modeller
 - [ ] Casts definert (active → boolean, features → array, etc.)
