@@ -93,7 +93,11 @@ Lag migrasjoner for resources, resource_availabilities, bookings tabeller.
 - `database/migrations/YYYY_MM_DD_000006_create_bookings_table.php`
 
 **Akseptansekriterier:**
-- [ ] Resources tabell har: id, tenant_id (FK), name, description, type, capacity, active, timestamps
+- [x] Resources tabell har: id, tenant_id (FK), name, description, type, capacity, active, timestamps
+
+
+
+
 - [ ] Resource_availabilities tabell har: id, resource_id (FK), day_of_week, start_time, end_time, timestamps
 - [ ] Bookings tabell har: id, resource_id (FK), customer_name, customer_email, customer_phone, booking_date, start_time, end_time, notes, status, timestamps
 - [ ] Indexes på: resources.tenant_id, bookings.resource_id, bookings.booking_date
