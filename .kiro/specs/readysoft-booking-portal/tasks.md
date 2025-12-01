@@ -237,7 +237,11 @@ Lag Eloquent modeller for alle tabeller med korrekte relasjoner og fillable fiel
 
 
 
-- [ ] Casts definert (active → boolean, features → array, etc.)
+- [x] Casts definert (active → boolean, features → array, etc.)
+
+
+
+
 - [ ] Fil-header og footer på alle filer
 
 **Testing:**
