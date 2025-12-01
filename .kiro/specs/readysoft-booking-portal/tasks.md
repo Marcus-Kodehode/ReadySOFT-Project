@@ -104,7 +104,12 @@ Lag migrasjoner for resources, resource_availabilities, bookings tabeller.
 
 
 
-- [ ] Bookings tabell har: id, resource_id (FK), customer_name, customer_email, customer_phone, booking_date, start_time, end_time, notes, status, timestamps
+- [x] Bookings tabell har: id, resource_id (FK), customer_name, customer_email, customer_phone, booking_date, start_time, end_time, notes, status, timestamps
+
+
+
+
+
 - [ ] Indexes på: resources.tenant_id, bookings.resource_id, bookings.booking_date
 - [ ] Foreign keys med cascade on delete
 - [ ] `php artisan migrate` kjører uten feil
