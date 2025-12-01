@@ -63,7 +63,12 @@ Lag migrasjoner for tenants, plans, subscriptions tabeller som er grunnlaget for
 
 
 
-- [ ] `php artisan migrate` kjører uten feil
+- [x] `php artisan migrate` kjører uten feil
+
+
+
+
+
 
 **Testing:**
 ```bash
