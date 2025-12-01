@@ -214,7 +214,10 @@ Lag Eloquent modeller for alle tabeller med korrekte relasjoner og fillable fiel
 
 
 
-- [ ] ResourceAvailability model: belongsTo(resource)
+- [x] ResourceAvailability model: belongsTo(resource)
+
+
+
 - [ ] Booking model: belongsTo(resource)
 - [ ] User model: belongsTo(tenant)
 - [ ] Fillable fields definert på alle modeller
