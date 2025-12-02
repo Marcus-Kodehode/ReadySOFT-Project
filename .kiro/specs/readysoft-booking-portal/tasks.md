@@ -328,7 +328,10 @@ Lag factories for å kunne generere test-data enkelt.
 
 
 
-- [ ] ResourceFactory genererer: name, description, type, capacity
+- [x] ResourceFactory genererer: name, description, type, capacity
+
+
+
 - [ ] BookingFactory genererer: customer_name, customer_email, customer_phone, booking_date, times
 - [ ] Fil-header og footer
 
