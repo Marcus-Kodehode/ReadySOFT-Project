@@ -615,9 +615,16 @@ Registrer de nye middleware i Laravel sin Kernel.
 - `bootstrap/app.php` (Laravel 12)
 
 **Akseptansekriterier:**
-- [ ] Middleware alias: 'subscription' => CheckActiveSubscription
-- [ ] Middleware alias: 'admin' => CheckAdminRole
-- [ ] Dokumentert i kommentarer
+- [x] Middleware alias: 'subscription' => CheckActiveSubscription
+
+
+
+
+- [x] Middleware alias: 'admin' => CheckAdminRole
+
+- [x] Dokumentert i kommentarer
+
+
 
 ---
 
