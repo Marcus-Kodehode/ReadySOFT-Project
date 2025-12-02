@@ -22,6 +22,19 @@ Route::get('/subscription/inactive', [SubscriptionController::class, 'inactive']
     ->middleware('auth')
     ->name('subscription.inactive');
 
+// Placeholder routes for Quick Actions (to be implemented in later phases)
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Resource routes (Phase 6)
+    Route::get('/dashboard/resources/create', function () {
+        return redirect()->route('dashboard')->with('info', 'Resource management coming soon!');
+    })->name('resources.create');
+    
+    // SMS Settings route (Phase 8)
+    Route::get('/dashboard/sms', function () {
+        return redirect()->route('dashboard')->with('info', 'SMS settings coming soon!');
+    })->name('dashboard.sms');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

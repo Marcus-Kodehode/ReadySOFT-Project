@@ -1,3 +1,4 @@
+{{-- File: resources/views/dashboard.blade.php --}}
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -87,6 +88,50 @@
                 </div>
             </div>
 
+            <!-- Quick Actions Section -->
+            <div class="mt-8 bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="mb-4 text-lg font-semibold text-gray-900">Quick Actions</h3>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <!-- New Resource Button (Primary) -->
+                    <a href="{{ route('resources.create') }}" 
+                       class="inline-flex items-center justify-center px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        New Resource
+                    </a>
+
+                    <!-- SMS Settings Button (Secondary) -->
+                    <a href="{{ route('dashboard.sms') }}" 
+                       class="inline-flex items-center justify-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                        </svg>
+                        SMS Settings
+                    </a>
+
+                    <!-- Share Booking Page Button (Secondary with Copy Icon) -->
+                    <div x-data="{ 
+                        copied: false,
+                        copyToClipboard() {
+                            const url = '{{ url('/' . auth()->user()->tenant->slug) }}';
+                            navigator.clipboard.writeText(url).then(() => {
+                                this.copied = true;
+                                setTimeout(() => this.copied = false, 2000);
+                            });
+                        }
+                    }">
+                        <button @click="copyToClipboard()" 
+                                class="inline-flex items-center justify-center w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium sm:w-auto">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                            <span x-text="copied ? 'Link Copied!' : 'Share Booking Page'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Upcoming Bookings Table -->
             <div class="mt-8 bg-white border border-gray-200 rounded-lg shadow-sm">
                 <div class="px-6 py-4 border-b border-gray-200">
@@ -132,3 +177,4 @@
         </div>
     </div>
 </x-app-layout>
+{{-- Tenant dashboard - viser statistikk og quick actions --}}

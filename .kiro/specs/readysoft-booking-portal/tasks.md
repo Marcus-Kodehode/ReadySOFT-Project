@@ -747,6 +747,10 @@ Lag dashboard view med stat cards og quick actions. Dette er hovedsiden tenant s
 
 
 - [ ] Quick actions seksjon: 3 knapper - "New Resource" (primary), "SMS Settings" (secondary), "Share Booking Page" (secondary med copy icon)
+
+
+
+
 - [ ] "Share Booking Page" bruker Alpine.js x-data med copyToClipboard() metode
 - [ ] Responsivt grid: grid-cols-1 md:grid-cols-2 lg:grid-cols-4 for stat cards
 - [ ] Tailwind classes: bg-white, rounded-lg, shadow-sm for cards, p-6 for padding
