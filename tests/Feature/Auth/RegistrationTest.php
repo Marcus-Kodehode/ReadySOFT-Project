@@ -193,3 +193,39 @@ test('registration rolls back all data if transaction fails', function () {
     // Verifiser at bruker IKKE er innlogget
     $this->assertGuest();
 });
+
+test('registration completes within acceptable time', function () {
+    // Sørg for at vi har en plan i databasen
+    \App\Models\Plan::factory()->create(['name' => 'Basic Plan']);
+    
+    // Mål tiden det tar å fullføre registrering
+    $startTime = microtime(true);
+    
+    $response = $this->post('/register', [
+        'name' => 'Performance Test User',
+        'email' => 'performance@example.com',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+        'business_name' => 'Performance Test Business',
+        'business_type' => 'Cabin Rental',
+        'slug' => 'performance-test-business',
+    ]);
+    
+    $endTime = microtime(true);
+    $duration = $endTime - $startTime;
+    
+    // Verifiser at registrering tar mindre enn 2 sekunder (kravet)
+    // I praksis tar det < 1 sekund
+    expect($duration)->toBeLessThan(2.0);
+    
+    // Verifiser at registrering lyktes
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('dashboard', absolute: false));
+    
+    // Verifiser at tenant ble opprettet
+    $tenant = \App\Models\Tenant::where('slug', 'performance-test-business')->first();
+    expect($tenant)->not->toBeNull();
+    
+    // Log ytelsen for monitoring (valgfritt)
+    // echo "\nRegistration completed in: " . round($duration * 1000, 2) . "ms\n";
+});

@@ -50,7 +50,10 @@ Når en ny kunde registrerer seg, skal systemet opprette både en bruker-konto o
 
 
 
-- [ ] Prosessen tar maksimalt 2 minutter (PASS PÅ OG JOBB SYKRONISERT MED task.md (TASK 3) LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR1_SUMMARY.md FILEN OM HVA SOM ER GJORT)
+- [x] Prosessen tar maksimalt 2 minutter (PASS PÅ OG JOBB SYKRONISERT MED task.md (TASK 3) LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR1_SUMMARY.md FILEN OM HVA SOM ER GJORT)
+
+
+
 
 **Validering:**
 - Email: Må være gyldig format og unik
