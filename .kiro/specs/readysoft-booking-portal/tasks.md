@@ -332,8 +332,11 @@ Lag factories for å kunne generere test-data enkelt.
 
 
 
-- [ ] BookingFactory genererer: customer_name, customer_email, customer_phone, booking_date, times
-- [ ] Fil-header og footer
+- [x] BookingFactory genererer: customer_name, customer_email, customer_phone, booking_date, times
+
+
+
+- [x] Fil-header og footer
 
 **Testing:**
 ```bash
