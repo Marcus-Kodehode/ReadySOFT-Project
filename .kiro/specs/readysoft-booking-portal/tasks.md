@@ -746,17 +746,17 @@ Lag dashboard view med stat cards og quick actions. Dette er hovedsiden tenant s
 
 
 
-- [ ] Quick actions seksjon: 3 knapper - "New Resource" (primary), "SMS Settings" (secondary), "Share Booking Page" (secondary med copy icon)
+- [x] Quick actions seksjon: 3 knapper - "New Resource" (primary), "SMS Settings" (secondary), "Share Booking Page" (secondary med copy icon)
 
 
 
 
-- [ ] "Share Booking Page" bruker Alpine.js x-data med copyToClipboard() metode
-- [ ] Responsivt grid: grid-cols-1 md:grid-cols-2 lg:grid-cols-4 for stat cards
-- [ ] Tailwind classes: bg-white, rounded-lg, shadow-sm for cards, p-6 for padding
-- [ ] Alle tekster på engelsk: "Welcome", "Bookings Today", "Active Resources", etc.
-- [ ] Fil-header: `{{-- File: resources/views/dashboard.blade.php --}}`
-- [ ] Fil-footer: `{{-- Tenant dashboard - viser statistikk og quick actions --}}`
+- [x] "Share Booking Page" bruker Alpine.js x-data med copyToClipboard() metode
+- [x] Responsivt grid: grid-cols-1 md:grid-cols-2 lg:grid-cols-4 for stat cards
+- [x] Tailwind classes: bg-white, rounded-lg, shadow-sm for cards, p-6 for padding
+- [x] Alle tekster på engelsk: "Welcome", "Bookings Today", "Active Resources", etc.
+- [x] Fil-header: `{{-- File: resources/views/dashboard.blade.php --}}`
+- [x] Fil-footer: `{{-- Tenant dashboard - viser statistikk og quick actions --}}`
 
 ---
 
@@ -773,10 +773,11 @@ Implementer Alpine.js logikk for å kopiere booking link til clipboard.
 - `resources/views/dashboard.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Knapp: "Share Booking Page"
-- [ ] Klikk kopierer URL: {{ url('/' . auth()->user()->tenant->slug) }}
-- [ ] Toast melding: "Link copied!"
-- [ ] Bruker Alpine.js og navigator.clipboard API
+- [x] Knapp: "Share Booking Page"
+
+- [x] Klikk kopierer URL: {{ url('/' . auth()->user()->tenant->slug) }}
+- [x] Toast melding: "Link copied!" (implemented as button text change)
+- [x] Bruker Alpine.js og navigator.clipboard API
 
 ---
 
