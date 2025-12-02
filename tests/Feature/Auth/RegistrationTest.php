@@ -154,3 +154,42 @@ test('registration auto-generates unique slug when generated slug is taken', fun
     $this->assertAuthenticated();
     $response->assertRedirect(route('dashboard', absolute: false));
 });
+
+test('registration rolls back all data if transaction fails', function () {
+    // Slett alle plans for å simulere en feil i transaksjonen
+    // Når subscription prøver å opprette med Plan::first(), vil det feile
+    \App\Models\Plan::query()->delete();
+    
+    // Tell antall records før registrering
+    $tenantCountBefore = \App\Models\Tenant::count();
+    $userCountBefore = \App\Models\User::count();
+    $subscriptionCountBefore = \App\Models\Subscription::count();
+
+    try {
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'business_name' => 'Test Business',
+            'business_type' => 'Cabin Rental',
+            'slug' => 'test-business',
+        ]);
+    } catch (\Exception $e) {
+        // Forventet feil - transaksjonen skal feile
+    }
+
+    // Verifiser at INGEN data ble opprettet (alt rullet tilbake)
+    expect(\App\Models\Tenant::count())->toBe($tenantCountBefore);
+    expect(\App\Models\User::count())->toBe($userCountBefore);
+    expect(\App\Models\Subscription::count())->toBe($subscriptionCountBefore);
+    
+    // Verifiser spesifikt at ingen tenant med denne slugen eksisterer
+    expect(\App\Models\Tenant::where('slug', 'test-business')->first())->toBeNull();
+    
+    // Verifiser spesifikt at ingen user med denne emailen eksisterer
+    expect(\App\Models\User::where('email', 'test@example.com')->first())->toBeNull();
+    
+    // Verifiser at bruker IKKE er innlogget
+    $this->assertGuest();
+});
