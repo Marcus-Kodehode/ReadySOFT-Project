@@ -308,9 +308,114 @@ Ingen duplisering - server-side genereringen er en fallback som fungerer sammen 
 
 ---
 
+## Slug Preview Funksjonalitet (FR-1 Krav)
+
+### Implementeringsdato: 2. desember 2025
+
+### Hva Ble Gjort
+
+Implementerte live slug preview funksjonalitet som viser brukeren en forhåndsvisning av deres bookingside URL mens de skriver bedriftsnavnet. Dette gir umiddelbar visuell feedback og lar brukeren se nøyaktig hvilken URL de vil få.
+
+### Funksjonalitet
+
+**Live Preview:**
+- Viser full URL med domene: `http://localhost:8000/` + slug
+- Oppdateres automatisk mens brukeren skriver i "Business Name" feltet
+- Slug genereres automatisk fra bedriftsnavnet
+- Brukeren kan også redigere slug manuelt
+
+**Visuell Feedback:**
+- Spinner-ikon mens systemet sjekker tilgjengelighet
+- Grønn checkmark (✓) når slug er tilgjengelig
+- Rød X når slug er opptatt
+- Fargekoding av input-feltet (grønn/rød border)
+
+**Sanntids Validering:**
+- API-kall til `/api/check-slug` endpoint
+- Debounced (500ms) for å unngå for mange requests
+- Viser forslag til alternative slugs hvis opptatt
+- Klikk på forslag for å bruke det
+
+### Teknisk Implementering
+
+**Frontend (Alpine.js):**
+```javascript
+x-data="{
+    businessName: '',
+    slug: '',
+    slugAvailable: null,
+    checking: false,
+    suggestions: [],
+    generateSlug() { ... },
+    checkSlugAvailability() { ... }
+}"
+```
+
+**Backend (API):**
+- Endpoint: `GET /api/check-slug?slug={slug}`
+- Controller: `SlugController@check`
+- Service: `SlugService`
+- Rate limiting: 10 requests per minutt
+
+**Komponenter:**
+1. **Input Field:** Viser slug med prefix `http://localhost:8000/`
+2. **Status Icons:** Spinner, checkmark, eller X
+3. **Feedback Messages:** "This URL is available!" eller "This URL is already taken"
+4. **Suggestions:** Klikbare alternativer hvis slug er opptatt
+
+### Brukeropplevelse
+
+**Scenario 1: Tilgjengelig slug**
+1. Bruker skriver "Salong Rosa" i Business Name
+2. Slug genereres automatisk: "salong-rosa"
+3. System sjekker tilgjengelighet (spinner vises)
+4. Grønn checkmark vises: "This URL is available!"
+5. Input får grønn border
+
+**Scenario 2: Opptatt slug**
+1. Bruker skriver "Test Salon"
+2. Slug genereres: "test-salon"
+3. System sjekker tilgjengelighet
+4. Rød X vises: "This URL is already taken"
+5. Input får rød border
+6. Forslag vises: "test-salon-1", "test-salon-2", "test-salon-3"
+7. Bruker kan klikke på forslag for å bruke det
+
+**Scenario 3: Manuell redigering**
+1. Bruker kan klikke i slug-feltet
+2. Redigere slug manuelt
+3. System validerer den nye slugen
+4. Visuell feedback oppdateres
+
+### Synkronisering med Task 3
+
+Denne implementeringen er fullstendig synkronisert med Task 3 i tasks.md:
+- **Task 3.1:** Registreringsskjema med slug-felt ✅
+- **Task 3.2:** SlugService for generering ✅
+- **Task 3.3:** API endpoint for validering ✅
+- **Task 3.4:** Alpine.js for live preview ✅ (DENNE OPPGAVEN)
+- **Task 3.5:** Server-side generering ✅
+
+Ingen duplisering - alle komponenter fungerer sammen som et helhetlig system.
+
+### Akseptansekriterier Oppfylt
+
+✅ Bruker kan se preview av slug mens de skriver
+✅ Preview viser full URL med domene
+✅ Slug genereres automatisk fra business_name
+✅ Slug kan redigeres manuelt
+✅ Sanntids validering via API
+✅ Visuell feedback (ikoner og farger)
+✅ Forslag til alternativer hvis opptatt
+✅ Debounced API calls (500ms)
+✅ Rate limiting (10 req/min)
+✅ Fungerer med og uten JavaScript
+
+---
+
 **Status:** ✅ FULLFØRT
 **Synkronisert med:** Task 3 (Multi-tenant Registrering)
-**Ingen Duplisering:** Server-side generering kompletterer client-side preview
+**Ingen Duplisering:** Alle komponenter fungerer sammen
 
 ---
 
