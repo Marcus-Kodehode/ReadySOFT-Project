@@ -395,7 +395,12 @@ Modifiser Breeze sitt registreringsskjema til å inkludere business_name, busine
 
 
 
-- [ ] Brukersynlig tekst på engelsk
+- [x] Brukersynlig tekst på engelsk
+
+
+
+
+
 - [ ] Fil-header og footer
 
 ---
