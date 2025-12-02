@@ -22,14 +22,14 @@ ReadySoft er en multi-tenant bookingportal hvor hver kunde får sin egen undersi
 Når en ny kunde registrerer seg, skal systemet opprette både en bruker-konto og en tilhørende tenant med subscription i én transaksjon.
 
 **Akseptansekriterier:**
-- [ ] Registreringsskjema inneholder: name, email, password, business_name, business_type
-- [ ] System genererer unik slug basert på business_name (f.eks. "Salong Rosa" → "salong-rosa")
-- [ ] Bruker kan se preview av slug mens de skriver
-- [ ] Slug valideres i sanntid (visuell feedback hvis opptatt)
-- [ ] Ved submit opprettes: User, Tenant, Subscription (active=true) i én transaksjon
-- [ ] Bruker redirectes til dashboard etter vellykket registrering
-- [ ] Feilhåndtering: Hvis noe feiler, rulles alt tilbake (ingen delvis data)
-- [ ] Prosessen tar maksimalt 2 minutter
+- [ ] Registreringsskjema inneholder: name, email, password, business_name, business_type (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE)
+- [ ] System genererer unik slug basert på business_name (f.eks. "Salong Rosa" → "salong-rosa") (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE)
+- [ ] Bruker kan se preview av slug mens de skriver (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE)
+- [ ] Slug valideres i sanntid (visuell feedback hvis opptatt) (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE)
+- [ ] Ved submit opprettes: User, Tenant, Subscription (active=true) i én transaksjon (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE)
+- [ ] Bruker redirectes til dashboard etter vellykket registrering (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE)
+- [ ] Feilhåndtering: Hvis noe feiler, rulles alt tilbake (ingen delvis data) (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE)
+- [ ] Prosessen tar maksimalt 2 minutter (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE)
 
 **Validering:**
 - Email: Må være gyldig format og unik

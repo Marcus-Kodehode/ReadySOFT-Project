@@ -256,6 +256,8 @@ php artisan tinker
 >>> App\Models\Plan::count()
 ```
 
+✅ TEST VELYKKET
+
 ---
 
 
@@ -300,8 +302,10 @@ Lag seeder som oppretter en "Basic" plan som alle nye tenants får automatisk.
 **Testing:**
 ```bash
 php artisan db:seed --class=PlanSeeder
-# Sjekk i Workbench at plan er opprettet
+# Sjekk i Workbench at plan er opprettet 
 ```
+
+✅ TEST VELYKKET
 
 ---
 
@@ -321,6 +325,9 @@ Lag factories for å kunne generere test-data enkelt.
 
 **Akseptansekriterier:**
 - [ ] TenantFactory genererer: name, slug (unique), business_type, active
+
+
+
 - [ ] ResourceFactory genererer: name, description, type, capacity
 - [ ] BookingFactory genererer: customer_name, customer_email, customer_phone, booking_date, times
 - [ ] Fil-header og footer
