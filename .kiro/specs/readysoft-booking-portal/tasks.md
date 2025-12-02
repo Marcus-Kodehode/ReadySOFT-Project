@@ -699,10 +699,22 @@ Lag controller som henter data for tenant dashboard. Denne controlleren skal sam
 
 
 
-- [ ] Data: bookings_today (count), bookings_this_week (count), active_resources (count), subscription_status (boolean), upcoming_bookings (5 siste med resource eager loaded)
-- [ ] Optimaliserte queries: Bruk count() for statistikk, limit(5) for bookinger, with('resource') for eager loading
-- [ ] Fil-header: `// File: app/Http/Controllers/DashboardController.php`
-- [ ] Fil-footer: `// Controller for tenant dashboard - henter statistikk og kommende bookinger`
+- [x] Data: bookings_today (count), bookings_this_week (count), active_resources (count), subscription_status (boolean), upcoming_bookings (5 siste med resource eager loaded)
+
+
+
+
+- [x] Optimaliserte queries: Bruk count() for statistikk, limit(5) for bookinger, with('resource') for eager loading
+
+
+
+
+- [x] Fil-header: `// File: app/Http/Controllers/DashboardController.php`
+
+
+
+
+- [x] Fil-footer: `// Controller for tenant dashboard - henter statistikk og kommende bookinger`
 
 ---
 
