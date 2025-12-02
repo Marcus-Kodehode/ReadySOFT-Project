@@ -101,11 +101,10 @@
                     name="slug" 
                     x-model="slug"
                     class="flex-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-r-md shadow-sm"
-                    required 
-                    readonly />
+                    required />
             </div>
             <p class="mt-1 text-sm text-gray-500">
-                {{ __('This will be your unique booking page URL') }}
+                {{ __('Auto-generated from business name, but you can edit it manually') }}
             </p>
             <x-input-error :messages="$errors->get('slug')" class="mt-2" />
         </div>
