@@ -645,11 +645,32 @@ Lag en enkel side som vises når subscription er inaktiv.
 - `routes/web.php`
 
 **Akseptansekriterier:**
-- [ ] Route: GET /subscription/inactive
-- [ ] Viser melding: "Your subscription is inactive"
-- [ ] Forklaring: "Please contact support to activate your account"
-- [ ] Link til support email eller kontaktskjema
+- [x] Route: GET /subscription/inactive
+
+
+
+
+
+- [x] Viser melding: "Your subscription is inactive"
+
+
+
+
+- [x] Forklaring: "Please contact support to activate your account"
+
+
+
+
+- [x] Link til support email eller kontaktskjema
+
+
+
+
 - [ ] Følger design guide
+
+
+
+
 - [ ] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
 
 ---
