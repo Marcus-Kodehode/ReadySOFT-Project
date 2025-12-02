@@ -324,7 +324,7 @@ Lag factories for å kunne generere test-data enkelt.
 - `database/factories/BookingFactory.php`
 
 **Akseptansekriterier:**
-- [ ] TenantFactory genererer: name, slug (unique), business_type, active
+- [X] TenantFactory genererer: name, slug (unique), business_type, active
 
 
 

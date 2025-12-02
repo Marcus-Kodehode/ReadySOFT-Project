@@ -33,3 +33,59 @@ AI-en trenger kanskje en kalender-app. Eller i det minste en reminder om at tide
 ---
 
 *Flere entries kommer sikkert snart...*
+
+## Shame Entry #2: Unit vs Feature Tests for Factory Testing
+
+**Dato:** 2025-12-02  
+**AI Forslag:** "Lag factory test i `tests/Unit/` mappen"  
+**Resultat:** ❌ Feilet - Ingen database connection  
+**Menneske Løsning:** "Prøv `tests/Feature/` i stedet"  
+**Resultat:** ✅ Fungerte perfekt  
+
+**Hva gikk galt:**
+AI foreslo å teste TenantFactory i Unit tests, men:
+- Unit tests kjører **uten** database connection (isolert, rask)
+- Feature tests kjører **med** full database (RefreshDatabase trait)
+- Factories trenger database for å:
+  - Faktisk opprette records
+  - Sjekke unike constraints (f.eks. slug)
+  - Teste relasjoner
+
+**Hvorfor Feature test er riktig:**
+```php
+// tests/Feature/TenantFactoryTest.php
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class TenantFactoryTest extends TestCase
+{
+    use RefreshDatabase; // ← Dette gir database tilgang!
+    
+    public function test_can_create_tenant()
+    {
+        $tenant = Tenant::factory()->create(); // Trenger database
+        $this->assertDatabaseHas('tenants', ['id' => $tenant->id]);
+    }
+}
+```
+
+**Når bruke Unit vs Feature:**
+
+**Unit tests (`tests/Unit/`):**
+- Tester isolert logikk (ingen database)
+- Rene funksjoner, beregninger, validering
+- Eksempel: `SlugService::generateSlug()` (kun string manipulation)
+
+**Feature tests (`tests/Feature/`):**
+- Tester med database, HTTP requests, full app
+- Factories, models, controllers, routes
+- Eksempel: Factory tests, booking flow, authentication
+
+**Lærdommen:**
+✅ Factory tests = Feature tests (trenger database)  
+✅ Ren logikk = Unit tests (ingen database)  
+❌ AI antok Unit test var riktig uten å tenke på database-behov  
+
+**Mennesket vant denne runden! 🏆**
+
+---
+
