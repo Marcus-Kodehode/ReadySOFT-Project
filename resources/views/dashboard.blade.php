@@ -7,6 +7,13 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Welcome Message -->
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-gray-900">
+                    Welcome, {{ auth()->user()->name }}!
+                </h1>
+            </div>
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
