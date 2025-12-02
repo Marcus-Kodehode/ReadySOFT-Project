@@ -280,7 +280,12 @@ Lag seeder som oppretter en "Basic" plan som alle nye tenants får automatisk.
 
 
 
-- [ ] Features kan være tom eller enkel JSON: {"max_resources": 10}
+- [x] Features kan være tom eller enkel JSON: {"max_resources": 10}
+
+
+
+
+
 - [ ] Seeder er idempotent (kan kjøres flere ganger)
 - [ ] Fil-header og footer
 
