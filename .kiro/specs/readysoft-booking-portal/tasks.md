@@ -600,6 +600,9 @@ Lag middleware som sjekker om bruker har admin-rolle.
 
 
 
+
+
+
 ---
 
 ### Task 4.3: Registrer middleware i Kernel
@@ -666,12 +669,12 @@ Lag en enkel side som vises når subscription er inaktiv.
 
 
 
-- [ ] Følger design guide
+- [x] Følger design guide
 
 
 
 
-- [ ] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
+- [x] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
 
 ---
 
@@ -684,16 +687,22 @@ Lag en enkel side som vises når subscription er inaktiv.
 **Avhengigheter:** Task 4.1, 1.4
 
 **Beskrivelse:**  
-Lag controller som henter data for tenant dashboard.
+Lag controller som henter data for tenant dashboard. Denne controlleren skal samle statistikk og kommende bookinger for innlogget tenant.
 
 **Filer som opprettes:**
 - `app/Http/Controllers/DashboardController.php`
 
 **Akseptansekriterier:**
-- [ ] Metode: index() returnerer dashboard view med data
-- [ ] Data: bookings_today, bookings_this_week, active_resources, subscription_status, upcoming_bookings (5 siste)
-- [ ] Optimaliserte queries (count, limit, eager loading)
-- [ ] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
+- [x] Metode: index() returnerer dashboard view med data
+
+
+
+
+
+- [ ] Data: bookings_today (count), bookings_this_week (count), active_resources (count), subscription_status (boolean), upcoming_bookings (5 siste med resource eager loaded)
+- [ ] Optimaliserte queries: Bruk count() for statistikk, limit(5) for bookinger, with('resource') for eager loading
+- [ ] Fil-header: `// File: app/Http/Controllers/DashboardController.php`
+- [ ] Fil-footer: `// Controller for tenant dashboard - henter statistikk og kommende bookinger`
 
 ---
 
@@ -704,21 +713,22 @@ Lag controller som henter data for tenant dashboard.
 **Avhengigheter:** Task 5.1
 
 **Beskrivelse:**  
-Lag dashboard view med stat cards og quick actions.
+Lag dashboard view med stat cards og quick actions. Dette er hovedsiden tenant ser etter innlogging.
 
 **Filer som opprettes:**
 - `resources/views/dashboard.blade.php` (erstatt Breeze default)
 
 **Akseptansekriterier:**
-- [ ] Velkomstmelding: "Welcome, {{ auth()->user()->name }}!"
-- [ ] 4 stat cards: Bookings Today, Bookings This Week, Active Resources, Subscription Status
-- [ ] Liste over upcoming bookings (5 siste)
-- [ ] Quick actions: "New Resource", "SMS Settings", "Share Booking Page"
-- [ ] "Share Booking Page" kopierer link til clipboard (Alpine.js)
-- [ ] Responsivt grid (1 col mobil, 2 col tablet, 4 col desktop)
-- [ ] Følger design guide
-- [ ] Brukersynlig tekst på engelsk
-- [ ] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
+- [ ] Velkomstmelding øverst: "Welcome, {{ auth()->user()->name }}!" med text-2xl font-bold
+- [ ] 4 stat cards i grid: "Bookings Today" (blue icon), "Bookings This Week" (green icon), "Active Resources" (purple icon), "Subscription Status" (badge)
+- [ ] Liste over upcoming bookings: Tabell med Resource, Customer, Date, Time (max 5 rader)
+- [ ] Quick actions seksjon: 3 knapper - "New Resource" (primary), "SMS Settings" (secondary), "Share Booking Page" (secondary med copy icon)
+- [ ] "Share Booking Page" bruker Alpine.js x-data med copyToClipboard() metode
+- [ ] Responsivt grid: grid-cols-1 md:grid-cols-2 lg:grid-cols-4 for stat cards
+- [ ] Tailwind classes: bg-white, rounded-lg, shadow-sm for cards, p-6 for padding
+- [ ] Alle tekster på engelsk: "Welcome", "Bookings Today", "Active Resources", etc.
+- [ ] Fil-header: `{{-- File: resources/views/dashboard.blade.php --}}`
+- [ ] Fil-footer: `{{-- Tenant dashboard - viser statistikk og quick actions --}}`
 
 ---
 
@@ -751,18 +761,19 @@ Implementer Alpine.js logikk for å kopiere booking link til clipboard.
 **Avhengigheter:** Task 1.4, 4.1
 
 **Beskrivelse:**  
-Lag resource controller med full CRUD funksjonalitet.
+Lag resource controller med full CRUD funksjonalitet for booking-ressurser (hytter, stoler, rom, etc.).
 
 **Filer som opprettes:**
 - `app/Http/Controllers/ResourceController.php`
 
 **Akseptansekriterier:**
-- [ ] Metoder: index, create, store, edit, update, destroy
-- [ ] Global scope sikrer tenant-isolasjon
-- [ ] Validering: name (required, unique per tenant), type, capacity (integer, min 1)
-- [ ] Eager loading av availabilities
-- [ ] Flash messages ved success/error
-- [ ] Fil-header og footer
+- [ ] Metoder: index() - liste ressurser, create() - vis form, store() - lagre ny, edit($id) - vis edit form, update($id) - lagre endringer, destroy($id) - slett
+- [ ] Global scope i index(): Resource::where('tenant_id', auth()->user()->tenant_id)
+- [ ] Validering i store/update: name (required, max:255, unique:resources,name,NULL,id,tenant_id), type (required), capacity (required, integer, min:1)
+- [ ] Eager loading i index/edit: Resource::with('availabilities')
+- [ ] Flash messages: session()->flash('success', 'Resource created successfully') / session()->flash('error', 'Failed to create resource')
+- [ ] Fil-header: `// File: app/Http/Controllers/ResourceController.php`
+- [ ] Fil-footer: `// CRUD controller for booking resources - håndterer hytter, stoler, rom, etc.`
 
 ---
 
@@ -773,20 +784,21 @@ Lag resource controller med full CRUD funksjonalitet.
 **Avhengigheter:** Task 6.1
 
 **Beskrivelse:**  
-Lag liste-visning av alle ressurser for tenant.
+Lag liste-visning av alle ressurser for tenant. Viser tabell på desktop, cards på mobil.
 
 **Filer som opprettes:**
 - `resources/views/resources/index.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Tabell med kolonner: Name, Type, Capacity, Status, Actions
-- [ ] Status badge: Active (grønn) / Inactive (grå)
-- [ ] Actions: Edit, Delete
-- [ ] "New Resource" knapp øverst
-- [ ] Empty state hvis ingen ressurser: "Create your first resource"
-- [ ] Responsivt (cards på mobil, tabell på desktop)
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Tabell med kolonner: Name (text-gray-900 font-medium), Type (text-gray-600), Capacity (text-gray-600), Status (badge), Actions (flex gap-2)
+- [ ] Status badge: Active (bg-green-100 text-green-800) / Inactive (bg-gray-100 text-gray-800) med px-2 py-1 rounded-full
+- [ ] Actions: Edit (text-blue-600 hover:text-blue-800), Delete (text-red-600 hover:text-red-800)
+- [ ] "New Resource" knapp øverst høyre: bg-blue-600 text-white px-4 py-2 rounded-lg
+- [ ] Empty state hvis @if($resources->isEmpty()): Illustrasjon, "No resources yet", "Create your first resource to start receiving bookings", "Create Resource" knapp
+- [ ] Responsivt: hidden md:table for tabell, block md:hidden for cards
+- [ ] Tailwind: bg-white rounded-lg shadow-sm border border-gray-200 for container
+- [ ] Fil-header: `{{-- File: resources/views/resources/index.blade.php --}}`
+- [ ] Fil-footer: `{{-- Resource list view - viser alle ressurser for tenant --}}`
 
 ---
 
@@ -797,21 +809,22 @@ Lag liste-visning av alle ressurser for tenant.
 **Avhengigheter:** Task 6.1
 
 **Beskrivelse:**  
-Lag skjema for å opprette og redigere ressurser.
+Lag skjema for å opprette og redigere ressurser. Bruker partial for å unngå duplisering.
 
 **Filer som opprettes:**
-- `resources/views/resources/create.blade.php`
-- `resources/views/resources/edit.blade.php`
-- `resources/views/resources/_form.blade.php` (partial)
+- `resources/views/resources/create.blade.php` - wrapper med "Create Resource" tittel
+- `resources/views/resources/edit.blade.php` - wrapper med "Edit Resource" tittel
+- `resources/views/resources/_form.blade.php` - selve skjemaet (gjenbrukbart)
 
 **Akseptansekriterier:**
-- [ ] Felter: name, description (textarea), type (dropdown), capacity (number)
-- [ ] Type dropdown: "Cabin", "Chair", "Room", "Treatment Room", "Other"
-- [ ] Inline validering (Alpine.js)
-- [ ] Submit knapp: "Create Resource" / "Update Resource"
-- [ ] Cancel knapp går tilbake til index
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Felter i _form.blade.php: name (text input, required), description (textarea, rows="4"), type (select dropdown), capacity (number input, min="1", default="1")
+- [ ] Type dropdown options: <option value="Cabin">Cabin</option>, "Chair", "Room", "Treatment Room", "Other"
+- [ ] Inline validering med Alpine.js: x-data="{ name: '', errors: {} }", @blur validering, viser feilmelding under felt
+- [ ] Submit knapp: create.blade.php har "Create Resource", edit.blade.php har "Update Resource" (bg-blue-600 text-white)
+- [ ] Cancel knapp: href="{{ route('resources.index') }}" (bg-white border border-gray-300 text-gray-700)
+- [ ] Tailwind form styling: w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500
+- [ ] Fil-header på alle 3 filer: `{{-- File: resources/views/resources/[filename] --}}`
+- [ ] Fil-footer: create: "Create form", edit: "Edit form", _form: "Shared form partial for create/edit"
 
 ---
 
@@ -895,20 +908,21 @@ Lag service class som håndterer availability-logikk.
 **Avhengigheter:** Task 1.4
 
 **Beskrivelse:**  
-Lag controller som håndterer offentlig bookingside og booking-prosess.
+Lag controller som håndterer offentlig bookingside (/{slug}) og booking-prosess. Ingen autentisering påkrevd.
 
 **Filer som opprettes:**
 - `app/Http/Controllers/PublicBookingController.php`
 
 **Akseptansekriterier:**
-- [ ] Metode: show($slug) - viser tenant sin bookingside
-- [ ] Metode: store(Request $request, $slug) - lagrer booking
-- [ ] Validering: resource_id, booking_date, start_time, end_time, customer_name, customer_email, customer_phone
-- [ ] Konflikt-sjekk før lagring
-- [ ] Returnerer bekreftelsesside ved suksess
-- [ ] Ingen autentisering påkrevd
-- [ ] Rate limiting: Max 10 bookinger per time per IP
-- [ ] Fil-header og footer
+- [ ] Metode: show($slug) - finn tenant via Tenant::where('slug', $slug)->firstOrFail(), eager load resources, returner view('public.booking', compact('tenant'))
+- [ ] Metode: store(Request $request, $slug) - valider input, sjekk konflikt, lagre booking, returner redirect til confirmation
+- [ ] Validering: resource_id (required, exists:resources,id), booking_date (required, date, after:today), start_time (required, date_format:H:i), end_time (required, date_format:H:i, after:start_time), customer_name (required, max:255), customer_email (required, email), customer_phone (required, regex:/^[+]?[0-9]{8,15}$/)
+- [ ] Konflikt-sjekk: Booking::where('resource_id', $resource_id)->where('booking_date', $date)->whereBetween('start_time', [$start, $end])->exists()
+- [ ] Returnerer: redirect()->route('booking.confirmation', ['id' => $booking->id]) ved suksess
+- [ ] Ingen auth middleware
+- [ ] Rate limiting i route: ->middleware('throttle:10,60') (10 requests per time)
+- [ ] Fil-header: `// File: app/Http/Controllers/PublicBookingController.php`
+- [ ] Fil-footer: `// Public booking controller - håndterer offentlig bookingside uten autentisering`
 
 ---
 
@@ -919,20 +933,21 @@ Lag controller som håndterer offentlig bookingside og booking-prosess.
 **Avhengigheter:** Task 8.1
 
 **Beskrivelse:**  
-Lag offentlig bookingside som viser tenant-info og ressurser.
+Lag offentlig bookingside som viser tenant-info og ressurser. Dette er siden kunder ser på /{slug}.
 
 **Filer som opprettes:**
 - `resources/views/public/booking.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Header: Tenant name og business type
-- [ ] Beskrivelse (hvis finnes)
-- [ ] Grid av resource cards
-- [ ] Hver card: name, description, capacity, "Book Now" knapp
-- [ ] Klikk på "Book Now" åpner booking modal
-- [ ] Responsivt design
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Header seksjon: <h1 class="text-3xl font-bold text-gray-900">{{ $tenant->name }}</h1>, <p class="text-lg text-gray-600">{{ $tenant->business_type }}</p>
+- [ ] Beskrivelse: @if($tenant->description) <p class="mt-4 text-gray-700">{{ $tenant->description }}</p> @endif
+- [ ] Grid av resource cards: <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+- [ ] Hver card: bg-white rounded-lg shadow-sm border p-6, viser name (font-semibold text-lg), description (text-gray-600 text-sm), capacity (text-gray-500 text-xs), "Book Now" knapp (bg-blue-600 text-white w-full)
+- [ ] Klikk på "Book Now": @click="openModal({{ $resource->id }})" (Alpine.js)
+- [ ] Responsivt: 1 col mobil, 2 col tablet, 3 col desktop
+- [ ] Tailwind container: max-w-7xl mx-auto px-4 py-8
+- [ ] Fil-header: `{{-- File: resources/views/public/booking.blade.php --}}`
+- [ ] Fil-footer: `{{-- Public booking page - viser tenant info og ressurser for booking --}}`
 
 ---
 
@@ -1013,19 +1028,20 @@ Lag custom 404 side for når slug ikke finnes.
 **Avhengigheter:** Task 1.4, 4.1
 
 **Beskrivelse:**  
-Lag controller for tenant å se og administrere bookinger.
+Lag controller for tenant å se og administrere bookinger for sine ressurser.
 
 **Filer som opprettes:**
 - `app/Http/Controllers/BookingController.php`
 
 **Akseptansekriterier:**
-- [ ] Metode: index() - liste alle bookinger for tenant sine ressurser
-- [ ] Metode: show($id) - vis detaljer for én booking
-- [ ] Metode: updateStatus($id) - endre status (pending/confirmed/cancelled)
-- [ ] Filtrering: upcoming, past, all
-- [ ] Sortering: Nyeste først (default)
-- [ ] Eager loading av resource relationship
-- [ ] Fil-header og footer
+- [ ] Metode: index(Request $request) - hent bookinger via Resource::where('tenant_id', auth()->user()->tenant_id)->pluck('id'), filtrer med $request->filter ('upcoming'/'past'/'all'), sorter orderBy('booking_date', 'desc')
+- [ ] Metode: show($id) - finn booking, sjekk at booking->resource->tenant_id === auth()->user()->tenant_id, returner view
+- [ ] Metode: updateStatus($id, Request $request) - valider status (in:pending,confirmed,cancelled), oppdater booking->status, returner redirect med flash message
+- [ ] Filtrering: if($filter === 'upcoming') whereDate('booking_date', '>=', now()), if($filter === 'past') whereDate('booking_date', '<', now())
+- [ ] Sortering: ->orderBy('booking_date', 'desc')->orderBy('start_time', 'desc')
+- [ ] Eager loading: Booking::with('resource')->whereIn('resource_id', $resourceIds)
+- [ ] Fil-header: `// File: app/Http/Controllers/BookingController.php`
+- [ ] Fil-footer: `// Booking management controller - tenant administrerer bookinger for sine ressurser`
 
 ---
 
@@ -1083,18 +1099,19 @@ Lag detaljvisning for én booking.
 **Avhengigheter:** Task 4.2
 
 **Beskrivelse:**  
-Lag controller for admin dashboard.
+Lag controller for admin dashboard. Kun tilgjengelig for brukere med role='admin'.
 
 **Filer som opprettes:**
 - `app/Http/Controllers/AdminController.php`
 
 **Akseptansekriterier:**
-- [ ] Metode: index() - admin dashboard med statistikk
-- [ ] Metode: tenants() - liste alle tenants
-- [ ] Metode: toggleTenantStatus($id) - aktiver/deaktiver tenant
-- [ ] Data: total_tenants, active_tenants, inactive_tenants, total_bookings
-- [ ] Middleware: admin
-- [ ] Fil-header og footer
+- [ ] Metode: index() - hent statistikk: Tenant::count(), Tenant::where('active', true)->count(), Tenant::where('active', false)->count(), Booking::count(), returner view('admin.dashboard', compact('total_tenants', 'active_tenants', 'inactive_tenants', 'total_bookings'))
+- [ ] Metode: tenants(Request $request) - hent alle tenants med søk/filter: Tenant::when($request->search, fn($q) => $q->where('name', 'like', "%{$request->search}%")), when($request->filter === 'active', fn($q) => $q->where('active', true)), paginate(20)
+- [ ] Metode: toggleTenantStatus($id) - finn tenant, toggle active status: $tenant->update(['active' => !$tenant->active]), returner back() med flash message
+- [ ] Data variabler: $total_tenants, $active_tenants, $inactive_tenants, $total_bookings (alle integers)
+- [ ] Middleware: Må ha 'admin' middleware på alle routes
+- [ ] Fil-header: `// File: app/Http/Controllers/AdminController.php`
+- [ ] Fil-footer: `// Admin controller - system administrator dashboard og tenant management`
 
 ---
 
@@ -1191,21 +1208,22 @@ Lag Eloquent model for SMS settings.
 **Avhengigheter:** Task 11.2
 
 **Beskrivelse:**  
-Lag service class for Teletopia SMS API integrasjon.
+Lag service class for Teletopia SMS API integrasjon. Håndterer sending av SMS via Teletopia sitt API.
 
 **Filer som opprettes:**
 - `app/Services/TeletopiaSmsService.php`
 
 **Akseptansekriterier:**
-- [ ] Metode: sendSms($phoneNumber, $message) - sender SMS via Teletopia API
-- [ ] Henter API-nøkkel fra tenant sin SmsSettings
-- [ ] HTTP client (Guzzle eller Laravel HTTP)
-- [ ] Error handling: Returnerer success/failure med melding
-- [ ] Logging av API calls
-- [ ] Timeout: 5 sekunder
-- [ ] Fil-header og footer med norske kommentarer
+- [ ] Metode: sendSms($tenantId, $phoneNumber, $message) - hent SmsSettings::where('tenant_id', $tenantId)->first(), sjekk enabled, send HTTP POST til Teletopia API, returner ['success' => true/false, 'message' => '...']
+- [ ] Henter API-nøkkel: $settings = SmsSettings::where('tenant_id', $tenantId)->first(), $apiKey = $settings->api_key (automatisk dekryptert via cast)
+- [ ] HTTP client: use Illuminate\Support\Facades\Http; Http::timeout(5)->withHeaders(['Authorization' => "Bearer {$apiKey}"])->post('https://api.teletopia.no/sms/send', ['to' => $phoneNumber, 'message' => $message])
+- [ ] Error handling: try-catch, hvis exception returner ['success' => false, 'message' => $e->getMessage()], hvis HTTP error returner ['success' => false, 'message' => 'Failed to send SMS']
+- [ ] Logging: Log::info("SMS sent to {$phoneNumber}", ['tenant_id' => $tenantId, 'success' => $success])
+- [ ] Timeout: Http::timeout(5) (5 sekunder)
+- [ ] Fil-header: `// File: app/Services/TeletopiaSmsService.php`
+- [ ] Fil-footer: `// Teletopia SMS service - sender SMS via Teletopia API med error handling og logging`
 
-**API Endpoint (eksempel):**
+**API Endpoint:**
 ```
 POST https://api.teletopia.no/sms/send
 Headers: Authorization: Bearer {api_key}
@@ -1289,26 +1307,23 @@ Lag controller for landingsside.
 
 **Prioritet:** Middels  
 **Estimat:** 90 min  
-**Avhengigheter:** Task 12.1
+**Avhengigheter:** Task 12.1ask 12.1
 
 **Beskrivelse:**  
-Lag landingsside med hero og tenant listing.
+Lag landingsside med hero og tenant listing. Dette er forsiden (/) som alle besøkende ser.
 
 **Filer som opprettes:**
 - `resources/views/welcome.blade.php` (erstatt Laravel default)
 
 **Akseptansekriterier:**
-- [ ] Hero seksjon:
-  - Overskrift: "Book Your Next Experience"
-  - Undertekst: "Find and book services from trusted providers"
-  - CTA knapp: "Get Started" (går til /register)
-- [ ] Tenant grid:
-  - Card per tenant: name, business_type badge, description (kort)
-  - "Book Now" knapp (går til /{slug})
-- [ ] Responsivt grid: 1 col mobil, 2 col tablet, 3 col desktop
-- [ ] Footer: About, Contact, Privacy (placeholder links)
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Hero seksjon: <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">, <h1 class="text-4xl md:text-5xl font-bold">"Book Your Next Experience"</h1>, <p class="text-xl mt-4">"Find and book services from trusted providers"</p>, <a href="{{ route('register') }}" class="mt-8 inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold">"Get Started"</a>
+- [ ] Tenant grid: <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">, @foreach($tenants as $tenant), card med bg-white rounded-lg shadow-sm p-6
+- [ ] Hver tenant card: <h3 class="text-lg font-semibold">{{ $tenant->name }}</h3>, <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{{ $tenant->business_type }}</span>, <p class="text-gray-600 text-sm mt-2">{{ Str::limit($tenant->description, 100) }}</p>, <a href="/{{ $tenant->slug }}" class="mt-4 block w-full text-center bg-blue-600 text-white py-2 rounded-lg">"Book Now"</a>
+- [ ] Responsivt grid: grid-cols-1 (mobil), md:grid-cols-2 (tablet), lg:grid-cols-3 (desktop)
+- [ ] Footer: <footer class="bg-gray-800 text-white py-8 mt-20">, links til About, Contact, Privacy (href="#" placeholder)
+- [ ] Tailwind: max-w-7xl mx-auto px-4 for container
+- [ ] Fil-header: `{{-- File: resources/views/welcome.blade.php --}}`
+- [ ] Fil-footer: `{{-- Landing page - viser hero og liste over alle aktive tenants --}}`
 
 ---
 
