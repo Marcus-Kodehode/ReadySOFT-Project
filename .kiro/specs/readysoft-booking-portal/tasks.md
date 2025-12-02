@@ -348,6 +348,8 @@ php artisan tinker
 >>> App\Models\Tenant::factory()->create()
 ```
 
+✅ TEST VELYKKET
+
 ---
 
 ## FASE 3: Multi-tenant Registrering (Dag 2)
@@ -436,6 +438,8 @@ php artisan tinker
 => "salong-rosa"
 ```
 
+✅ TEST VELYKKET
+
 ---
 
 ### Task 3.3: Opprett API endpoint for slug-validering
@@ -461,7 +465,7 @@ Lag en API route som validerer slug i sanntid (for live feedback i registrerings
 
 **Testing:**
 ```bash
-curl "http://localhost:8000/api/check-slug?slug=test-salon"
+curl "http://localhost:8000/api/check-slug?slug=test-salon" #RETURN TO THIS!
 ```
 
 ---
@@ -540,7 +544,12 @@ Lag middleware som sjekker om bruker har aktiv subscription før tilgang til bes
 - `app/Http/Middleware/CheckActiveSubscription.php`
 
 **Akseptansekriterier:**
-- [ ] Sjekker om auth()->user()->tenant har aktiv subscription
+- [x] Sjekker om auth()->user()->tenant har aktiv subscription
+
+
+
+
+
 - [ ] Hvis inaktiv: Redirect til /subscription/inactive
 - [ ] Hvis aktiv: Fortsett til neste middleware
 - [ ] Eager load subscription for å unngå N+1

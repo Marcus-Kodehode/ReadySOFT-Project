@@ -2440,3 +2440,6 @@ Registreringsprosessen er **kraftig optimalisert** og oppfyller kravet om maksim
 - Database transaction: ~0.1s
 - Redirect + render: ~0.07s
 - **Total: ~0.37s**
+
+**Tid brukt:** ~120 minutter 
+**Sist oppdatert:** 2. desember 2025
