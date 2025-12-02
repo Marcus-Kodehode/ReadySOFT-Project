@@ -291,7 +291,11 @@ Lag seeder som oppretter en "Basic" plan som alle nye tenants får automatisk.
 
 
 
-- [ ] Fil-header og footer
+- [x] Fil-header og footer
+
+
+
+
 
 **Testing:**
 ```bash
