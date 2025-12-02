@@ -8,7 +8,6 @@ Fase 1 etablerer databasestrukturen for multi-tenant systemet. Dette er grunnmur
 ## Task 1.1: Database-migrasjoner for core tabeller ✅
 
 **Status:** Fullført  
-**Tid brukt:** ~15 min (verifisering)
 
 ### Hva ble gjort
 Opprettet og verifisert tre kritiske database-tabeller som utgjør kjernen i multi-tenant systemet:
@@ -53,7 +52,6 @@ php artisan db:table subscriptions  # ✅ Struktur korrekt
 ## Task 1.2: Database-migrasjoner for booking-tabeller ✅
 
 **Status:** Fullført  
-**Tid brukt:** ~20 min (verifisering)
 
 ### Hva ble gjort
 Opprettet og verifisert tre kritiske database-tabeller for booking-funksjonaliteten:
@@ -111,7 +109,6 @@ php artisan db:table bookings  # ✅ Struktur og FK korrekt
 ## Task 1.3: Utvid users tabell med tenant_id og role ✅
 
 **Status:** Fullført  
-**Tid brukt:** ~10 min (verifisering)
 
 ### Hva ble gjort
 Utvidet den eksisterende `users` tabell med multi-tenant funksjonalitet gjennom en ny migrasjon:
@@ -164,7 +161,6 @@ Denne migrasjonen gjør det mulig å:
 ## Task 1.4: Eloquent modeller med relasjoner ✅
 
 **Status:** Fullført  
-**Tid brukt:** ~45 min
 
 ### Hva ble gjort
 Opprettet alle Eloquent modeller med korrekte relasjoner, fillable fields, casts, og dokumentasjon. Hver modell har fil-header og footer som forklarer dens rolle i systemet.
@@ -270,4 +266,5 @@ Med disse modellene på plass kan vi nå:
 
 ---
 
+**Tid brukt:** 10-12 timer.
 **Sist oppdatert:** 1. desember 2025
