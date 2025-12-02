@@ -39,9 +39,10 @@ class CheckActiveSubscription
         $tenant = $user->tenant()->with('subscriptions')->first();
 
         // Sjekk om tenant har minst én aktiv subscription
-        $hasActiveSubscription = $tenant && $tenant->subscriptions()
+        // Bruker allerede loadede subscriptions for å unngå ekstra query
+        $hasActiveSubscription = $tenant && $tenant->subscriptions
             ->where('active', true)
-            ->exists();
+            ->isNotEmpty();
 
         // Hvis ingen aktiv subscription, redirect til inactive-side
         if (!$hasActiveSubscription) {

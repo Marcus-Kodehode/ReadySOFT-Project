@@ -293,7 +293,12 @@ Lag seeder som oppretter en "Basic" plan som alle nye tenants får automatisk.
 
 
 
-- [x] Fil-header og footer
+- [ ] Fil-header og footer
+
+
+
+
+
 
 
 
@@ -556,9 +561,13 @@ Lag middleware som sjekker om bruker har aktiv subscription før tilgang til bes
 
 
 
-- [ ] Hvis aktiv: Fortsett til neste middleware
-- [ ] Eager load subscription for å unngå N+1
-- [ ] Fil-header og footer
+- [x] Hvis aktiv: Fortsett til neste middleware
+
+
+
+- [x] Eager load subscription for å unngå N+1
+
+- [x] Fil-header og footer
 
 **Testing:**
 - Sett subscription.active = false i database
@@ -582,7 +591,7 @@ Lag middleware som sjekker om bruker har admin-rolle.
 **Akseptansekriterier:**
 - [ ] Sjekker om auth()->user()->role === 'admin'
 - [ ] Hvis ikke admin: Abort 403
-- [ ] Fil-header og footer
+- [ ] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
 
 ---
 
@@ -627,7 +636,7 @@ Lag en enkel side som vises når subscription er inaktiv.
 - [ ] Forklaring: "Please contact support to activate your account"
 - [ ] Link til support email eller kontaktskjema
 - [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
 
 ---
 
@@ -649,7 +658,7 @@ Lag controller som henter data for tenant dashboard.
 - [ ] Metode: index() returnerer dashboard view med data
 - [ ] Data: bookings_today, bookings_this_week, active_resources, subscription_status, upcoming_bookings (5 siste)
 - [ ] Optimaliserte queries (count, limit, eager loading)
-- [ ] Fil-header og footer
+- [ ] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
 
 ---
 
@@ -674,7 +683,7 @@ Lag dashboard view med stat cards og quick actions.
 - [ ] Responsivt grid (1 col mobil, 2 col tablet, 4 col desktop)
 - [ ] Følger design guide
 - [ ] Brukersynlig tekst på engelsk
-- [ ] Fil-header og footer
+- [ ] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
 
 ---
 
