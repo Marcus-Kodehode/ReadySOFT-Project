@@ -551,6 +551,11 @@ Lag middleware som sjekker om bruker har aktiv subscription før tilgang til bes
 
 
 - [ ] Hvis inaktiv: Redirect til /subscription/inactive
+
+
+
+
+
 - [ ] Hvis aktiv: Fortsett til neste middleware
 - [ ] Eager load subscription for å unngå N+1
 - [ ] Fil-header og footer
