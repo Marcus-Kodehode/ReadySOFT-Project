@@ -372,7 +372,12 @@ Modifiser Breeze sitt registreringsskjema til å inkludere business_name, busine
 
 
 
-- [ ] Slug genereres automatisk fra business_name (live preview)
+- [x] Slug genereres automatisk fra business_name (live preview)
+
+
+
+
+
 - [ ] Slug kan redigeres manuelt
 - [ ] Slug valideres i sanntid (visuell feedback hvis opptatt)
 - [ ] Følger design guide (Tailwind classes)

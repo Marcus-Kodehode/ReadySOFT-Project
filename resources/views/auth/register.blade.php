@@ -1,5 +1,25 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" x-data="{
+        businessName: '{{ old('business_name') }}',
+        slug: '{{ old('slug') }}',
+        generateSlug() {
+            // Konverter til lowercase
+            let slug = this.businessName.toLowerCase();
+            
+            // Erstatt norske tegn
+            slug = slug.replace(/æ/g, 'ae')
+                       .replace(/ø/g, 'o')
+                       .replace(/å/g, 'a');
+            
+            // Erstatt mellomrom og spesialtegn med bindestrek
+            slug = slug.replace(/[^a-z0-9]+/g, '-');
+            
+            // Fjern bindestreker i starten og slutten
+            slug = slug.replace(/^-+|-+$/g, '');
+            
+            this.slug = slug;
+        }
+    }" x-init="if (businessName) generateSlug()">
         @csrf
 
         <!-- Name -->
@@ -42,7 +62,15 @@
         <!-- Business Name -->
         <div class="mt-4">
             <x-input-label for="business_name" :value="__('Business Name')" />
-            <x-text-input id="business_name" class="block mt-1 w-full" type="text" name="business_name" :value="old('business_name')" required autocomplete="organization" />
+            <x-text-input 
+                id="business_name" 
+                class="block mt-1 w-full" 
+                type="text" 
+                name="business_name" 
+                x-model="businessName"
+                @input="generateSlug()"
+                required 
+                autocomplete="organization" />
             <x-input-error :messages="$errors->get('business_name')" class="mt-2" />
         </div>
 
@@ -58,6 +86,28 @@
                 <option value="Other" {{ old('business_type') == 'Other' ? 'selected' : '' }}>Other</option>
             </select>
             <x-input-error :messages="$errors->get('business_type')" class="mt-2" />
+        </div>
+
+        <!-- Slug Preview -->
+        <div class="mt-4">
+            <x-input-label for="slug" :value="__('Your Booking Page URL')" />
+            <div class="flex items-center mt-1">
+                <span class="inline-flex items-center px-3 text-sm text-gray-500 bg-gray-50 border border-r-0 border-gray-300 rounded-l-md">
+                    {{ url('/') }}/
+                </span>
+                <input 
+                    type="text" 
+                    id="slug" 
+                    name="slug" 
+                    x-model="slug"
+                    class="flex-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-r-md shadow-sm"
+                    required 
+                    readonly />
+            </div>
+            <p class="mt-1 text-sm text-gray-500">
+                {{ __('This will be your unique booking page URL') }}
+            </p>
+            <x-input-error :messages="$errors->get('slug')" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">
