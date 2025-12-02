@@ -118,7 +118,7 @@
         <!-- Business Type -->
         <div class="mt-4">
             <x-input-label for="business_type" :value="__('Business Type')" />
-            <select id="business_type" name="business_type" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+            <select id="business_type" name="business_type" class="block mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
                 <option value="">{{ __('Select Business Type') }}</option>
                 <option value="Cabin Rental" {{ old('business_type') == 'Cabin Rental' ? 'selected' : '' }}>Cabin Rental</option>
                 <option value="Hair Salon" {{ old('business_type') == 'Hair Salon' ? 'selected' : '' }}>Hair Salon</option>
@@ -133,7 +133,7 @@
         <div class="mt-4">
             <x-input-label for="slug" :value="__('Your Booking Page URL')" />
             <div class="flex items-center mt-1">
-                <span class="inline-flex items-center px-3 text-sm text-gray-500 bg-gray-50 border border-r-0 border-gray-300 rounded-l-md">
+                <span class="inline-flex items-center px-3 py-2 text-sm text-gray-600 bg-gray-50 border border-r-0 border-gray-300 rounded-l-lg">
                     {{ url('/') }}/
                 </span>
                 <div class="relative flex-1">
@@ -144,11 +144,11 @@
                         x-model="slug"
                         @input="checkSlugAvailability()"
                         :class="{
-                            'border-green-300 focus:border-green-500 focus:ring-green-500': slugAvailable === true,
-                            'border-red-300 focus:border-red-500 focus:ring-red-500': slugAvailable === false,
-                            'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500': slugAvailable === null
+                            'border-green-300 focus:border-transparent focus:ring-2 focus:ring-green-500': slugAvailable === true,
+                            'border-red-300 focus:border-transparent focus:ring-2 focus:ring-red-500': slugAvailable === false,
+                            'border-gray-300 focus:border-transparent focus:ring-2 focus:ring-blue-500': slugAvailable === null
                         }"
-                        class="w-full rounded-r-md shadow-sm pr-10"
+                        class="w-full px-3 py-2 rounded-r-lg focus:outline-none pr-10"
                         required />
                     
                     <!-- Status Icon -->
@@ -196,7 +196,7 @@
                             <button 
                                 type="button"
                                 @click="useSlug(suggestion)"
-                                class="px-3 py-1 text-sm text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
+                                class="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
                                 x-text="suggestion">
                             </button>
                         </template>
@@ -212,7 +212,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
 

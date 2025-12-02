@@ -389,7 +389,12 @@ Modifiser Breeze sitt registreringsskjema til å inkludere business_name, busine
 
 
 
-- [ ] Følger design guide (Tailwind classes)
+- [x] Følger design guide (Tailwind classes)
+
+
+
+
+
 - [ ] Brukersynlig tekst på engelsk
 - [ ] Fil-header og footer
 
