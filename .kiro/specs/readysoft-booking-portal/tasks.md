@@ -550,7 +550,7 @@ Lag middleware som sjekker om bruker har aktiv subscription før tilgang til bes
 
 
 
-- [ ] Hvis inaktiv: Redirect til /subscription/inactive
+- [x] Hvis inaktiv: Redirect til /subscription/inactive
 
 
 

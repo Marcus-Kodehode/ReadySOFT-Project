@@ -178,3 +178,98 @@ npm run build  # Eller npm run dev
 
 ---
 
+
+## Shame Entry #4: Modal Z-Index Layering Problem
+
+**Dato:** 2025-12-02  
+**AI Forslag:** "Her er en modal-komponent med backdrop"  
+**Resultat:** ❌ Modal-innhold ble grått/transparent sammen med backdrop  
+**Menneske Observasjon:** "Modal-boksen blir også grå, ikke bare bakgrunnen, kan det være problemer med z-index?"  
+**AI Løsning:** "Ah! Mangler `relative z-10` på modal-innholdet"  
+**Resultat:** ✅ Fungerte perfekt etter z-index fix  
+
+**Hva gikk galt:**
+AI laget en modal med backdrop, men glemte å sette riktig z-index på modal-innholdet:
+
+```blade
+<!-- ❌ Opprinnelig (feil) -->
+<div x-show="open" class="fixed inset-0 flex items-center justify-center">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black bg-opacity-50"></div>
+    
+    <!-- Modal content - MANGLER z-index! -->
+    <div class="w-full max-w-md p-6 bg-white rounded-lg">
+        Content here
+    </div>
+</div>
+```
+
+**Resultat:**
+- Backdrop ble grå (korrekt)
+- Men modal-innholdet ble OGSÅ grått/transparent
+- Modal-innholdet lå ikke "over" backdrop
+- Ubrukelig modal
+
+**Riktig løsning:**
+
+```blade
+<!-- ✅ Riktig (med z-index) -->
+<div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center">
+    <!-- Backdrop -->
+    <div @click="open = false" 
+         class="fixed inset-0 bg-black bg-opacity-50"></div>
+    
+    <!-- Modal content - MED relative z-10 -->
+    <div class="relative z-10 w-full max-w-md p-6 bg-white rounded-lg shadow-xl">
+        Content here
+    </div>
+</div>
+```
+
+**Hvorfor `relative z-10` er nødvendig:**
+
+1. **`relative`** - Etablerer en ny stacking context
+2. **`z-10`** - Plasserer modal-innholdet OVER backdrop
+3. **Uten dette** - Modal-innholdet ligger på samme nivå som backdrop
+
+**Z-index hierarki i modals:**
+
+```
+z-50  → Hele modal-containeren (over alt annet på siden)
+  ├─ z-0  → Backdrop (grå bakgrunn)
+  └─ z-10 → Modal-innhold (hvit boks) ← MÅ være høyere enn backdrop!
+```
+
+**Lærdommen:**
+✅ Modals trenger alltid riktig z-index layering  
+✅ Modal-innhold må ha høyere z-index enn backdrop  
+✅ `relative z-10` på modal-innhold er standard  
+✅ Test alltid at modal-innholdet er klikkbart og synlig  
+❌ AI glemte å tenke på stacking context  
+
+**Bonus - Standard modal-struktur:**
+```blade
+<div x-show="open" 
+     x-cloak
+     class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    
+    <!-- Backdrop (z-0 implicit) -->
+    <div @click="open = false" 
+         class="fixed inset-0 bg-black bg-opacity-50"></div>
+    
+    <!-- Modal content (z-10 explicit) -->
+    <div class="relative z-10 w-full max-w-md p-6 bg-white rounded-lg shadow-xl">
+        <h3 class="text-lg font-semibold">Title</h3>
+        <p class="mt-2">Content</p>
+        <div class="flex justify-end gap-3 mt-4">
+            <button @click="open = false">Cancel</button>
+            <button>Confirm</button>
+        </div>
+    </div>
+</div>
+```
+
+**Mennesket oppdaget problemet visuelt! 🏆**
+
+---
+
