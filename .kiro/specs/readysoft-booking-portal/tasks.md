@@ -366,7 +366,12 @@ Modifiser Breeze sitt registreringsskjema til å inkludere business_name, busine
 
 
 
-- [ ] Business type dropdown har minimum: "Cabin Rental", "Hair Salon", "Spa & Wellness", "Room Rental", "Other"
+
+- [x] Business type dropdown har minimum: "Cabin Rental", "Hair Salon", "Spa & Wellness", "Room Rental", "Other"
+
+
+
+
 - [ ] Slug genereres automatisk fra business_name (live preview)
 - [ ] Slug kan redigeres manuelt
 - [ ] Slug valideres i sanntid (visuell feedback hvis opptatt)
