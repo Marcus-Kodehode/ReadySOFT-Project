@@ -89,3 +89,92 @@ class TenantFactoryTest extends TestCase
 
 ---
 
+
+## Shame Entry #3: Tailwind CSS 4 - Glemte å oppdatere Vite config
+
+**Dato:** 2025-12-02  
+**AI Forslag:** "Oppdater til Tailwind v4 med `@import 'tailwindcss'`"  
+**Resultat:** ❌ Delvis - CSS fungerte ikke i nettleseren  
+**Menneske Oppdagelse:** "Vite config mangler Tailwind v4 plugin!"  
+**Resultat:** ✅ Fungerte perfekt etter full oppdatering  
+
+**Hva gikk galt:**
+AI oppdaterte `resources/css/app.css` til Tailwind v4 syntaks:
+```css
+@import "tailwindcss"; // ✅ Riktig
+```
+
+Men glemte å oppdatere `vite.config.js` til å bruke Tailwind v4 Vite plugin:
+```js
+// ❌ Manglet dette:
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+    plugins: [
+        laravel({...}),
+        tailwindcss(), // ← Dette manglet!
+    ],
+});
+```
+
+**Resultat:**
+- CSS kompilerte uten feil
+- Men Tailwind-klasser fungerte ikke i nettleseren
+- Ingen synlige feilmeldinger (stille feil)
+
+**Riktig Tailwind v4 oppsett:**
+
+**1. `resources/css/app.css`:**
+```css
+@import "tailwindcss";
+```
+
+**2. `vite.config.js`:**
+```js
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+            refresh: true,
+        }),
+        tailwindcss(),
+    ],
+});
+```
+
+**3. Kjør:**
+```bash
+npm run build  # Eller npm run dev
+```
+
+**Viktige forskjeller Tailwind v3 vs v4:**
+
+| Tailwind v3 | Tailwind v4 |
+|-------------|-------------|
+| `@tailwind base;` | `@import "tailwindcss";` |
+| `@tailwind components;` | (ikke nødvendig) |
+| `@tailwind utilities;` | (ikke nødvendig) |
+| `tailwind.config.js` påkrevd | Valgfri (defaults er gode) |
+| PostCSS plugin | Vite plugin |
+| `postcss.config.js` | Ikke nødvendig |
+
+**Lærdommen:**
+✅ Tailwind v4 krever BÅDE CSS-endring OG Vite plugin  
+✅ Sjekk alltid at CSS faktisk fungerer i nettleseren  
+✅ Stille feil er verst - ingen feilmelding, men ingenting fungerer  
+❌ AI gjorde halve jobben og antok resten var OK  
+
+**Mennesket reddet dagen igjen! 🏆**
+
+**Bonus - Hvordan verifisere at Tailwind fungerer:**
+1. Åpne nettleseren
+2. Inspiser et element med Tailwind-klasser (f.eks. `bg-blue-600`)
+3. Sjekk at CSS-en faktisk er applisert
+4. Hvis ikke: Sjekk Vite config og rebuild
+
+---
+
