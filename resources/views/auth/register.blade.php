@@ -2,6 +2,10 @@
     <form method="POST" action="{{ route('register') }}" x-data="{
         businessName: '{{ old('business_name') }}',
         slug: '{{ old('slug') }}',
+        slugAvailable: null,
+        checking: false,
+        suggestions: [],
+        checkTimeout: null,
         generateSlug() {
             // Konverter til lowercase
             let slug = this.businessName.toLowerCase();
@@ -18,6 +22,43 @@
             slug = slug.replace(/^-+|-+$/g, '');
             
             this.slug = slug;
+            this.checkSlugAvailability();
+        },
+        checkSlugAvailability() {
+            // Clear existing timeout
+            if (this.checkTimeout) {
+                clearTimeout(this.checkTimeout);
+            }
+            
+            // Reset state hvis slug er tom
+            if (!this.slug || this.slug.length < 2) {
+                this.slugAvailable = null;
+                this.suggestions = [];
+                return;
+            }
+            
+            // Debounce: Vent 500ms før API call
+            this.checkTimeout = setTimeout(async () => {
+                this.checking = true;
+                this.suggestions = [];
+                
+                try {
+                    const response = await fetch(`/api/check-slug?slug=${encodeURIComponent(this.slug)}`);
+                    const data = await response.json();
+                    
+                    this.slugAvailable = data.available;
+                    this.suggestions = data.suggestions || [];
+                } catch (error) {
+                    console.error('Error checking slug:', error);
+                    this.slugAvailable = null;
+                } finally {
+                    this.checking = false;
+                }
+            }, 500);
+        },
+        useSlug(suggestion) {
+            this.slug = suggestion;
+            this.checkSlugAvailability();
         }
     }" x-init="if (businessName) generateSlug()">
         @csrf
@@ -95,17 +136,78 @@
                 <span class="inline-flex items-center px-3 text-sm text-gray-500 bg-gray-50 border border-r-0 border-gray-300 rounded-l-md">
                     {{ url('/') }}/
                 </span>
-                <input 
-                    type="text" 
-                    id="slug" 
-                    name="slug" 
-                    x-model="slug"
-                    class="flex-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-r-md shadow-sm"
-                    required />
+                <div class="relative flex-1">
+                    <input 
+                        type="text" 
+                        id="slug" 
+                        name="slug" 
+                        x-model="slug"
+                        @input="checkSlugAvailability()"
+                        :class="{
+                            'border-green-300 focus:border-green-500 focus:ring-green-500': slugAvailable === true,
+                            'border-red-300 focus:border-red-500 focus:ring-red-500': slugAvailable === false,
+                            'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500': slugAvailable === null
+                        }"
+                        class="w-full rounded-r-md shadow-sm pr-10"
+                        required />
+                    
+                    <!-- Status Icon -->
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <!-- Checking spinner -->
+                        <svg x-show="checking" class="w-5 h-5 text-gray-400 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        
+                        <!-- Available checkmark -->
+                        <svg x-show="!checking && slugAvailable === true" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        
+                        <!-- Not available X -->
+                        <svg x-show="!checking && slugAvailable === false" class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                </div>
             </div>
-            <p class="mt-1 text-sm text-gray-500">
-                {{ __('Auto-generated from business name, but you can edit it manually') }}
-            </p>
+            
+            <!-- Feedback Messages -->
+            <div class="mt-1">
+                <p x-show="!checking && slugAvailable === true" class="text-sm text-green-600 flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    {{ __('This URL is available!') }}
+                </p>
+                
+                <p x-show="!checking && slugAvailable === false" class="text-sm text-red-600 flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    {{ __('This URL is already taken') }}
+                </p>
+                
+                <!-- Suggestions -->
+                <div x-show="!checking && slugAvailable === false && suggestions.length > 0" class="mt-2">
+                    <p class="text-sm text-gray-600 mb-1">{{ __('Try these alternatives:') }}</p>
+                    <div class="flex flex-wrap gap-2">
+                        <template x-for="suggestion in suggestions" :key="suggestion">
+                            <button 
+                                type="button"
+                                @click="useSlug(suggestion)"
+                                class="px-3 py-1 text-sm text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
+                                x-text="suggestion">
+                            </button>
+                        </template>
+                    </div>
+                </div>
+                
+                <p x-show="slugAvailable === null && slug.length >= 2" class="text-sm text-gray-500">
+                    {{ __('Auto-generated from business name, but you can edit it manually') }}
+                </p>
+            </div>
+            
             <x-input-error :messages="$errors->get('slug')" class="mt-2" />
         </div>
 

@@ -383,7 +383,12 @@ Modifiser Breeze sitt registreringsskjema til å inkludere business_name, busine
 
 
 
-- [ ] Slug valideres i sanntid (visuell feedback hvis opptatt)
+- [x] Slug valideres i sanntid (visuell feedback hvis opptatt)
+
+
+
+
+
 - [ ] Følger design guide (Tailwind classes)
 - [ ] Brukersynlig tekst på engelsk
 - [ ] Fil-header og footer
@@ -403,11 +408,11 @@ Lag en service class som håndterer slug-generering og validering.
 - `app/Services/SlugService.php`
 
 **Akseptansekriterier:**
-- [ ] Metode: generateSlug($name) - konverterer til lowercase, erstatter mellomrom med bindestrek
-- [ ] Metode: isSlugAvailable($slug) - sjekker om slug er ledig
-- [ ] Metode: suggestAlternatives($slug) - foreslår alternativer hvis opptatt (slug-1, slug-2, etc.)
-- [ ] Håndterer spesialtegn (æ, ø, å → ae, o, a)
-- [ ] Fil-header og footer med norske kommentarer
+- [x] Metode: generateSlug($name) - konverterer til lowercase, erstatter mellomrom med bindestrek
+- [x] Metode: isSlugAvailable($slug) - sjekker om slug er ledig
+- [x] Metode: suggestAlternatives($slug) - foreslår alternativer hvis opptatt (slug-1, slug-2, etc.)
+- [x] Håndterer spesialtegn (æ, ø, å → ae, o, a)
+- [x] Fil-header og footer med norske kommentarer
 
 **Testing:**
 ```bash
@@ -435,10 +440,10 @@ Lag en API route som validerer slug i sanntid (for live feedback i registrerings
 - `routes/web.php` (eller `routes/api.php`)
 
 **Akseptansekriterier:**
-- [ ] Route: GET /api/check-slug?slug={slug}
-- [ ] Returnerer JSON: {"available": true/false, "suggestions": [...]}
-- [ ] Rate limiting: Max 10 requests per minutt
-- [ ] Fil-header og footer
+- [x] Route: GET /api/check-slug?slug={slug}
+- [x] Returnerer JSON: {"available": true/false, "suggestions": [...]}
+- [x] Rate limiting: Max 10 requests per minutt
+- [x] Fil-header og footer
 
 **Testing:**
 ```bash
@@ -460,12 +465,12 @@ Implementer Alpine.js logikk for å vise slug preview og validering i sanntid.
 - `resources/views/auth/register.blade.php`
 
 **Akseptansekriterier:**
-- [ ] x-data holder: businessName, slug, slugAvailable, checking
-- [ ] Watch på businessName genererer slug automatisk
-- [ ] Debounced API call til /api/check-slug
-- [ ] Visuell feedback: Grønn checkmark hvis ledig, rød X hvis opptatt
-- [ ] Viser forslag hvis opptatt
-- [ ] Bruker kan overstyre auto-generert slug
+- [x] x-data holder: businessName, slug, slugAvailable, checking
+- [x] Watch på businessName genererer slug automatisk
+- [x] Debounced API call til /api/check-slug
+- [x] Visuell feedback: Grønn checkmark hvis ledig, rød X hvis opptatt
+- [x] Viser forslag hvis opptatt
+- [x] Bruker kan overstyre auto-generert slug
 
 ---
 

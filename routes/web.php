@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Api\SlugController;
 use Illuminate\Support\Facades\Route;
+
+// API Routes
+Route::get('/api/check-slug', [SlugController::class, 'check'])->name('api.check-slug');
 
 Route::get('/', function () {
     return view('welcome');
