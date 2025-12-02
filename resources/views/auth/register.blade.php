@@ -39,6 +39,27 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
+        <!-- Business Name -->
+        <div class="mt-4">
+            <x-input-label for="business_name" :value="__('Business Name')" />
+            <x-text-input id="business_name" class="block mt-1 w-full" type="text" name="business_name" :value="old('business_name')" required autocomplete="organization" />
+            <x-input-error :messages="$errors->get('business_name')" class="mt-2" />
+        </div>
+
+        <!-- Business Type -->
+        <div class="mt-4">
+            <x-input-label for="business_type" :value="__('Business Type')" />
+            <select id="business_type" name="business_type" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+                <option value="">{{ __('Select Business Type') }}</option>
+                <option value="Cabin Rental" {{ old('business_type') == 'Cabin Rental' ? 'selected' : '' }}>Cabin Rental</option>
+                <option value="Hair Salon" {{ old('business_type') == 'Hair Salon' ? 'selected' : '' }}>Hair Salon</option>
+                <option value="Spa & Wellness" {{ old('business_type') == 'Spa & Wellness' ? 'selected' : '' }}>Spa & Wellness</option>
+                <option value="Room Rental" {{ old('business_type') == 'Room Rental' ? 'selected' : '' }}>Room Rental</option>
+                <option value="Other" {{ old('business_type') == 'Other' ? 'selected' : '' }}>Other</option>
+            </select>
+            <x-input-error :messages="$errors->get('business_type')" class="mt-2" />
+        </div>
+
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
                 {{ __('Already registered?') }}

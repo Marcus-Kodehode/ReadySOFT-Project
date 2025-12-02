@@ -361,7 +361,11 @@ Modifiser Breeze sitt registreringsskjema til å inkludere business_name, busine
 - `resources/views/auth/register.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Skjema inneholder: name, email, password, password_confirmation, business_name, business_type (dropdown)
+- [x] Skjema inneholder: name, email, password, password_confirmation, business_name, business_type (dropdown)
+
+
+
+
 - [ ] Business type dropdown har minimum: "Cabin Rental", "Hair Salon", "Spa & Wellness", "Room Rental", "Other"
 - [ ] Slug genereres automatisk fra business_name (live preview)
 - [ ] Slug kan redigeres manuelt
