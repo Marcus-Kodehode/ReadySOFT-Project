@@ -589,9 +589,16 @@ Lag middleware som sjekker om bruker har admin-rolle.
 - `app/Http/Middleware/CheckAdminRole.php`
 
 **Akseptansekriterier:**
-- [ ] Sjekker om auth()->user()->role === 'admin'
-- [ ] Hvis ikke admin: Abort 403
-- [ ] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
+- [x] Sjekker om auth()->user()->role === 'admin'
+
+
+
+
+- [x] Hvis ikke admin: Abort 403
+
+- [x] Fil-header og footer (KUN NYE FILER/ENDRETE FILER)
+
+
 
 ---
 
