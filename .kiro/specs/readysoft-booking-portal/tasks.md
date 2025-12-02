@@ -299,6 +299,10 @@ Lag seeder som oppretter en "Basic" plan som alle nye tenants får automatisk.
 
 
 
+
+
+
+
 **Testing:**
 ```bash
 php artisan db:seed --class=PlanSeeder
@@ -401,7 +405,7 @@ Modifiser Breeze sitt registreringsskjema til å inkludere business_name, busine
 
 
 
-- [ ] Fil-header og footer
+- [x] Fil-header og footer
 
 ---
 

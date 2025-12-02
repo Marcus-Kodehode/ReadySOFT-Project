@@ -266,5 +266,5 @@ Med disse modellene på plass kan vi nå:
 
 ---
 
-**Tid brukt:** 10-12 timer.
+**Tid brukt:** ~10-12 timer
 **Sist oppdatert:** 1. desember 2025

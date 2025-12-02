@@ -9,7 +9,6 @@ Fase 2 etablerer seed data og testing-infrastruktur for systemet. Dette gjør de
 
 **Status:** Fullført  
 **Prioritet:** Høy  
-**Estimat:** 20 min  
 **Avhengigheter:** Task 1.4
 
 ### Hva ble gjort
@@ -79,8 +78,7 @@ $subscription = Subscription::create([
 ## Task 2.2: Opprett factory for testing ✅
 
 **Status:** Fullført  
-**Prioritet:** Middels  
-**Estimat:** 30 min  
+**Prioritet:** Middels   
 **Avhengigheter:** Task 1.4
 
 ### Hva ble gjort
@@ -218,5 +216,5 @@ public function test_tenant_can_view_own_resources()
 
 ---
 
-**Tid brukt:** ~50 min (20 min + 30 min)  
+**Tid brukt:** ~120 minuter
 **Sist oppdatert:** 2. desember 2025
