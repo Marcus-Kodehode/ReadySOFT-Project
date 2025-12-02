@@ -736,7 +736,11 @@ Lag dashboard view med stat cards og quick actions. Dette er hovedsiden tenant s
 
 
 
-- [ ] 4 stat cards i grid: "Bookings Today" (blue icon), "Bookings This Week" (green icon), "Active Resources" (purple icon), "Subscription Status" (badge)
+- [x] 4 stat cards i grid: "Bookings Today" (blue icon), "Bookings This Week" (green icon), "Active Resources" (purple icon), "Subscription Status" (badge)
+
+
+
+
 - [ ] Liste over upcoming bookings: Tabell med Resource, Customer, Date, Time (max 5 rader)
 - [ ] Quick actions seksjon: 3 knapper - "New Resource" (primary), "SMS Settings" (secondary), "Share Booking Page" (secondary med copy icon)
 - [ ] "Share Booking Page" bruker Alpine.js x-data med copyToClipboard() metode
