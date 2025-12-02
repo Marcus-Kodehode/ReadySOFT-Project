@@ -86,6 +86,49 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Upcoming Bookings Table -->
+            <div class="mt-8 bg-white border border-gray-200 rounded-lg shadow-sm">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">Upcoming Bookings</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    @if($upcomingBookings->isEmpty())
+                        <div class="px-6 py-8 text-center">
+                            <p class="text-gray-500">No upcoming bookings</p>
+                        </div>
+                    @else
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Resource</th>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Customer</th>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Date</th>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($upcomingBookings as $booking)
+                                    <tr>
+                                        <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                            {{ $booking->resource->name }}
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                                            {{ $booking->customer_name }}
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                                            {{ \Carbon\Carbon::parse($booking->booking_date)->format('M d, Y') }}
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                                            {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>
