@@ -501,7 +501,11 @@ Utvid Breeze sin RegisteredUserController til å opprette Tenant og Subscription
 - `app/Http/Controllers/Auth/RegisteredUserController.php`
 
 **Akseptansekriterier:**
-- [ ] Validering: business_name (required, 3-255), business_type (required), slug (required, unique)
+- [x] Validering: business_name (required, 3-255), business_type (required), slug (required, unique)
+
+
+
+
 - [ ] Database transaksjon: Opprett Tenant → Opprett User med tenant_id → Opprett Subscription
 - [ ] Subscription settes til active=true, plan_id=1 (Basic plan)
 - [ ] Hvis noe feiler: Rollback alt
