@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Tenant;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Services\SlugService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,6 +27,13 @@ use Illuminate\View\View;
  */
 class RegisteredUserController extends Controller
 {
+    protected SlugService $slugService;
+
+    public function __construct(SlugService $slugService)
+    {
+        $this->slugService = $slugService;
+    }
+
     /**
      * Display the registration view.
      */
@@ -50,16 +58,29 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'business_name' => ['required', 'string', 'min:3', 'max:255'],
             'business_type' => ['required', 'string'],
-            'slug' => ['required', 'string', 'unique:tenants,slug'],
+            'slug' => ['nullable', 'string', 'unique:tenants,slug'],
         ]);
+
+        // Generer slug fra business_name hvis ikke oppgitt (fallback for no-JS)
+        // Eksempel: "Salong Rosa" → "salong-rosa"
+        $slug = $request->slug;
+        if (empty($slug)) {
+            $slug = $this->slugService->generateSlug($request->business_name);
+            
+            // Hvis generert slug er opptatt, legg til suffix
+            if (!$this->slugService->isSlugAvailable($slug)) {
+                $alternatives = $this->slugService->suggestAlternatives($slug, 1);
+                $slug = $alternatives[0] ?? $slug . '-' . time();
+            }
+        }
 
         // Database transaksjon: Opprett Tenant → User → Subscription
         // Hvis noe feiler, rulles alt tilbake
-        DB::transaction(function () use ($request, &$user) {
+        DB::transaction(function () use ($request, $slug, &$user) {
             // 1. Opprett Tenant
             $tenant = Tenant::create([
                 'name' => $request->business_name,
-                'slug' => $request->slug,
+                'slug' => $slug,
                 'business_type' => $request->business_type,
                 'active' => true,
             ]);

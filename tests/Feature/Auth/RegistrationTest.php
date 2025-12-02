@@ -95,13 +95,62 @@ test('registration requires all tenant fields', function () {
         'email' => 'test@example.com',
         'password' => 'password123',
         'password_confirmation' => 'password123',
-        // Mangler business_name, business_type, slug
+        // Mangler business_name, business_type (slug er nå nullable og auto-genereres)
     ]);
 
-    // Verifiser at registrering feiler
-    $response->assertSessionHasErrors(['business_name', 'business_type', 'slug']);
+    // Verifiser at registrering feiler (slug er ikke påkrevd lenger, genereres automatisk)
+    $response->assertSessionHasErrors(['business_name', 'business_type']);
     
     // Verifiser at ingen data ble opprettet
     expect(\App\Models\User::where('email', 'test@example.com')->first())->toBeNull();
     expect(\App\Models\Tenant::count())->toBe(0);
+});
+
+test('registration auto-generates slug from business name when not provided', function () {
+    \App\Models\Plan::factory()->create(['name' => 'Basic Plan']);
+
+    $response = $this->post('/register', [
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+        'business_name' => 'Salong Rosa',
+        'business_type' => 'Hair Salon',
+        // Slug ikke oppgitt - skal genereres automatisk
+    ]);
+
+    // Verifiser at tenant ble opprettet med auto-generert slug
+    $tenant = \App\Models\Tenant::where('name', 'Salong Rosa')->first();
+    expect($tenant)->not->toBeNull();
+    expect($tenant->slug)->toBe('salong-rosa');
+    
+    // Verifiser at bruker er innlogget og redirected
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('dashboard', absolute: false));
+});
+
+test('registration auto-generates unique slug when generated slug is taken', function () {
+    // Opprett eksisterende tenant med slug "test-salon"
+    \App\Models\Tenant::factory()->create(['slug' => 'test-salon']);
+    \App\Models\Plan::factory()->create(['name' => 'Basic Plan']);
+
+    $response = $this->post('/register', [
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+        'business_name' => 'Test Salon', // Ville generere "test-salon" som er opptatt
+        'business_type' => 'Hair Salon',
+        // Slug ikke oppgitt - skal genereres automatisk med suffix
+    ]);
+
+    // Verifiser at tenant ble opprettet med alternativ slug
+    $tenant = \App\Models\Tenant::where('name', 'Test Salon')->first();
+    expect($tenant)->not->toBeNull();
+    expect($tenant->slug)->not->toBe('test-salon'); // Skal ikke være den opptatte
+    expect($tenant->slug)->toStartWith('test-salon-'); // Skal ha suffix
+    
+    // Verifiser at bruker er innlogget og redirected
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('dashboard', absolute: false));
 });
