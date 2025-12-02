@@ -286,7 +286,11 @@ Lag seeder som oppretter en "Basic" plan som alle nye tenants får automatisk.
 
 
 
-- [ ] Seeder er idempotent (kan kjøres flere ganger)
+- [x] Seeder er idempotent (kan kjøres flere ganger)
+
+
+
+
 - [ ] Fil-header og footer
 
 **Testing:**
