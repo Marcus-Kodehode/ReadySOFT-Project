@@ -506,12 +506,17 @@ Utvid Breeze sin RegisteredUserController til å opprette Tenant og Subscription
 
 
 
-- [ ] Database transaksjon: Opprett Tenant → Opprett User med tenant_id → Opprett Subscription
-- [ ] Subscription settes til active=true, plan_id=1 (Basic plan)
-- [ ] Hvis noe feiler: Rollback alt
-- [ ] Redirect til /dashboard etter suksess
-- [ ] Flash message: "Welcome! Let's get started"
-- [ ] Fil-header og footer med norske kommentarer
+- [x] Database transaksjon: Opprett Tenant → Opprett User med tenant_id → Opprett Subscription
+
+
+
+
+
+- [x] Subscription settes til active=true, plan_id=1 (Basic plan)
+- [x] Hvis noe feiler: Rollback alt
+- [x] Redirect til /dashboard etter suksess
+- [x] Flash message: "Welcome! Let's get started"
+- [x] Fil-header og footer med norske kommentarer
 
 **Testing:**
 - Registrer ny bruker via /register
