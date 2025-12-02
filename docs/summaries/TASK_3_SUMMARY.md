@@ -551,5 +551,243 @@ Med Alpine.js implementeringen får vi:
 
 ---
 
-**Tid brukt:** ~240 minutter 
+
+## Task 3.5: Modifiser RegisteredUserController for tenant-opprettelse ✅
+
+**Status:** Fullført  
+**Prioritet:** Kritisk  
+**Avhengigheter:** Task 3.1, 3.2, 2.1
+
+### Hva ble gjort
+Implementerte atomisk database-transaksjon i RegisteredUserController som oppretter Tenant, User og Subscription i én operasjon. Dette sikrer dataintegritet og forhindrer delvis opprettede tenants.
+
+#### **RegisteredUserController** (`app/Http/Controllers/Auth/RegisteredUserController.php`)
+
+**Hovedfunksjonalitet:**
+- Database-transaksjon med `DB::transaction()`
+- Oppretter Tenant → User → Subscription i riktig rekkefølge
+- Automatisk rollback hvis noe feiler
+- Flash message ved suksess
+- Redirect til dashboard
+
+**Transaksjonsflyt:**
+```php
+DB::transaction(function () use ($request, &$user) {
+    // 1. Opprett Tenant
+    $tenant = Tenant::create([...]);
+    
+    // 2. Opprett User med tenant_id
+    $user = User::create([
+        'tenant_id' => $tenant->id,
+        'role' => 'tenant_admin',
+        ...
+    ]);
+    
+    // 3. Opprett Subscription
+    $basicPlan = Plan::first();
+    Subscription::create([
+        'tenant_id' => $tenant->id,
+        'plan_id' => $basicPlan->id,
+        'active' => true,
+        'active_from' => now(),
+    ]);
+});
+```
+
+### Tekniske detaljer
+
+**Validering:**
+```php
+$request->validate([
+    'name' => ['required', 'string', 'max:255'],
+    'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+    'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    'business_name' => ['required', 'string', 'min:3', 'max:255'],
+    'business_type' => ['required', 'string'],
+    'slug' => ['required', 'string', 'unique:tenants,slug'],
+]);
+```
+
+**Database Transaction:**
+- Bruker `DB::transaction()` for atomisk operasjon
+- Automatisk rollback ved exception
+- Sikrer at enten alt opprettes eller ingenting
+- Forhindrer orphaned records
+
+**User Role:**
+- Alle nye brukere får `role = 'tenant_admin'`
+- Kan administrere sin egen tenant
+- Kan ikke se andre tenants
+
+**Subscription Setup:**
+- Henter første plan fra database (Basic Plan)
+- Setter `active = true` umiddelbart
+- Setter `active_from = now()`
+- Ingen `active_to` (ubegrenset)
+
+**Success Handling:**
+```php
+return redirect(route('dashboard', absolute: false))
+    ->with('success', 'Welcome! Let\'s get started');
+```
+
+### PlanFactory
+
+**Opprettet:** `database/factories/PlanFactory.php`
+
+**Formål:**
+- Generere test-data for Plan-modellen
+- Brukes i tester for å sikre Basic plan finnes
+- Følger Laravel factory conventions
+
+**Eksempel:**
+```php
+Plan::factory()->create([
+    'name' => 'Basic Plan',
+    'description' => 'Basic features',
+    'features' => ['max_resources' => 10],
+]);
+```
+
+### Testing
+
+**Opprettet tester i:** `tests/Feature/Auth/RegistrationTest.php`
+
+**Test 1: Full registrering med tenant-opprettelse**
+```php
+test('registration creates tenant, user and subscription in transaction')
+```
+- Verifiserer at Tenant opprettes med riktig data
+- Verifiserer at User opprettes med tenant_id
+- Verifiserer at Subscription opprettes og er aktiv
+- Verifiserer at bruker er innlogget
+- Verifiserer redirect til dashboard
+
+**Test 2: Validering forhindrer duplikat slug**
+```php
+test('registration validation prevents duplicate slug')
+```
+- Oppretter eksisterende tenant med slug
+- Prøver å registrere med samme slug
+- Verifiserer at registrering feiler
+- Verifiserer at ingen ny user opprettes
+
+**Test 3: Påkrevde felter**
+```php
+test('registration requires all tenant fields')
+```
+- Prøver å registrere uten tenant-felter
+- Verifiserer at validering feiler
+- Verifiserer at ingen data opprettes
+
+**Test 4: Oppdatert eksisterende test**
+```php
+test('new users can register')
+```
+- Oppdatert til å inkludere tenant-felter
+- Sikrer at Basic plan finnes
+- Verifiserer vellykket registrering
+
+**Testresultater:**
+```
+✓ registration screen can be rendered
+✓ new users can register
+✓ registration creates tenant, user and subscription in transaction
+✓ registration validation prevents duplicate slug
+✓ registration requires all tenant fields
+
+Tests: 5 passed (28 assertions)
+```
+
+### Dokumentasjon
+
+**Fil-header:**
+```php
+// File: app/Http/Controllers/Auth/RegisteredUserController.php
+
+/**
+ * RegisteredUserController
+ * 
+ * Håndterer brukerregistrering med multi-tenant funksjonalitet.
+ * Oppretter Tenant, User og Subscription i én atomisk transaksjon.
+ */
+```
+
+**Fil-footer:**
+```php
+// Controller håndterer registrering av nye tenants med full multi-tenant setup.
+// Bruker database-transaksjoner for å sikre dataintegritet.
+```
+
+**Inline kommentarer:**
+- Forklarer hver steg i transaksjonen
+- Norske kommentarer for klarhet
+- Beskriver rollback-mekanisme
+
+### Sikkerhet og Dataintegritet
+
+**Atomisk operasjon:**
+- Enten opprettes alt eller ingenting
+- Ingen delvis opprettede tenants
+- Ingen orphaned users eller subscriptions
+
+**Rollback scenarios:**
+- Tenant-opprettelse feiler → Ingen data lagres
+- User-opprettelse feiler → Tenant rulles tilbake
+- Subscription-opprettelse feiler → Tenant og User rulles tilbake
+- Ingen plan i database → Hele transaksjonen feiler
+
+**Validering:**
+- Server-side validering før transaksjon
+- Unique constraint på slug
+- Email må være unik
+- Alle påkrevde felter valideres
+
+### Verifisering
+
+**Manuell testing:**
+```bash
+# 1. Registrer ny bruker
+- Gå til /register
+- Fyll inn alle felter
+- Submit
+
+# 2. Verifiser i database
+mysql> SELECT * FROM tenants WHERE slug = 'test-salon';
+mysql> SELECT * FROM users WHERE email = 'test@example.com';
+mysql> SELECT * FROM subscriptions WHERE tenant_id = 1;
+
+# 3. Verifiser redirect
+- Skal redirectes til /dashboard
+- Skal se flash message: "Welcome! Let's get started"
+
+# 4. Test rollback
+- Prøv å registrere med duplikat slug
+- Verifiser at ingen ny data opprettes
+```
+
+**Automatisk testing:**
+```bash
+php artisan test --filter=RegistrationTest
+# Alle 5 tester skal passere
+```
+
+### Betydning
+
+Med denne implementeringen har vi nå:
+- ✅ **Full multi-tenant registrering:** Tenant, User og Subscription opprettes automatisk
+- ✅ **Dataintegritet:** Atomisk transaksjon sikrer konsistens
+- ✅ **Sikkerhet:** Rollback forhindrer delvis data
+- ✅ **Testdekning:** 5 tester med 28 assertions
+- ✅ **Brukeropplevelse:** Umiddelbar tilgang til dashboard
+- ✅ **Subscription:** Automatisk aktiv subscription med Basic plan
+
+**Neste steg:**
+- Fase 4: Middleware og tilgangskontroll
+- Implementere CheckActiveSubscription middleware
+- Sikre tenant-isolasjon i alle queries
+
+---
+
+**Tid brukt:** ~300 minutter 
 **Sist oppdatert:** 2. desember 2025
