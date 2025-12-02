@@ -43,3 +43,39 @@ Laravel sorterer migrasjoner alfabetisk:
 
 ---
 
+## Q2: Hvorfor ser jeg ikke nye tabeller/data i MySQL Workbench?
+
+**Spørsmål:**  
+Jeg kjørte `php artisan migrate` og `php artisan db:seed`, men ser ikke de nye tabellene eller dataene i MySQL Workbench. Hva er galt?
+
+**Svar:**  
+Ingenting er galt! MySQL Workbench oppdaterer **ikke** automatisk. Du må refreshe manuelt.
+
+**Løsning:**
+
+**Metode 1: Refresh Tables**
+1. Høyreklikk på **Tables** (i Navigator-panelet til venstre)
+2. Velg **"Refresh All"**
+
+**Metode 2: Refresh-ikon**
+- Klikk på refresh-ikonet (🔄) øverst i Navigator-panelet
+
+**Metode 3: Keyboard shortcut**
+- Trykk **F5** (refresh)
+
+**Når må du refreshe?**
+- Etter `php artisan migrate` (nye tabeller)
+- Etter `php artisan db:seed` (nye data)
+- Etter du har lagt til/endret data via Laravel
+- Etter du har kjørt SQL-queries i en annen tab
+
+**Pro tip:**  
+Kom i vanen med å refreshe hver gang du har gjort endringer i databasen via terminalen. Workbench vet ikke at noe har skjedd før du refresher!
+
+**Konklusjon:**  
+✅ MySQL Workbench oppdaterer IKKE automatisk  
+✅ Alltid refresh etter migrations/seeding  
+✅ Høyreklikk Tables → Refresh All  
+
+---
+
