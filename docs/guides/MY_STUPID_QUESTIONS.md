@@ -79,3 +79,38 @@ Kom i vanen med å refreshe hver gang du har gjort endringer i databasen via ter
 
 ---
 
+## Q3: Hvorfor kjører ikke npm install også composer install?
+
+Spørsmål:
+Jeg trodde npm install skulle hente alt jeg trenger, men Laravel klager på manglende filer i vendor/. Hvorfor installeres ikke PHP-pakkene automatisk?
+
+Svar:
+Fordi npm og composer er to helt forskjellige systemer.
+npm install installerer frontend-pakker (Tailwind, Vite, Alpine osv.), mens composer install installerer PHP-pakker (Laravel-kjernen, routing, migrasjoner osv.).
+De snakker ikke sammen og kan ikke erstatte hverandre.
+
+Løsning:
+Når du kloner et Laravel-prosjekt må du ALLTID kjøre begge:
+
+PHP-avhengigheter:
+
+composer install
+
+
+Frontend-avhengigheter:
+
+npm install
+
+
+Når må du kjøre dette?
+
+Etter du har clonet et prosjekt
+
+Når du bytter PC
+
+Etter noen har lagt til nye pakker i composer.json eller package.json
+
+Konklusjon:
+✅ npm install = frontend
+✅ composer install = backend
+❌ Den ene erstatter ikke den andre
