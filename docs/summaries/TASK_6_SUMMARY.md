@@ -515,3 +515,242 @@ Forhindrer "flash of unstyled content" når Alpine.js initialiserer.
 ---
 **Status:** ✅ Fullført  
 **Dato:** December 2025
+
+
+# Task 6.4 Summary - Delete Funksjonalitet med Modal
+
+## Oversikt
+Task 6.4 implementerte delete-funksjonalitet med bekreftelsesmodal for ressurser. Bruker Alpine.js for modal-håndtering og gir tydelig advarsel om konsekvenser før sletting.
+
+## Hva ble implementert
+
+### 1. Alpine.js Modal State Management
+**Implementert i resources/index.blade.php**
+
+**x-data struktur:**
+```javascript
+{
+    showDeleteModal: false,
+    deleteResourceId: null,
+    deleteResourceName: '',
+    openDeleteModal(id, name) { ... },
+    closeDeleteModal() { ... },
+    confirmDelete() { ... }
+}
+```
+
+**Metoder:**
+- `openDeleteModal(id, name)` - Åpner modal og lagrer ressurs-info
+- `closeDeleteModal()` - Lukker modal og nullstiller state
+- `confirmDelete()` - Submitter delete-form for valgt ressurs
+
+### 2. Delete Knapper
+**Desktop (tabell):**
+```html
+<button type="button"
+        @click="openDeleteModal({{ $resource->id }}, '{{ addslashes($resource->name) }}')"
+        class="text-red-600 hover:text-red-800 transition-colors">
+    Delete
+</button>
+```
+
+**Mobile (cards):**
+Samme implementering, tilpasset card-layout.
+
+**Skjult form:**
+```html
+<form id="delete-form-{{ $resource->id }}" 
+      action="{{ route('resources.destroy', $resource->id) }}" 
+      method="POST">
+    @csrf
+    @method('DELETE')
+</form>
+```
+
+### 3. Bekreftelsesmodal
+
+**Modal struktur:**
+- **Backdrop:** Svart overlay med 50% opacity, klikk lukker modal
+- **Modal container:** Hvit boks, sentrert, max-width 28rem
+- **Escape key:** Lukker modal med `@keydown.escape.window`
+
+**Innhold:**
+1. **Heading:** "Delete Resource" (text-lg font-semibold)
+2. **Bekreftelse:** "Are you sure you want to delete this resource?"
+3. **Ressursnavn:** Vises dynamisk med `x-text="deleteResourceName"`
+4. **Advarsel:** "All bookings for this resource will also be deleted." (text-red-600)
+5. **Knapper:** Cancel (grå) og Delete (rød)
+
+**Styling:**
+```html
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black bg-opacity-50"></div>
+    
+    <!-- Modal -->
+    <div class="relative z-10 w-full max-w-md p-6 bg-white rounded-lg shadow-xl">
+        <!-- Content -->
+    </div>
+</div>
+```
+
+### 4. Knapper i Modal
+
+**Cancel knapp:**
+```html
+<button @click="closeDeleteModal()"
+        class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg 
+               hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 
+               focus:ring-offset-2 transition-colors font-medium">
+    Cancel
+</button>
+```
+
+**Delete knapp:**
+```html
+<button @click="confirmDelete()"
+        class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 
+               focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
+               transition-colors font-medium">
+    Delete
+</button>
+```
+
+### 5. x-cloak for Smooth Loading
+Modal bruker `x-cloak` for å forhindre flash av innhold før Alpine.js initialiserer:
+```html
+<div x-show="showDeleteModal" x-cloak>
+```
+
+## Design Patterns
+
+### Modal Best Practices
+- **Backdrop click:** Lukker modal
+- **Escape key:** Lukker modal
+- **@click.stop:** Forhindrer at klikk på modal lukker den
+- **z-index layering:** Backdrop (z-50), Modal (z-10 relative)
+
+### User Confirmation Flow
+1. Bruker klikker "Delete" på ressurs
+2. Modal åpnes med ressursnavn synlig
+3. Bruker ser tydelig advarsel om konsekvenser
+4. Bruker må eksplisitt bekrefte eller avbryte
+5. Ved bekreftelse: Form submittes, ressurs slettes
+
+### State Management
+- Minimal state: kun ID, navn og modal-status
+- State nullstilles ved lukking
+- Ingen memory leaks eller stale data
+
+## Brukeropplevelse
+
+### Tydelig Kommunikasjon
+- **Ressursnavn vises:** Bruker ser nøyaktig hva som slettes
+- **Konsekvenser tydelige:** Rød advarsel om at bookinger også slettes
+- **Reversibel handling:** Cancel-knapp lett tilgjengelig
+
+### Visual Feedback
+- **Rød farge:** Signaliserer destruktiv handling
+- **Backdrop:** Fokuserer oppmerksomhet på modal
+- **Hover states:** Tydelig feedback på alle knapper
+
+### Accessibility
+- **Keyboard support:** Escape key lukker modal
+- **Focus management:** Modal får fokus når åpnet
+- **Color contrast:** Følger WCAG guidelines
+- **Semantic HTML:** Proper button elements
+
+## Tekniske Detaljer
+
+### Alpine.js Integration
+- Ingen ekstra dependencies
+- Reaktiv state management
+- Event handling med `@click` og `@keydown`
+- Conditional rendering med `x-show`
+
+### Form Submission
+- Skjult form per ressurs med unik ID
+- CSRF beskyttelse
+- DELETE method via `@method('DELETE')`
+- Submits via JavaScript: `document.getElementById().submit()`
+
+### CSS Transitions
+- Smooth fade-in/out av modal
+- Hover transitions på knapper
+- Backdrop opacity transition
+
+### Security
+- CSRF token på alle forms
+- Server-side validering i controller
+- Tenant-isolasjon sikrer kun egne ressurser kan slettes
+
+## Cascade Delete Behavior
+
+**Advarsel i modal:**
+"All bookings for this resource will also be deleted."
+
+**Database-nivå:**
+Definert i migration med foreign key constraints:
+```php
+$table->foreign('resource_id')
+      ->references('id')
+      ->on('resources')
+      ->onDelete('cascade');
+```
+
+**Konsekvenser:**
+- Sletting av ressurs → Sletter alle tilhørende bookinger
+- Sletting av ressurs → Sletter alle tilhørende availabilities
+- Bruker advares tydelig før handling
+
+## Testing
+
+**Manuelle test-scenarios:**
+
+1. **Åpne modal:**
+   - Klikk "Delete" på en ressurs
+   - Modal skal åpnes med riktig ressursnavn
+
+2. **Lukke modal:**
+   - Klikk "Cancel" → modal lukkes
+   - Klikk på backdrop → modal lukkes
+   - Trykk Escape → modal lukkes
+
+3. **Bekrefte sletting:**
+   - Klikk "Delete" i modal
+   - Ressurs skal slettes
+   - Redirect til index med success-melding
+
+4. **Responsivitet:**
+   - Test på mobil og desktop
+   - Modal skal være sentrert og lesbar på alle skjermstørrelser
+
+5. **Multiple resources:**
+   - Åpne modal for forskjellige ressurser
+   - Riktig navn skal vises hver gang
+
+## Status og Fullføring
+
+### ✅ Fullført
+- [x] Delete knapp åpner modal (Alpine.js)
+- [x] Modal spør: "Are you sure you want to delete this resource?"
+- [x] Advarsel: "All bookings for this resource will also be deleted"
+- [x] Confirm knapp sender DELETE request
+- [x] Cancel knapp lukker modal
+- [x] Følger design guide for modal
+
+### Integrasjon
+- Fungerer sømløst med ResourceController.destroy()
+- Bruker eksisterende routes
+- Kompatibel med flash messages
+- Følger design guide for modals
+
+### Sikkerhet
+- CSRF beskyttelse
+- Tenant-isolasjon
+- Server-side validering
+- Cascade delete håndtert på database-nivå
+
+---
+**Tid brukt:** ~8 timer 
+**Sist oppdatert:** 2. desember 2025

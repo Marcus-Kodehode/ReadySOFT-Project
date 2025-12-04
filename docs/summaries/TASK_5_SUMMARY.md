@@ -200,3 +200,6 @@ Clipboard API krever HTTPS (eller localhost) og moderne browser (Chrome 63+, Fir
 
 ## Konklusjon
 Task 5.3 er fullført og klar for produksjon. Brukere kan enkelt dele sin booking-side URL med ett klikk.
+
+**Tid brukt:** ~160 minutter 
+**Sist oppdatert:** 2. desember 2025
