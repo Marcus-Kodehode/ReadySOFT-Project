@@ -1027,11 +1027,14 @@ Lag service class som håndterer availability-logikk.
 - `app/Services/AvailabilityService.php`
 
 **Akseptansekriterier:**
-- [ ] Metode: getAvailableSlots($resource, $date) - returnerer ledige tider for en dato
-- [ ] Metode: isTimeSlotAvailable($resource, $date, $start_time, $end_time) - sjekker om tid er ledig
-- [ ] Tar hensyn til: åpningstider, eksisterende bookinger
-- [ ] Returnerer array av time slots (f.eks. ["09:00", "09:30", "10:00", ...])
-- [ ] Fil-header og footer
+- [x] Metode: getAvailableSlots($resource, $date) - returnerer ledige tider for en dato
+- [x] Metode: isTimeSlotAvailable($resource, $date, $start_time, $end_time) - sjekker om tid er ledig
+- [x] Tar hensyn til: åpningstider, eksisterende bookinger
+- [x] Returnerer array av time slots (f.eks. ["09:00", "09:30", "10:00", ...])
+- [x] Fil-header og footer
+
+**Merk:** Servicen er fullstendig implementert og fungerer korrekt i manuell testing. 
+Se `docs/summaries/TASK_7.2_PROBLEM_REPORT.md` for detaljer om test-problemer.
 
 ---
 
