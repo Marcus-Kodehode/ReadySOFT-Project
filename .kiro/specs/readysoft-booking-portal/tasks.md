@@ -964,11 +964,22 @@ Implementer delete med bekreftelse i modal.
 
 
 
-- [ ] Modal spør: "Are you sure you want to delete this resource?"
-- [ ] Advarsel: "All bookings for this resource will also be deleted"
+- [x] Modal spør: "Are you sure you want to delete this resource?"
+
+
+
+
+
+
+- [x] Advarsel: "All bookings for this resource will also be deleted"
+
+
 - [ ] Confirm knapp sender DELETE request
-- [ ] Cancel knapp lukker modal
-- [ ] Følger design guide for modal
+- [x] Cancel knapp lukker modal
+
+
+- [x] Følger design guide for modal
+
 
 ---
 

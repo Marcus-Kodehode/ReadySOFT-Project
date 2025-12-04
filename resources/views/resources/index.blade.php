@@ -208,7 +208,10 @@
                      @click.stop>
                     <h3 class="mb-4 text-lg font-semibold text-gray-900">Delete Resource</h3>
                     <p class="mb-2 text-gray-600">
-                        Are you sure you want to delete <span class="font-semibold" x-text="deleteResourceName"></span>?
+                        Are you sure you want to delete this resource?
+                    </p>
+                    <p class="mb-2 text-sm text-gray-700">
+                        <span class="font-semibold" x-text="deleteResourceName"></span>
                     </p>
                     <p class="mb-6 text-sm text-red-600">
                         All bookings for this resource will also be deleted.
