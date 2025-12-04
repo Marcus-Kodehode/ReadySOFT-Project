@@ -923,7 +923,10 @@ Lag skjema for å opprette og redigere ressurser. Bruker partial for å unngå d
 
 
 
-- [ ] Inline validering med Alpine.js: x-data="{ name: '', errors: {} }", @blur validering, viser feilmelding under felt
+- [x] Inline validering med Alpine.js: x-data="{ name: '', errors: {} }", @blur validering, viser feilmelding under felt
+
+
+
 - [ ] Submit knapp: create.blade.php har "Create Resource", edit.blade.php har "Update Resource" (bg-blue-600 text-white)
 - [ ] Cancel knapp: href="{{ route('resources.index') }}" (bg-white border border-gray-300 text-gray-700)
 - [ ] Tailwind form styling: w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500
