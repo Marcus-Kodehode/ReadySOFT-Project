@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Api\SlugController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ResourceController;
 use Illuminate\Support\Facades\Route;
 
 // API Routes
@@ -22,13 +23,13 @@ Route::get('/subscription/inactive', [SubscriptionController::class, 'inactive']
     ->middleware('auth')
     ->name('subscription.inactive');
 
+// Resource Management Routes (Phase 6)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('resources', ResourceController::class);
+});
+
 // Placeholder routes for Quick Actions (to be implemented in later phases)
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Resource routes (Phase 6)
-    Route::get('/dashboard/resources/create', function () {
-        return redirect()->route('dashboard')->with('info', 'Resource management coming soon!');
-    })->name('resources.create');
-    
     // SMS Settings route (Phase 8)
     Route::get('/dashboard/sms', function () {
         return redirect()->route('dashboard')->with('info', 'SMS settings coming soon!');

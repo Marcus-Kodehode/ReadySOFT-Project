@@ -796,7 +796,12 @@ Lag resource controller med full CRUD funksjonalitet for booking-ressurser (hytt
 - `app/Http/Controllers/ResourceController.php`
 
 **Akseptansekriterier:**
-- [ ] Metoder: index() - liste ressurser, create() - vis form, store() - lagre ny, edit($id) - vis edit form, update($id) - lagre endringer, destroy($id) - slett
+- [x] Metoder: index() - liste ressurser, create() - vis form, store() - lagre ny, edit($id) - vis edit form, update($id) - lagre endringer, destroy($id) - slett
+
+
+
+
+
 - [ ] Global scope i index(): Resource::where('tenant_id', auth()->user()->tenant_id)
 - [ ] Validering i store/update: name (required, max:255, unique:resources,name,NULL,id,tenant_id), type (required), capacity (required, integer, min:1)
 - [ ] Eager loading i index/edit: Resource::with('availabilities')
