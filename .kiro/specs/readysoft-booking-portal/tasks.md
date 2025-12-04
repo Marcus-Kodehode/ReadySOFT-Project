@@ -1034,7 +1034,7 @@ Lag service class som håndterer availability-logikk.
 - [x] Fil-header og footer
 
 **Merk:** Servicen er fullstendig implementert og fungerer korrekt i manuell testing. 
-Se `docs/summaries/TASK_7.2_PROBLEM_REPORT.md` for detaljer om test-problemer.
+Se `docs/reports/TASK_7.2_PROBLEM_REPORT.md` for detaljer om test-problemer.
 
 ---
 
