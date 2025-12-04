@@ -254,5 +254,264 @@ http://localhost:8000/dashboard/resources
 ```
 
 ---
+
+# Task 6.3 Summary - Resource Create/Edit Form
+
+## Oversikt
+Task 6.3 implementerte skjemaer for å opprette og redigere ressurser med en delt form-partial for å unngå kode-duplisering. Inkluderer full inline validering med Alpine.js og Tailwind CSS styling.
+
+## Hva ble implementert
+
+### 1. Filer opprettet
+
+#### resources/views/resources/_form.blade.php
+**Delt form-partial** som brukes av både create og edit views.
+
+**Felter implementert:**
+- **Name** (required): Text input med validering
+- **Description** (optional): Textarea med 4 rader
+- **Type** (required): Select dropdown med alternativer
+- **Capacity** (required): Number input, minimum 1, default 1
+- **Active**: Checkbox for ressurs-status
+
+**Type alternativer:**
+- Cabin
+- Chair
+- Room
+- Treatment Room
+- Other
+
+#### resources/views/resources/create.blade.php
+**Wrapper for opprettelse av ny ressurs:**
+- Header: "Create Resource"
+- Inkluderer `_form.blade.php` partial
+- POST til `resources.store` route
+- Submit knapp: "Create Resource" (blue)
+- Cancel knapp: Tilbake til `resources.index`
+
+#### resources/views/resources/edit.blade.php
+**Wrapper for redigering av eksisterende ressurs:**
+- Header: "Edit Resource"
+- Inkluderer `_form.blade.php` partial
+- PUT til `resources.update` route
+- Submit knapp: "Update Resource" (blue)
+- Cancel knapp: Tilbake til `resources.index`
+
+### 2. Alpine.js Inline Validering
+
+**x-data struktur:**
+```javascript
+{
+    name: '{{ old('name', $resource->name ?? '') }}',
+    description: '{{ old('description', $resource->description ?? '') }}',
+    type: '{{ old('type', $resource->type ?? '') }}',
+    capacity: '{{ old('capacity', $resource->capacity ?? '1') }}',
+    errors: {},
+    validateName() { ... },
+    validateType() { ... },
+    validateCapacity() { ... }
+}
+```
+
+**Valideringsmetoder:**
+
+#### validateName()
+- Sjekker at feltet ikke er tomt
+- Minimum 3 tegn
+- Maksimum 255 tegn
+- Setter/fjerner feilmelding i `errors.name`
+
+#### validateType()
+- Sjekker at en type er valgt
+- Setter/fjerner feilmelding i `errors.type`
+
+#### validateCapacity()
+- Sjekker at feltet ikke er tomt
+- Minimum verdi 1
+- Setter/fjerner feilmelding i `errors.capacity`
+
+**Implementering per felt:**
+- `x-model` for two-way data binding
+- `@blur` event trigger for validering når bruker forlater feltet
+- `:class` dynamic binding for border-farge (rød ved feil, grå normalt)
+- `x-show` og `x-text` for å vise feilmeldinger
+
+### 3. Tailwind CSS Styling
+
+**Form inputs:**
+```css
+w-full px-3 py-2 border border-gray-300 rounded-lg 
+focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+```
+
+**Knapper:**
+- **Primary (Submit):** `bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700`
+- **Secondary (Cancel):** `bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50`
+
+**Error states:**
+- Border: `border-red-300` (dynamisk via `:class`)
+- Feilmelding: `text-sm text-red-600` med error ikon
+- Ikon: SVG exclamation circle fra Heroicons
+
+**Labels:**
+- `text-sm font-medium text-gray-700`
+- Required felter markert med `<span class="text-red-500">*</span>`
+
+### 4. Validering - Dual Layer
+
+**Client-side (Alpine.js):**
+- Real-time validering ved blur
+- Umiddelbar visuell feedback
+- Forhindrer unødvendige server-requests
+- Bedre brukeropplevelse
+
+**Server-side (Laravel):**
+- Fallback validering i ResourceController
+- Sikkerhet mot manipulation
+- `@error` directives viser Laravel validation errors
+- Old input preservation med `old()` helper
+
+**Begge lag fungerer sammen:**
+- Alpine.js gir rask feedback
+- Laravel sikrer data-integritet
+- Feilmeldinger vises fra begge kilder
+
+### 5. Layout Enhancement
+
+**x-cloak style lagt til i app.blade.php:**
+```css
+[x-cloak] { display: none !important; }
+```
+Forhindrer "flash of unstyled content" når Alpine.js initialiserer.
+
+### 6. Dokumentasjon
+
+**Alle filer har:**
+- Fil-header: `{{-- File: path/to/file.blade.php --}}`
+- Fil-footer med beskrivelse
+- Inline kommentarer for hver seksjon
+
+**_form.blade.php footer:**
+```blade
+{{-- Shared form partial for create/edit --}}
+```
+
+**create.blade.php footer:**
+```blade
+{{-- Create form - wrapper for new resource creation --}}
+```
+
+**edit.blade.php footer:**
+```blade
+{{-- Edit form - wrapper for resource editing --}}
+```
+
+## Design Patterns
+
+### DRY Principle
+Én form-partial brukes av både create og edit views:
+- Reduserer kode-duplisering
+- Enklere vedlikehold
+- Konsistent oppførsel
+
+### Progressive Enhancement
+- Fungerer uten JavaScript (server-side validering)
+- Alpine.js forbedrer opplevelsen når tilgjengelig
+- Graceful degradation
+
+### Conditional Rendering
+```blade
+@error('name')
+    {{-- Laravel server-side error --}}
+@enderror
+<p x-show="errors.name" x-text="errors.name">
+    {{-- Alpine.js client-side error --}}
+</p>
+```
+
+## Brukeropplevelse
+
+### Real-time Feedback
+- Validering trigger ved blur (når bruker forlater felt)
+- Rød border vises umiddelbart ved feil
+- Feilmelding vises under feltet
+- Grønn/normal border når feltet er OK
+
+### Visual Hierarchy
+- Required felter markert med rød asterisk (*)
+- Tydelige labels
+- God spacing mellom felter
+- Konsistent button-plassering
+
+### Error Handling
+- Tydelige feilmeldinger på norsk/engelsk
+- Ikon for visuell feedback
+- Farge-koding (rød = feil)
+- Feilmeldinger forsvinner når bruker retter feilen
+
+## Tekniske Detaljer
+
+### Alpine.js Integration
+- Inkludert via `resources/js/app.js`
+- Ingen ekstra dependencies nødvendig
+- Lightweight client-side validering
+- Reaktiv data binding
+
+### Form Submission
+- CSRF beskyttelse med `@csrf`
+- Method spoofing for PUT: `@method('PUT')`
+- Old input preservation: `old('field', $resource->field ?? '')`
+- Redirect tilbake til index etter success
+
+### Accessibility
+- Semantic HTML (label, input, textarea, select)
+- Proper label-input association med `for` og `id`
+- Required attributes på påkrevde felter
+- Focus states tydelig synlige
+
+## Testing
+
+**Manuelle test-scenarios:**
+1. **Create form:**
+   - Gå til `/dashboard/resources/create`
+   - Prøv å submit tom form → skal vise feilmeldinger
+   - Fyll inn gyldige verdier → skal lagre og redirecte
+
+2. **Edit form:**
+   - Gå til `/dashboard/resources/{id}/edit`
+   - Eksisterende verdier skal være pre-filled
+   - Endre verdier → skal oppdatere og redirecte
+
+3. **Inline validering:**
+   - Skriv mindre enn 3 tegn i Name → blur → skal vise feil
+   - Rett feilen → blur → feilmelding skal forsvinne
+   - La Type være tom → blur → skal vise feil
+
+4. **Server-side validering:**
+   - Disable JavaScript i browser
+   - Submit ugyldig form → skal vise Laravel errors
+   - Old input skal være bevart
+
+## Status og Fullføring
+
+### ✅ Fullført
+- [x] Felter: name, description, type, capacity, active
+- [x] Type dropdown med alle alternativer
+- [x] Inline validering med Alpine.js
+- [x] x-data med state og validation methods
+- [x] @blur validering på alle required felter
+- [x] Feilmeldinger under felt med x-show/x-text
+- [x] Submit knapper: "Create Resource" / "Update Resource"
+- [x] Cancel knapper med link til index
+- [x] Tailwind form styling: w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500
+- [x] Fil-header og footer på alle 3 filer
+
+### Integrasjon
+- Fungerer sømløst med ResourceController
+- Bruker eksisterende routes
+- Kompatibel med Laravel validation
+- Følger design guide
+
+---
 **Status:** ✅ Fullført  
 **Dato:** December 2025

@@ -927,11 +927,21 @@ Lag skjema for å opprette og redigere ressurser. Bruker partial for å unngå d
 
 
 
-- [ ] Submit knapp: create.blade.php har "Create Resource", edit.blade.php har "Update Resource" (bg-blue-600 text-white)
-- [ ] Cancel knapp: href="{{ route('resources.index') }}" (bg-white border border-gray-300 text-gray-700)
-- [ ] Tailwind form styling: w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500
-- [ ] Fil-header på alle 3 filer: `{{-- File: resources/views/resources/[filename] --}}`
-- [ ] Fil-footer: create: "Create form", edit: "Edit form", _form: "Shared form partial for create/edit"
+
+- [x] Submit knapp: create.blade.php har "Create Resource", edit.blade.php har "Update Resource" (bg-blue-600 text-white)
+
+
+
+
+- [x] Cancel knapp: href="{{ route('resources.index') }}" (bg-white border border-gray-300 text-gray-700)
+- [x] Tailwind form styling: w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500
+
+
+
+
+
+- [x] Fil-header på alle 3 filer: `{{-- File: resources/views/resources/[filename] --}}`
+- [x] Fil-footer: create: "Create form", edit: "Edit form", _form: "Shared form partial for create/edit"
 
 ---
 
