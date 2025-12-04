@@ -855,11 +855,33 @@ Lag liste-visning av alle ressurser for tenant. Viser tabell på desktop, cards 
 
 
 
-- [ ] Status badge: Active (bg-green-100 text-green-800) / Inactive (bg-gray-100 text-gray-800) med px-2 py-1 rounded-full
-- [ ] Actions: Edit (text-blue-600 hover:text-blue-800), Delete (text-red-600 hover:text-red-800)
-- [ ] "New Resource" knapp øverst høyre: bg-blue-600 text-white px-4 py-2 rounded-lg
-- [ ] Empty state hvis @if($resources->isEmpty()): Illustrasjon, "No resources yet", "Create your first resource to start receiving bookings", "Create Resource" knapp
-- [ ] Responsivt: hidden md:table for tabell, block md:hidden for cards
+- [x] Status badge: Active (bg-green-100 text-green-800) / Inactive (bg-gray-100 text-gray-800) med px-2 py-1 rounded-full
+
+
+
+
+- [x] Actions: Edit (text-blue-600 hover:text-blue-800), Delete (text-red-600 hover:text-red-800)
+
+
+
+
+
+
+- [x] "New Resource" knapp øverst høyre: bg-blue-600 text-white px-4 py-2 rounded-lg
+
+
+
+
+- [x] Empty state hvis @if($resources->isEmpty()): Illustrasjon, "No resources yet", "Create your first resource to start receiving bookings", "Create Resource" knapp
+
+
+
+
+- [x] Responsivt: hidden md:table for tabell, block md:hidden for cards
+
+
+
+
 - [ ] Tailwind: bg-white rounded-lg shadow-sm border border-gray-200 for container
 - [ ] Fil-header: `{{-- File: resources/views/resources/index.blade.php --}}`
 - [ ] Fil-footer: `{{-- Resource list view - viser alle ressurser for tenant --}}`

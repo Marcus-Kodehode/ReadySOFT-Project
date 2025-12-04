@@ -59,8 +59,8 @@
                 </div>
             @else
                 {{-- Desktop Table View --}}
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hidden md:block">
-                    <table class="min-w-full divide-y divide-gray-200">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200 hidden md:table">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
