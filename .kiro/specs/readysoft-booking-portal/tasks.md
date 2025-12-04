@@ -912,8 +912,17 @@ Lag skjema for å opprette og redigere ressurser. Bruker partial for å unngå d
 - `resources/views/resources/_form.blade.php` - selve skjemaet (gjenbrukbart)
 
 **Akseptansekriterier:**
-- [ ] Felter i _form.blade.php: name (text input, required), description (textarea, rows="4"), type (select dropdown), capacity (number input, min="1", default="1")
-- [ ] Type dropdown options: <option value="Cabin">Cabin</option>, "Chair", "Room", "Treatment Room", "Other"
+- [x] Felter i _form.blade.php: name (text input, required), description (textarea, rows="4"), type (select dropdown), capacity (number input, min="1", default="1")
+
+
+
+
+
+- [x] Type dropdown options: <option value="Cabin">Cabin</option>, "Chair", "Room", "Treatment Room", "Other"
+
+
+
+
 - [ ] Inline validering med Alpine.js: x-data="{ name: '', errors: {} }", @blur validering, viser feilmelding under felt
 - [ ] Submit knapp: create.blade.php har "Create Resource", edit.blade.php har "Update Resource" (bg-blue-600 text-white)
 - [ ] Cancel knapp: href="{{ route('resources.index') }}" (bg-white border border-gray-300 text-gray-700)
