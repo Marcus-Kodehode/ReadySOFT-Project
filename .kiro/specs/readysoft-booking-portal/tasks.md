@@ -882,9 +882,18 @@ Lag liste-visning av alle ressurser for tenant. Viser tabell på desktop, cards 
 
 
 
-- [ ] Tailwind: bg-white rounded-lg shadow-sm border border-gray-200 for container
-- [ ] Fil-header: `{{-- File: resources/views/resources/index.blade.php --}}`
-- [ ] Fil-footer: `{{-- Resource list view - viser alle ressurser for tenant --}}`
+
+- [x] Tailwind: bg-white rounded-lg shadow-sm border border-gray-200 for container
+
+
+
+
+
+- [x] Fil-header: `{{-- File: resources/views/resources/index.blade.php --}}`
+
+
+- [x] Fil-footer: `{{-- Resource list view - viser alle ressurser for tenant --}}`
+
 
 ---
 

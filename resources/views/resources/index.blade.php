@@ -132,9 +132,9 @@
                 </div>
 
                 {{-- Mobile Card View --}}
-                <div class="block md:hidden space-y-4">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 block md:hidden">
                     @foreach($resources as $resource)
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                        <div class="p-4 border-b border-gray-200 last:border-b-0">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex-1">
                                     <h3 class="text-lg font-medium text-gray-900">{{ $resource->name }}</h3>
