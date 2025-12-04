@@ -958,7 +958,12 @@ Implementer delete med bekreftelse i modal.
 - `resources/views/resources/index.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Delete knapp åpner modal (Alpine.js)
+- [x] Delete knapp åpner modal (Alpine.js)
+
+
+
+
+
 - [ ] Modal spør: "Are you sure you want to delete this resource?"
 - [ ] Advarsel: "All bookings for this resource will also be deleted"
 - [ ] Confirm knapp sender DELETE request

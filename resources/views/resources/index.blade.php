@@ -13,7 +13,26 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12" x-data="{ 
+        showDeleteModal: false, 
+        deleteResourceId: null, 
+        deleteResourceName: '',
+        openDeleteModal(id, name) {
+            this.deleteResourceId = id;
+            this.deleteResourceName = name;
+            this.showDeleteModal = true;
+        },
+        closeDeleteModal() {
+            this.showDeleteModal = false;
+            this.deleteResourceId = null;
+            this.deleteResourceName = '';
+        },
+        confirmDelete() {
+            if (this.deleteResourceId) {
+                document.getElementById('delete-form-' + this.deleteResourceId).submit();
+            }
+        }
+    }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{-- Flash Messages --}}
             @if (session('success'))
@@ -112,17 +131,18 @@
                                                class="text-blue-600 hover:text-blue-800 transition-colors">
                                                 Edit
                                             </a>
-                                            <form action="{{ route('resources.destroy', $resource->id) }}" 
+                                            <form id="delete-form-{{ $resource->id }}" 
+                                                  action="{{ route('resources.destroy', $resource->id) }}" 
                                                   method="POST" 
-                                                  class="inline"
-                                                  onsubmit="return confirm('Are you sure you want to delete this resource? All bookings for this resource will also be deleted.');">
+                                                  class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" 
-                                                        class="text-red-600 hover:text-red-800 transition-colors">
-                                                    Delete
-                                                </button>
                                             </form>
+                                            <button type="button"
+                                                    @click="openDeleteModal({{ $resource->id }}, '{{ addslashes($resource->name) }}')"
+                                                    class="text-red-600 hover:text-red-800 transition-colors">
+                                                Delete
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -162,23 +182,49 @@
                                        class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors">
                                         Edit
                                     </a>
-                                    <form action="{{ route('resources.destroy', $resource->id) }}" 
-                                          method="POST" 
-                                          class="inline"
-                                          onsubmit="return confirm('Are you sure you want to delete this resource? All bookings for this resource will also be deleted.');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
-                                                class="text-red-600 hover:text-red-800 text-sm font-medium transition-colors">
-                                            Delete
-                                        </button>
-                                    </form>
+                                    <button type="button"
+                                            @click="openDeleteModal({{ $resource->id }}, '{{ addslashes($resource->name) }}')"
+                                            class="text-red-600 hover:text-red-800 text-sm font-medium transition-colors">
+                                        Delete
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
             @endif
+
+            {{-- Delete Confirmation Modal --}}
+            <div x-show="showDeleteModal" 
+                 x-cloak
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                 @keydown.escape.window="closeDeleteModal()">
+                {{-- Backdrop --}}
+                <div @click="closeDeleteModal()" 
+                     class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+                
+                {{-- Modal --}}
+                <div class="relative z-10 w-full max-w-md p-6 bg-white rounded-lg shadow-xl"
+                     @click.stop>
+                    <h3 class="mb-4 text-lg font-semibold text-gray-900">Delete Resource</h3>
+                    <p class="mb-2 text-gray-600">
+                        Are you sure you want to delete <span class="font-semibold" x-text="deleteResourceName"></span>?
+                    </p>
+                    <p class="mb-6 text-sm text-red-600">
+                        All bookings for this resource will also be deleted.
+                    </p>
+                    <div class="flex justify-end gap-3">
+                        <button @click="closeDeleteModal()"
+                                class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium">
+                            Cancel
+                        </button>
+                        <button @click="confirmDelete()"
+                                class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors font-medium">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>
