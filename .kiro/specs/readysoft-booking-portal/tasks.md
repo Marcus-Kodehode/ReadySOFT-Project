@@ -1000,14 +1000,17 @@ Utvid resource form til å inkludere åpningstider per ukedag.
 - `app/Http/Controllers/ResourceController.php`
 
 **Akseptansekriterier:**
-- [ ] Seksjon: "Opening Hours"
-- [ ] For hver ukedag (Monday-Sunday): Checkbox (enabled), start_time, end_time
-- [ ] Quick setup: "Same hours every day" checkbox
-- [ ] Default: 09:00 - 17:00
-- [ ] Validering: end_time må være etter start_time
-- [ ] Store metode lagrer availabilities i resource_availabilities tabell
-- [ ] Update metode oppdaterer eksisterende availabilities
-- [ ] Alpine.js for "same hours" funksjonalitet
+- [x] Seksjon: "Opening Hours"
+
+
+
+- [x] For hver ukedag (Monday-Sunday): Checkbox (enabled), start_time, end_time
+- [x] Quick setup: "Same hours every day" checkbox
+- [x] Default: 09:00 - 17:00
+- [x] Validering: end_time må være etter start_time
+- [x] Store metode lagrer availabilities i resource_availabilities tabell
+- [x] Update metode oppdaterer eksisterende availabilities
+- [x] Alpine.js for "same hours" funksjonalitet
 
 ---
 

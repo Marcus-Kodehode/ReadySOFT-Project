@@ -63,6 +63,10 @@ class ResourceController extends Controller
             'type' => 'required|string|max:100',
             'capacity' => 'required|integer|min:1',
             'active' => 'boolean',
+            'availabilities' => 'nullable|array',
+            'availabilities.*.enabled' => 'nullable|boolean',
+            'availabilities.*.start_time' => 'nullable|date_format:H:i',
+            'availabilities.*.end_time' => 'nullable|date_format:H:i|after:availabilities.*.start_time',
         ]);
 
         // Legg til tenant_id automatisk
@@ -72,6 +76,11 @@ class ResourceController extends Controller
         try {
             // Opprett ressurs
             $resource = Resource::create($validated);
+
+            // Lagre availabilities hvis de finnes
+            if ($request->has('availabilities')) {
+                $this->saveAvailabilities($resource, $request->input('availabilities'));
+            }
 
             // Flash success melding
             session()->flash('success', 'Resource created successfully');
@@ -128,6 +137,10 @@ class ResourceController extends Controller
             'type' => 'required|string|max:100',
             'capacity' => 'required|integer|min:1',
             'active' => 'boolean',
+            'availabilities' => 'nullable|array',
+            'availabilities.*.enabled' => 'nullable|boolean',
+            'availabilities.*.start_time' => 'nullable|date_format:H:i',
+            'availabilities.*.end_time' => 'nullable|date_format:H:i|after:availabilities.*.start_time',
         ]);
 
         $validated['active'] = $request->has('active') ? true : false;
@@ -135,6 +148,13 @@ class ResourceController extends Controller
         try {
             // Oppdater ressurs
             $resource->update($validated);
+
+            // Oppdater availabilities
+            // Slett eksisterende og opprett nye
+            $resource->availabilities()->delete();
+            if ($request->has('availabilities')) {
+                $this->saveAvailabilities($resource, $request->input('availabilities'));
+            }
 
             // Flash success melding
             session()->flash('success', 'Resource updated successfully');
@@ -173,6 +193,32 @@ class ResourceController extends Controller
             session()->flash('error', 'Failed to delete resource');
 
             return back();
+        }
+    }
+
+    /**
+     * Save resource availabilities.
+     *
+     * @param  \App\Models\Resource  $resource
+     * @param  array  $availabilities
+     * @return void
+     */
+    private function saveAvailabilities(Resource $resource, array $availabilities)
+    {
+        foreach ($availabilities as $dayOfWeek => $availability) {
+            // Kun lagre hvis dagen er enabled og har tider
+            if (
+                isset($availability['enabled']) && 
+                $availability['enabled'] && 
+                isset($availability['start_time']) && 
+                isset($availability['end_time'])
+            ) {
+                $resource->availabilities()->create([
+                    'day_of_week' => $dayOfWeek,
+                    'start_time' => $availability['start_time'],
+                    'end_time' => $availability['end_time'],
+                ]);
+            }
         }
     }
 }
