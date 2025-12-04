@@ -802,12 +802,39 @@ Lag resource controller med full CRUD funksjonalitet for booking-ressurser (hytt
 
 
 
-- [ ] Global scope i index(): Resource::where('tenant_id', auth()->user()->tenant_id)
-- [ ] Validering i store/update: name (required, max:255, unique:resources,name,NULL,id,tenant_id), type (required), capacity (required, integer, min:1)
-- [ ] Eager loading i index/edit: Resource::with('availabilities')
-- [ ] Flash messages: session()->flash('success', 'Resource created successfully') / session()->flash('error', 'Failed to create resource')
-- [ ] Fil-header: `// File: app/Http/Controllers/ResourceController.php`
-- [ ] Fil-footer: `// CRUD controller for booking resources - håndterer hytter, stoler, rom, etc.`
+- [x] Global scope i index(): Resource::where('tenant_id', auth()->user()->tenant_id)
+
+
+
+
+
+- [x] Validering i store/update: name (required, max:255, unique:resources,name,NULL,id,tenant_id), type (required), capacity (required, integer, min:1)
+
+
+
+
+
+- [x] Eager loading i index/edit: Resource::with('availabilities')
+
+
+
+
+- [x] Flash messages: session()->flash('success', 'Resource created successfully') / session()->flash('error', 'Failed to create resource')
+
+
+
+
+
+
+
+
+
+- [x] Fil-header: `// File: app/Http/Controllers/ResourceController.php`
+
+
+
+
+- [X] Fil-footer: `// CRUD controller for booking resources - håndterer hytter, stoler, rom, etc.`
 
 ---
 
