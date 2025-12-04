@@ -851,7 +851,10 @@ Lag liste-visning av alle ressurser for tenant. Viser tabell på desktop, cards 
 - `resources/views/resources/index.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Tabell med kolonner: Name (text-gray-900 font-medium), Type (text-gray-600), Capacity (text-gray-600), Status (badge), Actions (flex gap-2)
+- [x] Tabell med kolonner: Name (text-gray-900 font-medium), Type (text-gray-600), Capacity (text-gray-600), Status (badge), Actions (flex gap-2)
+
+
+
 - [ ] Status badge: Active (bg-green-100 text-green-800) / Inactive (bg-gray-100 text-gray-800) med px-2 py-1 rounded-full
 - [ ] Actions: Edit (text-blue-600 hover:text-blue-800), Delete (text-red-600 hover:text-red-800)
 - [ ] "New Resource" knapp øverst høyre: bg-blue-600 text-white px-4 py-2 rounded-lg
