@@ -1108,10 +1108,10 @@ Implementer booking modal med dato-velger, tid-velger og kunde-info.
 - [x] Steg 2: Velg tid (dropdown med ledige slots fra AvailabilityService)
 - [x] Steg 3: Kunde-info (name, email, phone, notes)
 - [x] Inline validering på alle felter
-- [ ] Submit knapp disabled til alle felter er gyldige
-- [ ] Loading state ved submit
-- [ ] Alpine.js for modal og form state
-- [ ] Følger design guide i `resources/views/public/booking.blade.php`
+- [x] Submit knapp disabled til alle felter er gyldige
+- [x] Loading state ved submit
+- [x] Alpine.js for modal og form state
+- [x] Følger design guide i `resources/views/public/booking.blade.php`
 
 ---
 
@@ -1132,8 +1132,8 @@ Lag bekreftelsesside som vises etter vellykket booking.
 - [ ] Viser: Booking ID, Resource name, Date, Time, Customer name
 - [ ] Melding: "You will receive a confirmation via email/SMS"
 - [ ] Knapp: "Book Another" (går tilbake til /{slug})
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Følger design guide i `resources/views/public/booking-confirmation.blade.php`
+- [ ] Fil-header og footer i `resources/views/public/booking-confirmation.blade.php`
 
 ---
 

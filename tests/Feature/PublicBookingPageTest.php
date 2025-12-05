@@ -328,6 +328,6 @@ test('it includes validation for customer information fields', function () {
     $response->assertSee('@blur="validateField(\'email\')"', false);
     $response->assertSee('@blur="validateField(\'phone\')"', false);
     
-    // Assert: Check that Complete Booking button is disabled when step 2 is not valid
-    $response->assertSee(':disabled="!isStep2Valid()"', false);
+    // Assert: Check that Complete Booking button is disabled when step 2 is not valid or submitting
+    $response->assertSee(':disabled="!isStep2Valid() || submitting"', false);
 });
