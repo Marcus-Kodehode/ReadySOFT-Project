@@ -1198,13 +1198,13 @@ Lag liste-visning av bookinger for tenant.
 
 **Akseptansekriterier:**
 - [x] Tabell: Booking ID, Resource, Customer, Date, Time, Status, Actions
-- [ ] Status badge: Confirmed (grønn), Pending (gul), Cancelled (rød)
-- [ ] Filter tabs: Upcoming, Past, All
-- [ ] Actions: View Details, Cancel
-- [ ] Paginering (20 per side)
-- [ ] Responsivt design
-- [ ] Følger design guide i `resources/views/bookings/index.blade.php`
-- [ ] Fil-header og footer i `resources/views/bookings/index.blade.php` (LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_9_SUMMARY.md FILEN)
+- [x] Status badge: Confirmed (grønn), Pending (gul), Cancelled (rød)
+- [x] Filter tabs: Upcoming, Past, All
+- [x] Actions: View Details, Cancel
+- [x] Paginering (20 per side)
+- [x] Responsivt design
+- [x] Følger design guide i `resources/views/bookings/index.blade.php`
+- [x] Fil-header og footer i `resources/views/bookings/index.blade.php` (LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_9_SUMMARY.md FILEN)
 
 ---
 
@@ -1221,11 +1221,11 @@ Lag detaljvisning for én booking.
 - `resources/views/bookings/show.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Viser all info: Resource, Date, Time, Customer (name, email, phone), Notes, Status
-- [ ] Knapper: "Confirm", "Cancel" (hvis ikke allerede cancelled)
-- [ ] Tilbake-knapp til liste
-- [ ] Følger design guide i `resources/views/bookings/show.blade.php`
-- [ ] Fil-header og footer i `resources/views/bookings/show.blade.php` (LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_9_SUMMARY.md FILEN)
+- [x] Viser all info: Resource, Date, Time, Customer (name, email, phone), Notes, Status
+- [x] Knapper: "Confirm", "Cancel" (hvis ikke allerede cancelled)
+- [x] Tilbake-knapp til liste
+- [x] Følger design guide i `resources/views/bookings/show.blade.php`
+- [x] Fil-header og footer i `resources/views/bookings/show.blade.php` (LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_9_SUMMARY.md FILEN)
 
 ---
 

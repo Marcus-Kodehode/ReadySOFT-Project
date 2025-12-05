@@ -45,6 +45,74 @@ class BookingControllerTest extends TestCase
     }
 
     /**
+     * Test that booking detail view displays all required information.
+     * Verifies: Resource, Date, Time, Customer (name, email, phone), Notes, Status
+     */
+    public function test_booking_detail_view_displays_all_information(): void
+    {
+        // Create tenant with user
+        $tenant = Tenant::factory()->create();
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Create resource for this tenant with description
+        $resource = Resource::factory()->create([
+            'tenant_id' => $tenant->id,
+            'name' => 'Test Resource',
+            'type' => 'Cabin',
+            'description' => 'A beautiful cabin in the woods',
+        ]);
+
+        // Create booking with all fields populated
+        $booking = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => '2025-12-15',
+            'start_time' => '10:00:00',
+            'end_time' => '12:00:00',
+            'customer_name' => 'John Doe',
+            'customer_email' => 'john@example.com',
+            'customer_phone' => '+4712345678',
+            'notes' => 'Please prepare the cabin before arrival',
+            'status' => 'confirmed',
+        ]);
+
+        // Access the booking detail page
+        $response = $this->actingAs($user)
+            ->get(route('bookings.show', $booking->id));
+
+        // Assert response is successful
+        $response->assertStatus(200);
+
+        // Verify Resource information is displayed
+        $response->assertSee('Test Resource');
+        $response->assertSee('Cabin');
+        $response->assertSee('A beautiful cabin in the woods');
+
+        // Verify Date is displayed (formatted)
+        $response->assertSee('Monday, December 15, 2025');
+
+        // Verify Time is displayed
+        $response->assertSee('10:00');
+        $response->assertSee('12:00');
+
+        // Verify Customer information is displayed
+        $response->assertSee('John Doe');
+        $response->assertSee('john@example.com');
+        $response->assertSee('+4712345678');
+
+        // Verify Notes are displayed
+        $response->assertSee('Please prepare the cabin before arrival');
+
+        // Verify Status is displayed
+        $response->assertSee('Confirmed');
+
+        // Verify booking ID is displayed
+        $response->assertSee('Booking #' . $booking->id);
+    }
+
+    /**
      * Test that tenant cannot view another tenant's booking.
      */
     public function test_tenant_cannot_view_other_tenant_booking(): void
