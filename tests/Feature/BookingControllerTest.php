@@ -253,4 +253,175 @@ class BookingControllerTest extends TestCase
             ]);
         }
     }
+
+    /**
+     * Test that index filters upcoming bookings correctly.
+     */
+    public function test_index_filters_upcoming_bookings(): void
+    {
+        // Create tenant with user
+        $tenant = Tenant::factory()->create();
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Create resource for this tenant
+        $resource = Resource::factory()->create([
+            'tenant_id' => $tenant->id,
+        ]);
+
+        // Create past booking
+        $pastBooking = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => now()->subDays(2),
+        ]);
+
+        // Create upcoming booking
+        $upcomingBooking = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => now()->addDays(2),
+        ]);
+
+        // Request with upcoming filter
+        $response = $this->actingAs($user)
+            ->get(route('bookings.index', ['filter' => 'upcoming']));
+
+        // Assert response is successful
+        $response->assertStatus(200);
+
+        // Verify only upcoming booking is in the view data
+        $bookings = $response->viewData('bookings');
+        $this->assertCount(1, $bookings);
+        $this->assertEquals($upcomingBooking->id, $bookings->first()->id);
+    }
+
+    /**
+     * Test that index filters past bookings correctly.
+     */
+    public function test_index_filters_past_bookings(): void
+    {
+        // Create tenant with user
+        $tenant = Tenant::factory()->create();
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Create resource for this tenant
+        $resource = Resource::factory()->create([
+            'tenant_id' => $tenant->id,
+        ]);
+
+        // Create past booking
+        $pastBooking = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => now()->subDays(2),
+        ]);
+
+        // Create upcoming booking
+        $upcomingBooking = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => now()->addDays(2),
+        ]);
+
+        // Request with past filter
+        $response = $this->actingAs($user)
+            ->get(route('bookings.index', ['filter' => 'past']));
+
+        // Assert response is successful
+        $response->assertStatus(200);
+
+        // Verify only past booking is in the view data
+        $bookings = $response->viewData('bookings');
+        $this->assertCount(1, $bookings);
+        $this->assertEquals($pastBooking->id, $bookings->first()->id);
+    }
+
+    /**
+     * Test that index shows all bookings when no filter is applied.
+     */
+    public function test_index_shows_all_bookings_without_filter(): void
+    {
+        // Create tenant with user
+        $tenant = Tenant::factory()->create();
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Create resource for this tenant
+        $resource = Resource::factory()->create([
+            'tenant_id' => $tenant->id,
+        ]);
+
+        // Create past booking
+        $pastBooking = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => now()->subDays(2),
+        ]);
+
+        // Create upcoming booking
+        $upcomingBooking = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => now()->addDays(2),
+        ]);
+
+        // Request without filter (defaults to 'all')
+        $response = $this->actingAs($user)
+            ->get(route('bookings.index'));
+
+        // Assert response is successful
+        $response->assertStatus(200);
+
+        // Verify both bookings are in the view data
+        $bookings = $response->viewData('bookings');
+        $this->assertCount(2, $bookings);
+    }
+
+    /**
+     * Test that index only shows bookings for tenant's own resources.
+     */
+    public function test_index_only_shows_own_tenant_bookings(): void
+    {
+        // Create first tenant with user
+        $tenant1 = Tenant::factory()->create();
+        $user1 = User::factory()->create([
+            'tenant_id' => $tenant1->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Create resource for tenant1
+        $resource1 = Resource::factory()->create([
+            'tenant_id' => $tenant1->id,
+        ]);
+
+        // Create booking for tenant1
+        $booking1 = Booking::factory()->create([
+            'resource_id' => $resource1->id,
+            'booking_date' => now()->addDays(1),
+        ]);
+
+        // Create second tenant with resource and booking
+        $tenant2 = Tenant::factory()->create();
+        $resource2 = Resource::factory()->create([
+            'tenant_id' => $tenant2->id,
+        ]);
+        $booking2 = Booking::factory()->create([
+            'resource_id' => $resource2->id,
+            'booking_date' => now()->addDays(1),
+        ]);
+
+        // Request as tenant1
+        $response = $this->actingAs($user1)
+            ->get(route('bookings.index'));
+
+        // Assert response is successful
+        $response->assertStatus(200);
+
+        // Verify only tenant1's booking is in the view data
+        $bookings = $response->viewData('bookings');
+        $this->assertCount(1, $bookings);
+        $this->assertEquals($booking1->id, $bookings->first()->id);
+    }
 }
