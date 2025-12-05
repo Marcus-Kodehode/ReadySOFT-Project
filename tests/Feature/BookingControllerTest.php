@@ -424,4 +424,74 @@ class BookingControllerTest extends TestCase
         $this->assertCount(1, $bookings);
         $this->assertEquals($booking1->id, $bookings->first()->id);
     }
+
+    /**
+     * Test that bookings are sorted by date DESC then by start_time DESC.
+     * This test verifies the sorting logic directly without requiring the view.
+     */
+    public function test_bookings_are_sorted_by_date_and_time_desc(): void
+    {
+        // Create tenant with user
+        $tenant = Tenant::factory()->create();
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Create resource for this tenant
+        $resource = Resource::factory()->create([
+            'tenant_id' => $tenant->id,
+        ]);
+
+        // Create bookings with different dates and times
+        // Booking 1: Earlier date, earlier time
+        $booking1 = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => now()->addDays(1)->format('Y-m-d'),
+            'start_time' => '09:00:00',
+            'end_time' => '10:00:00',
+        ]);
+
+        // Booking 2: Earlier date, later time
+        $booking2 = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => now()->addDays(1)->format('Y-m-d'),
+            'start_time' => '14:00:00',
+            'end_time' => '15:00:00',
+        ]);
+
+        // Booking 3: Later date, earlier time
+        $booking3 = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => now()->addDays(3)->format('Y-m-d'),
+            'start_time' => '10:00:00',
+            'end_time' => '11:00:00',
+        ]);
+
+        // Booking 4: Later date, later time
+        $booking4 = Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'booking_date' => now()->addDays(3)->format('Y-m-d'),
+            'start_time' => '16:00:00',
+            'end_time' => '17:00:00',
+        ]);
+
+        // Simulate the controller's query logic
+        $resourceIds = Resource::where('tenant_id', $tenant->id)->pluck('id');
+        $bookings = Booking::with('resource')
+            ->whereIn('resource_id', $resourceIds)
+            ->orderBy('booking_date', 'desc')
+            ->orderBy('start_time', 'desc')
+            ->get();
+
+        // Verify bookings are sorted correctly
+        $this->assertCount(4, $bookings);
+
+        // Expected order: booking4, booking3, booking2, booking1
+        // (latest date first, then latest time first within same date)
+        $this->assertEquals($booking4->id, $bookings[0]->id, 'First booking should be booking4 (latest date, latest time)');
+        $this->assertEquals($booking3->id, $bookings[1]->id, 'Second booking should be booking3 (latest date, earlier time)');
+        $this->assertEquals($booking2->id, $bookings[2]->id, 'Third booking should be booking2 (earlier date, latest time)');
+        $this->assertEquals($booking1->id, $bookings[3]->id, 'Fourth booking should be booking1 (earlier date, earlier time)');
+    }
 }

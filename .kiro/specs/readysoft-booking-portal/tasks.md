@@ -1177,8 +1177,8 @@ Lag controller for tenant å se og administrere bookinger for sine ressurser.
 - [x] Metode: show($id) - finn booking, sjekk at booking->resource->tenant_id === auth()->user()->tenant_id, returner view
 - [x] Metode: updateStatus($id, Request $request) - valider status (in:pending,confirmed,cancelled), oppdater booking->status, returner redirect med flash message
 - [x] Filtrering: if($filter === 'upcoming') whereDate('booking_date', '>=', now()), if($filter === 'past') whereDate('booking_date', '<', now())
-- [ ] Sortering: ->orderBy('booking_date', 'desc')->orderBy('start_time', 'desc')
-- [ ] Eager loading: Booking::with('resource')->whereIn('resource_id', $resourceIds)
+- [x] Sortering: ->orderBy('booking_date', 'desc')->orderBy('start_time', 'desc')
+- [x] Eager loading: Booking::with('resource')->whereIn('resource_id', $resourceIds)
 - [ ] Fil-header: `// File: app/Http/Controllers/BookingController.php`
 - [ ] Fil-footer: `// Booking management controller - tenant administrerer bookinger for sine ressurser` (LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_9_SUMMARY.md FILEN)
 
