@@ -188,10 +188,22 @@ Opprettet `resources/views/public/booking.blade.php` med:
 
 ### Design Compliance
 
-- ✅ Tailwind classes som spesifisert
+- ✅ Tailwind container: `max-w-7xl mx-auto px-4 py-8`
+- ✅ Responsivt grid: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+- ✅ Card styling: `bg-white rounded-lg shadow-sm border p-6`
 - ✅ Responsivt design (mobil → tablet → desktop)
 - ✅ Konsistent med design guide
 - ✅ Brukersynlig tekst på engelsk
+- ✅ Fil-header og footer
+
+### Alle Akseptansekriterier Fullført
+
+- ✅ Header seksjon med tenant info (h1, business_type, description)
+- ✅ Grid av resource cards med korrekte Tailwind classes
+- ✅ Hver card viser: name, description, capacity, "Book Now" knapp
+- ✅ "Book Now" knapp åpner modal via Alpine.js
+- ✅ Responsivt: 1 col mobil, 2 col tablet, 3 col desktop
+- ✅ Tailwind container: max-w-7xl mx-auto px-4 py-8
 - ✅ Fil-header og footer
 
 ### Neste steg

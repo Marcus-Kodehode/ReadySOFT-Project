@@ -1083,10 +1083,10 @@ Lag offentlig bookingside som viser tenant-info og ressurser. Dette er siden kun
 - [x] Grid av resource cards: <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 - [x] Hver card: bg-white rounded-lg shadow-sm border p-6, viser name (font-semibold text-lg), description (text-gray-600 text-sm), capacity (text-gray-500 text-xs), "Book Now" knapp (bg-blue-600 text-white w-full)
 - [x] Klikk på "Book Now": @click="openModal({{ $resource->id }})" (Alpine.js)
-- [ ] Responsivt: 1 col mobil, 2 col tablet, 3 col desktop
-- [ ] Tailwind container: max-w-7xl mx-auto px-4 py-8
-- [ ] Fil-header: `{{-- File: resources/views/public/booking.blade.php --}}`
-- [ ] Fil-footer: `{{-- Public booking page - viser tenant info og ressurser for booking --}}`
+- [x] Responsivt: 1 col mobil, 2 col tablet, 3 col desktop
+- [x] Tailwind container: max-w-7xl mx-auto px-4 py-8
+- [x] Fil-header: `{{-- File: resources/views/public/booking.blade.php --}}`
+- [x] Fil-footer: `{{-- Public booking page - viser tenant info og ressurser for booking --}}`
 
 ---
 
