@@ -1153,8 +1153,8 @@ Lag custom 404 side for når slug ikke finnes.
 - [ ] Melding: "Tenant Not Found"
 - [ ] Forklaring: "The page you're looking for doesn't exist"
 - [ ] Link: "Go to Home Page"
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Følger design guide i `resources/views/errors/404.blade.php`
+- [ ] Fil-header og footer i `resources/views/errors/404.blade.php`
 
 ---
 

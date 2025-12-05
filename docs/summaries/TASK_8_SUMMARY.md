@@ -209,3 +209,240 @@ Opprettet `resources/views/public/booking.blade.php` med:
 ### Neste steg
 
 Task 8.3: Opprett booking modal med Alpine.js (dato-velger, tid-velger, kunde-info)
+
+---
+
+## Task 8.3: Booking Modal med Alpine.js
+
+**Status:** ✅ FULLFØRT  
+**Dato:** 05.12.2025
+
+### Hva ble implementert
+
+#### Alpine.js State Management
+Implementerte komplett Alpine.js data object med:
+
+**Modal State:**
+- `modalOpen` - Kontrollerer modal synlighet
+- `currentStep` - Håndterer 2-stegs booking prosess (1: Dato/Tid, 2: Kunde-info)
+- `selectedResourceId` - ID på valgt ressurs
+- `selectedResourceName` - Navn på valgt ressurs
+
+**Booking Data:**
+- `bookingDate` - Valgt dato
+- `minDate` - Minimum dato (dagens dato)
+- `availableSlots` - Array av tilgjengelige tidspunkter
+- `selectedTimeSlot` - Valgt tidspunkt
+- `loadingSlots` - Loading state for API kall
+
+**Customer Information:**
+- `customerName` - Kundens navn
+- `customerEmail` - Kundens e-post
+- `customerPhone` - Kundens telefonnummer
+- `customerNotes` - Valgfrie notater
+
+**Form State:**
+- `errors` - Object med valideringsfeil per felt
+- `touched` - Object som tracker hvilke felter brukeren har interagert med
+- `submitting` - Loading state ved innsending
+
+#### Metoder Implementert
+
+**1. fetchAvailableSlots()**
+- Henter tilgjengelige tidspunkter fra API
+- Kjøres automatisk når dato endres
+- Håndterer loading state og feil
+
+**2. Validering:**
+- `validateEmail(email)` - Validerer e-post format
+- `validatePhone(phone)` - Validerer telefonnummer (8-15 siffer)
+- `validateField(field)` - Validerer enkeltfelt med spesifikke regler
+- `validateStep1()` - Validerer dato og tid
+- `validateCustomerInfo()` - Validerer alle kunde-felter
+
+**3. Navigasjon:**
+- `nextStep()` - Går til neste steg (validerer først)
+- `previousStep()` - Går tilbake til forrige steg
+- `resetModal()` - Nullstiller alle felter når modal lukkes
+
+**4. Hjelpemetoder:**
+- `isStep1Valid()` - Sjekker om steg 1 er gyldig
+- `isStep2Valid()` - Sjekker om steg 2 er gyldig
+
+#### Modal UI Komponenter
+
+**1. Step Indicator**
+- Visuell indikator for 2-stegs prosess
+- Aktiv step markert med blå farge
+- Inaktiv step markert med grå farge
+- Forbindelseslinje mellom steg
+
+**2. Step 1: Date & Time Selection**
+- **Date Picker:**
+  - HTML5 date input
+  - Min dato satt til i dag
+  - Inline validering med feilmeldinger
+  - Helper tekst
+
+- **Time Slot Selector:**
+  - Vises kun når dato er valgt
+  - Loading state mens slots hentes
+  - Dropdown med tilgjengelige tidspunkter
+  - "No slots available" melding hvis ingen ledige tider
+  - Inline validering
+
+**3. Step 2: Customer Information**
+- **Full Name:**
+  - Required, 2-255 tegn
+  - Real-time validering
+  - Grønn checkmark når gyldig
+  - Rød feilmelding når ugyldig
+
+- **Email Address:**
+  - Required, gyldig e-post format
+  - Real-time validering
+  - Grønn checkmark når gyldig
+  - Rød feilmelding når ugyldig
+
+- **Phone Number:**
+  - Required, 8-15 siffer
+  - Støtter internasjonalt format (+47)
+  - Real-time validering
+  - Grønn checkmark når gyldig
+  - Rød feilmelding når ugyldig
+
+- **Additional Notes:**
+  - Valgfritt felt
+  - Textarea for lengre tekst
+  - Ingen validering
+
+**4. Action Buttons**
+- **Back Button:** Vises kun på steg 2, går tilbake til steg 1
+- **Cancel Button:** Lukker modal og nullstiller
+- **Next Button:** Vises på steg 1, disabled til validering passerer
+- **Submit Button:** Vises på steg 2, disabled til validering passerer
+  - Loading spinner under innsending
+  - Tekst endres til "Submitting..."
+
+#### Validering Features
+
+**Real-time Validation:**
+- Validering kjøres ved `@blur` (når felt mister fokus)
+- Validering kjøres ved `@input` hvis felt allerede er "touched"
+- Visuell feedback med røde borders og feilmeldinger
+- Grønne checkmarks for gyldige felter
+
+**Touched State:**
+- Tracker hvilke felter brukeren har interagert med
+- Forhindrer feilmeldinger før bruker har prøvd å fylle ut
+- Settes ved blur eller eksplisitt ved knappeklikk
+
+**Field-specific Validation:**
+- **Name:** Min 2 tegn, max 255 tegn
+- **Email:** Gyldig e-post format (regex)
+- **Phone:** 8-15 siffer, støtter + prefix
+- **Date:** Må være i fremtiden
+- **Time Slot:** Må være valgt
+
+#### Alpine.js Watchers
+
+Implementerte `x-init` med watchers for automatisk validering:
+```javascript
+$watch('bookingDate', () => { 
+    fetchAvailableSlots(); 
+    if(touched.date) validateField('date'); 
+});
+$watch('selectedTimeSlot', () => { 
+    if(touched.timeSlot) validateField('timeSlot'); 
+});
+$watch('customerName', () => { 
+    if(touched.name) validateField('name'); 
+});
+$watch('customerEmail', () => { 
+    if(touched.email) validateField('email'); 
+});
+$watch('customerPhone', () => { 
+    if(touched.phone) validateField('phone'); 
+});
+```
+
+#### Keyboard Support
+
+- **Escape Key:** Lukker modal (`@keydown.escape.window`)
+- **Tab Navigation:** Fungerer naturlig gjennom alle felter
+- **Enter Key:** Submitter form (standard HTML behavior)
+
+#### Responsive Design
+
+- Modal sentrert på alle skjermstørrelser
+- Max-width: 28rem (448px)
+- Padding: 1rem på mobil
+- Full-width inputs
+- Touch-vennlige knapper (min 44x44px)
+
+### Akseptansekriterier - Alle Fullført ✅
+
+- ✅ Modal åpnes ved klikk på "Book Now"
+- ✅ Steg 1: Velg dato (date input, kun fremtidige datoer)
+- ✅ Steg 2: Velg tid (dropdown med ledige slots fra AvailabilityService)
+- ✅ Steg 3: Kunde-info (name, email, phone, notes)
+- ✅ Inline validering på alle felter
+- ✅ Submit knapp disabled til alle felter er gyldige
+- ✅ Loading state ved submit
+- ✅ Alpine.js for modal og form state
+- ✅ Følger design guide
+
+### Testing
+
+**Manuell Testing:**
+- ✅ Modal åpner og lukker korrekt
+- ✅ Step indicator oppdateres
+- ✅ Date picker fungerer
+- ✅ Time slots hentes fra API
+- ✅ Validering fungerer på alle felter
+- ✅ Real-time feedback fungerer
+- ✅ Navigation mellom steg fungerer
+- ✅ Submit button disabled/enabled korrekt
+- ✅ Escape key lukker modal
+- ✅ Click outside lukker modal
+- ✅ Reset fungerer ved lukking
+
+**Automatiserte tester:**
+Eksisterende tester i `PublicBookingPageTest.php` dekker:
+- ✅ Modal struktur er tilstede
+- ✅ Alpine.js data attributes
+- ✅ Form felter er tilstede
+- ✅ Validation attributes
+
+### Design Compliance
+
+- ✅ Følger design guide for modal
+- ✅ Tailwind classes konsistent brukt
+- ✅ Responsivt design
+- ✅ Accessibility (labels, aria-attributes)
+- ✅ Loading states
+- ✅ Error states
+- ✅ Success states (grønne checkmarks)
+
+### Tekniske Detaljer
+
+**Alpine.js Version:** 3.x (via Vite)
+**Styling:** Tailwind CSS 3.x
+**Icons:** Inline SVG (Heroicons style)
+**API Integration:** Fetch API for available slots
+
+### Fil-struktur
+
+```
+resources/views/public/
+└── booking.blade.php  ← Oppdatert med komplett modal
+
+Ingen nye filer opprettet - alt implementert i eksisterende view.
+```
+
+### Neste Steg
+
+Task 8.4: Opprett booking bekreftelsesside
+- Vise booking detaljer
+- Success melding
+- "Book Another" knapp
