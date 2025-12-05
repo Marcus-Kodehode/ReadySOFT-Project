@@ -74,6 +74,42 @@ class BookingController extends Controller
 
         return view('bookings.show', compact('booking'));
     }
+
+    /**
+     * Update the status of the specified booking.
+     * 
+     * Oppdaterer status for en booking. Validerer at status er gyldig
+     * og at bookingen tilhører innlogget tenant.
+     * 
+     * @param int $id
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function updateStatus($id, Request $request)
+    {
+        // Valider status input
+        $validated = $request->validate([
+            'status' => 'required|in:pending,confirmed,cancelled',
+        ]);
+
+        // Finn booking med eager loading av resource
+        $booking = Booking::with('resource')->findOrFail($id);
+
+        // Sjekk at booking tilhører en ressurs som eies av innlogget tenant
+        if ($booking->resource->tenant_id !== auth()->user()->tenant_id) {
+            abort(403, 'Unauthorized access to this booking.');
+        }
+
+        // Oppdater booking status
+        $booking->status = $validated['status'];
+        $booking->save();
+
+        // Returner redirect med success melding
+        return redirect()
+            ->route('bookings.show', $booking->id)
+            ->with('success', 'Booking status updated successfully to ' . $validated['status'] . '.');
+    }
 }
 
 // Booking management controller - tenant administrerer bookinger for sine ressurser

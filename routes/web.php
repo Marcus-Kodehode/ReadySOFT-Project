@@ -37,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/bookings', [BookingController::class, 'index'])->name('bookings.index');
     Route::get('/dashboard/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
+    Route::patch('/dashboard/bookings/{id}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
 });
 
 // Placeholder routes for Quick Actions (to be implemented in later phases)
