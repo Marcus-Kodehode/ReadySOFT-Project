@@ -55,34 +55,22 @@ class PublicBookingController extends Controller
             ->where('tenant_id', $tenant->id)
             ->firstOrFail();
 
-        // Sjekk for konflikter - overlappende bookinger
-        // Hent alle eksisterende bookinger for denne ressursen og datoen
-        $existingBookings = Booking::where('resource_id', $validated['resource_id'])
+        // Sjekk for konflikter basert på capacity
+        // Tell antall overlappende bookinger og sammenlign med ressursens kapasitet
+        $overlappingBookingsCount = Booking::where('resource_id', $validated['resource_id'])
             ->where('booking_date', $validated['booking_date'])
             ->where('status', '!=', 'cancelled')
-            ->get();
-        
-        // Sjekk manuelt for overlapp (mer robust enn SQL-sammenligning)
-        $hasConflict = false;
-        foreach ($existingBookings as $existing) {
-            // Normaliser tidsformater med full dato for korrekt sammenligning
-            $existingStart = \Carbon\Carbon::parse($validated['booking_date'] . ' ' . $existing->start_time);
-            $existingEnd = \Carbon\Carbon::parse($validated['booking_date'] . ' ' . $existing->end_time);
-            $newStart = \Carbon\Carbon::parse($validated['booking_date'] . ' ' . $validated['start_time']);
-            $newEnd = \Carbon\Carbon::parse($validated['booking_date'] . ' ' . $validated['end_time']);
-            
-            // To tidsperioder overlapper hvis:
-            // - Ny start er før eksisterende slutt OG
-            // - Ny slutt er etter eksisterende start
-            if ($newStart->lt($existingEnd) && $newEnd->gt($existingStart)) {
-                $hasConflict = true;
-                break;
-            }
-        }
+            ->where(function ($query) use ($validated) {
+                // Bruk Carbon for å sikre korrekt tidssammenligning
+                $query->whereRaw('TIME(end_time) > TIME(?)', [$validated['start_time']])
+                      ->whereRaw('TIME(start_time) < TIME(?)', [$validated['end_time']]);
+            })
+            ->count();
 
-        if ($hasConflict) {
+        // Hvis antall overlappende bookinger >= capacity, er det fullt
+        if ($overlappingBookingsCount >= $resource->capacity) {
             return back()->withErrors([
-                'booking' => 'This time slot is no longer available. Please select a different time.'
+                'booking' => 'This time slot is fully booked. Please select a different time.'
             ])->withInput();
         }
 

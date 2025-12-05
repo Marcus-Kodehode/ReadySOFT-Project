@@ -86,17 +86,17 @@ class AvailabilityService
     }
     
     /**
-     * Sjekk om et spesifikt tidsrom er ledig for booking.
+     * Sjekk om et spesifikt tidsrom er ledig for booking basert på kapasitet.
      * 
      * Validerer at:
      * - Tidspunktet er innenfor åpningstider
-     * - Ingen eksisterende bookinger overlapper
+     * - Antall overlappende bookinger < ressursens kapasitet
      * 
      * @param Resource $resource Ressursen det skal sjekkes for
      * @param string|Carbon $date Datoen (format: Y-m-d)
      * @param string $startTime Start-tid (format: H:i)
      * @param string $endTime Slutt-tid (format: H:i)
-     * @return bool True hvis ledig, false hvis opptatt
+     * @return bool True hvis ledig, false hvis fullt booket
      */
     public function isTimeSlotAvailable(Resource $resource, $date, string $startTime, string $endTime): bool
     {
@@ -129,32 +129,25 @@ class AvailabilityService
             return false;
         }
         
-        // Hent eksisterende bookinger for denne datoen
-        $existingBookings = $resource->bookings()
+        // Tell antall overlappende bookinger
+        $overlappingCount = $resource->bookings()
             ->where('booking_date', $date->format('Y-m-d'))
             ->whereIn('status', ['pending', 'confirmed'])
-            ->get();
+            ->where(function ($query) use ($baseDate, $startTime, $endTime) {
+                $query->whereRaw('TIME(end_time) > TIME(?)', [$startTime])
+                      ->whereRaw('TIME(start_time) < TIME(?)', [$endTime]);
+            })
+            ->count();
         
-        // Sjekk om forespurt tid overlapper med eksisterende bookinger
-        foreach ($existingBookings as $booking) {
-            $bookingStart = Carbon::createFromFormat('Y-m-d H:i:s', $baseDate . ' ' . $booking->start_time);
-            $bookingEnd = Carbon::createFromFormat('Y-m-d H:i:s', $baseDate . ' ' . $booking->end_time);
-            
-            // Sjekk overlapp: to tidsperioder overlapper hvis:
-            // start1 < end2 OG start2 < end1
-            if ($requestedStart->lt($bookingEnd) && $bookingStart->lt($requestedEnd)) {
-                return false;
-            }
-        }
-        
-        return true;
+        // Tilgjengelig hvis antall overlappende bookinger < capacity
+        return $overlappingCount < $resource->capacity;
     }
     
     /**
-     * Filtrer bort tidsluker som er opptatt av eksisterende bookinger.
+     * Filtrer bort tidsluker som er fullt booket basert på ressursens kapasitet.
      * 
-     * En slot (30 min) er opptatt hvis den overlapper med en booking.
-     * Slot fra 09:30-10:00 overlapper med booking 09:30-10:30.
+     * En slot er tilgjengelig hvis antall overlappende bookinger < capacity.
+     * Dette tillater flere bookinger samtidig for ressurser med capacity > 1.
      * 
      * @param array $slots Alle mulige tidsluker
      * @param Collection $bookings Eksisterende bookinger
@@ -164,12 +157,22 @@ class AvailabilityService
     protected function filterOccupiedSlots(array $slots, Collection $bookings, Carbon $date): array
     {
         $baseDate = $date->format('Y-m-d');
+        $resource = $bookings->first()?->resource ?? null;
         
-        return array_values(array_filter($slots, function ($slot) use ($bookings, $baseDate) {
+        // Hvis ingen resource eller ingen bookinger, returner alle slots
+        if (!$resource) {
+            return $slots;
+        }
+        
+        $capacity = $resource->capacity;
+        
+        return array_values(array_filter($slots, function ($slot) use ($bookings, $baseDate, $capacity) {
             $slotStart = Carbon::createFromFormat('Y-m-d H:i', $baseDate . ' ' . $slot);
             // En slot er 30 minutter lang
             $slotEnd = $slotStart->copy()->addMinutes(30);
             
+            // Tell antall overlappende bookinger for denne sloten
+            $overlappingCount = 0;
             foreach ($bookings as $booking) {
                 $bookingStart = Carbon::createFromFormat('Y-m-d H:i:s', $baseDate . ' ' . $booking->start_time);
                 $bookingEnd = Carbon::createFromFormat('Y-m-d H:i:s', $baseDate . ' ' . $booking->end_time);
@@ -177,11 +180,12 @@ class AvailabilityService
                 // Sjekk overlapp: to tidsperioder overlapper hvis:
                 // slotStart < bookingEnd OG bookingStart < slotEnd
                 if ($slotStart->lt($bookingEnd) && $bookingStart->lt($slotEnd)) {
-                    return false;
+                    $overlappingCount++;
                 }
             }
             
-            return true;
+            // Slot er tilgjengelig hvis antall overlappende bookinger < capacity
+            return $overlappingCount < $capacity;
         }));
     }
 }
