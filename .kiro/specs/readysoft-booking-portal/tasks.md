@@ -1054,7 +1054,7 @@ Lag controller som håndterer offentlig bookingside (/{slug}) og booking-prosess
 
 **Akseptansekriterier:**
 - [x] Metode: show($slug) - finn tenant via Tenant::where('slug', $slug)->firstOrFail(), eager load resources, returner view('public.booking', compact('tenant'))
-- [ ] Metode: store(Request $request, $slug) - valider input, sjekk konflikt, lagre booking, returner redirect til confirmation
+- [x] Metode: store(Request $request, $slug) - valider input, sjekk konflikt, lagre booking, returner redirect til confirmation
 - [ ] Validering: resource_id (required, exists:resources,id), booking_date (required, date, after:today), start_time (required, date_format:H:i), end_time (required, date_format:H:i, after:start_time), customer_name (required, max:255), customer_email (required, email), customer_phone (required, regex:/^[+]?[0-9]{8,15}$/)
 - [ ] Konflikt-sjekk: Booking::where('resource_id', $resource_id)->where('booking_date', $date)->whereBetween('start_time', [$start, $end])->exists()
 - [ ] Returnerer: redirect()->route('booking.confirmation', ['id' => $booking->id]) ved suksess

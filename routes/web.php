@@ -47,3 +47,6 @@ require __DIR__.'/auth.php';
 
 // Public Booking Page (Phase 8) - MUST BE LAST to avoid catching other routes
 Route::get('/{slug}', [PublicBookingController::class, 'show'])->name('booking.show');
+Route::post('/{slug}/bookings', [PublicBookingController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('booking.store');
