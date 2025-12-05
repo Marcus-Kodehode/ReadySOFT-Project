@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\SlugController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\PublicBookingController;
 use Illuminate\Support\Facades\Route;
 
 // API Routes
@@ -13,6 +14,9 @@ Route::get('/api/check-slug', [SlugController::class, 'check'])->name('api.check
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Public Booking Page (Phase 8)
+Route::get('/{slug}', [PublicBookingController::class, 'show'])->name('booking.show');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
