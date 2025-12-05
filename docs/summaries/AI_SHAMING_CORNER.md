@@ -273,3 +273,109 @@ z-50  → Hele modal-containeren (over alt annet på siden)
 
 ---
 
+
+## Shame Entry #5: Catch-all Route Placement Problem
+
+**Dato:** 2025-12-04  
+**AI Forslag:** "Legg til `/{slug}` route i web.php"  
+**Resultat:** ❌ Alle ruter ble fanget av slug-ruten, inkludert /dashboard, /login, /register  
+**Menneske Observasjon:** "Jeg kan ikke aksessere login eller dashboard lenger!"  
+**AI Løsning:** "Ah! Catch-all ruten må være SIST i route-filen"  
+**Resultat:** ✅ Fungerte perfekt etter flytting  
+
+**Hva gikk galt:**
+AI plasserte `/{slug}` ruten for tidlig i route-filen:
+
+```php
+// ❌ FEIL PLASSERING (tidlig i filen)
+Route::get('/{slug}', [PublicBookingController::class, 'show']);
+
+// Disse ruter ble aldri nådd fordi /{slug} fanget alt:
+Route::get('/dashboard', ...);
+Route::get('/login', ...);
+Route::get('/register', ...);
+```
+
+**Resultat:**
+- `/dashboard` → Fanget av `/{slug}` med slug="dashboard"
+- `/login` → Fanget av `/{slug}` med slug="login"
+- `/register` → Fanget av `/{slug}` med slug="register"
+- Ingen av de spesifikke rutene ble nådd
+- Brukeren kunne ikke logge inn eller aksessere dashboard
+
+**Riktig løsning:**
+
+```php
+// ✅ RIKTIG PLASSERING (sist i filen)
+
+// Spesifikke ruter først
+Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::get('/login', ...);
+Route::get('/register', ...);
+// ... alle andre spesifikke ruter
+
+// Catch-all route SIST
+// Public Booking Page (Phase 8) - MUST BE LAST to avoid catching other routes
+Route::get('/{slug}', [PublicBookingController::class, 'show'])
+    ->name('booking.show');
+```
+
+**Hvorfor dette fungerer:**
+
+Laravel matcher ruter i **rekkefølgen de er definert**:
+1. Sjekker `/dashboard` → Match! Kjører DashboardController
+2. Sjekker `/login` → Match! Kjører LoginController
+3. Sjekker `/register` → Match! Kjører RegisterController
+4. Sjekker `/{slug}` → Match! Kjører PublicBookingController (kun hvis ingen andre matcher)
+
+**Route matching-regler:**
+
+| URL | Spesifikk route først | Catch-all route først |
+|-----|----------------------|----------------------|
+| `/dashboard` | ✅ Matches `/dashboard` | ❌ Matches `/{slug}` |
+| `/login` | ✅ Matches `/login` | ❌ Matches `/{slug}` |
+| `/my-salon` | ✅ Matches `/{slug}` | ✅ Matches `/{slug}` |
+
+**Lærdommen:**
+✅ Catch-all routes (`/{param}`) må ALLTID være sist  
+✅ Spesifikke routes må komme før dynamiske routes  
+✅ Laravel matcher routes i rekkefølge (top-to-bottom)  
+✅ Første match vinner - ingen videre sjekk  
+❌ AI glemte å tenke på route-prioritering  
+
+**Bonus - Andre catch-all patterns som må være sist:**
+```php
+// Disse må også være sist:
+Route::get('/{category}/{slug}', ...);  // To-level catch-all
+Route::get('/blog/{any}', ...)->where('any', '.*');  // Regex catch-all
+Route::fallback(function () { ... });  // Ultimate fallback
+```
+
+**Best practice kommentar:**
+```php
+// ============================================
+// CATCH-ALL ROUTES - MUST BE LAST
+// ============================================
+// These routes use dynamic parameters that can match any URL.
+// Place them at the end to avoid catching specific routes above.
+
+Route::get('/{slug}', [PublicBookingController::class, 'show'])
+    ->name('booking.show');
+```
+
+**Mennesket reddet dagen igjen! 🏆**
+
+**Testing for å verifisere:**
+```bash
+# Test at spesifikke ruter fungerer
+curl http://localhost:8000/dashboard  # Skal vise dashboard
+curl http://localhost:8000/login      # Skal vise login
+curl http://localhost:8000/register   # Skal vise register
+
+# Test at catch-all fungerer
+curl http://localhost:8000/my-salon   # Skal vise tenant booking page
+curl http://localhost:8000/invalid    # Skal vise 404 (tenant not found)
+```
+
+---
+

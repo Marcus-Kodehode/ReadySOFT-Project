@@ -15,9 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Public Booking Page (Phase 8)
-Route::get('/{slug}', [PublicBookingController::class, 'show'])->name('booking.show');
-
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -47,3 +44,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Public Booking Page (Phase 8) - MUST BE LAST to avoid catching other routes
+Route::get('/{slug}', [PublicBookingController::class, 'show'])->name('booking.show');
