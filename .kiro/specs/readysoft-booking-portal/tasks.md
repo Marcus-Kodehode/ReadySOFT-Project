@@ -1060,8 +1060,8 @@ Lag controller som håndterer offentlig bookingside (/{slug}) og booking-prosess
 - [x] Returnerer: redirect()->route('booking.confirmation', ['id' => $booking->id]) ved suksess
 - [x] Ingen auth middleware
 - [x] Rate limiting i route: ->middleware('throttle:10,60') (10 requests per time)
-- [ ] Fil-header: `// File: app/Http/Controllers/PublicBookingController.php`
-- [ ] Fil-footer: `// Public booking controller - håndterer offentlig bookingside uten autentisering`
+- [x] Fil-header: `// File: app/Http/Controllers/PublicBookingController.php`
+- [x] Fil-footer: `// Public booking controller - håndterer offentlig bookingside uten autentisering`
 
 ---
 
