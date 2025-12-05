@@ -24,6 +24,7 @@
         customerPhone: '',
         customerNotes: '',
         errors: {},
+        touched: {},
         async fetchAvailableSlots() {
             if (!this.bookingDate || !this.selectedResourceId) {
                 this.availableSlots = [];
@@ -45,7 +46,7 @@
             }
         },
         nextStep() {
-            if (this.currentStep === 1 && this.bookingDate && this.selectedTimeSlot) {
+            if (this.validateStep1()) {
                 this.currentStep = 2;
             }
         },
@@ -64,6 +65,7 @@
             this.customerPhone = '';
             this.customerNotes = '';
             this.errors = {};
+            this.touched = {};
         },
         validateEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -73,24 +75,92 @@
             const re = /^[+]?[0-9]{8,15}$/;
             return re.test(phone.replace(/\s/g, ''));
         },
+        validateStep1() {
+            const stepErrors = {};
+            
+            if (!this.bookingDate) {
+                stepErrors.date = 'Please select a date';
+            } else if (this.bookingDate < this.minDate) {
+                stepErrors.date = 'Date must be in the future';
+            }
+            
+            if (!this.selectedTimeSlot) {
+                stepErrors.timeSlot = 'Please select a time slot';
+            }
+            
+            this.errors = { ...this.errors, ...stepErrors };
+            return Object.keys(stepErrors).length === 0;
+        },
+        validateField(field) {
+            this.touched[field] = true;
+            
+            switch(field) {
+                case 'name':
+                    if (!this.customerName || this.customerName.trim().length === 0) {
+                        this.errors.name = 'Name is required';
+                    } else if (this.customerName.trim().length < 2) {
+                        this.errors.name = 'Name must be at least 2 characters';
+                    } else if (this.customerName.trim().length > 255) {
+                        this.errors.name = 'Name must not exceed 255 characters';
+                    } else {
+                        delete this.errors.name;
+                    }
+                    break;
+                    
+                case 'email':
+                    if (!this.customerEmail || this.customerEmail.trim().length === 0) {
+                        this.errors.email = 'Email is required';
+                    } else if (!this.validateEmail(this.customerEmail)) {
+                        this.errors.email = 'Please enter a valid email address';
+                    } else {
+                        delete this.errors.email;
+                    }
+                    break;
+                    
+                case 'phone':
+                    if (!this.customerPhone || this.customerPhone.trim().length === 0) {
+                        this.errors.phone = 'Phone number is required';
+                    } else if (!this.validatePhone(this.customerPhone)) {
+                        this.errors.phone = 'Please enter a valid phone number (8-15 digits)';
+                    } else {
+                        delete this.errors.phone;
+                    }
+                    break;
+                    
+                case 'date':
+                    if (!this.bookingDate) {
+                        this.errors.date = 'Please select a date';
+                    } else if (this.bookingDate < this.minDate) {
+                        this.errors.date = 'Date must be in the future';
+                    } else {
+                        delete this.errors.date;
+                    }
+                    break;
+                    
+                case 'timeSlot':
+                    if (!this.selectedTimeSlot) {
+                        this.errors.timeSlot = 'Please select a time slot';
+                    } else {
+                        delete this.errors.timeSlot;
+                    }
+                    break;
+            }
+        },
         validateCustomerInfo() {
-            this.errors = {};
+            this.validateField('name');
+            this.validateField('email');
+            this.validateField('phone');
             
-            if (!this.customerName || this.customerName.trim().length < 2) {
-                this.errors.name = 'Name must be at least 2 characters';
-            }
-            
-            if (!this.customerEmail || !this.validateEmail(this.customerEmail)) {
-                this.errors.email = 'Please enter a valid email address';
-            }
-            
-            if (!this.customerPhone || !this.validatePhone(this.customerPhone)) {
-                this.errors.phone = 'Please enter a valid phone number (8-15 digits)';
-            }
-            
-            return Object.keys(this.errors).length === 0;
+            return !this.errors.name && !this.errors.email && !this.errors.phone;
+        },
+        isStep1Valid() {
+            return this.bookingDate && this.selectedTimeSlot && !this.errors.date && !this.errors.timeSlot;
+        },
+        isStep2Valid() {
+            return this.customerName && this.customerEmail && this.customerPhone && 
+                   !this.errors.name && !this.errors.email && !this.errors.phone;
         }
-    }" x-init="$watch('bookingDate', () => fetchAvailableSlots())">
+    }" x-init="$watch('bookingDate', () => { fetchAvailableSlots(); if(touched.date) validateField('date'); }); $watch('selectedTimeSlot', () => { if(touched.timeSlot) validateField('timeSlot'); }); $watch('customerName', () => { if(touched.name) validateField('name'); }); $watch('customerEmail', () => { if(touched.email) validateField('email'); }); $watch('customerPhone', () => { if(touched.phone) validateField('phone'); })">
         {{-- Header Section --}}
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900">{{ $tenant->name }}</h1>
@@ -173,23 +243,28 @@
                         {{-- Select Date --}}
                         <div>
                             <label for="booking_date" class="block mb-1 text-sm font-medium text-gray-700">
-                                Select Date
+                                Select Date <span class="text-red-500">*</span>
                             </label>
                             <input 
                                 type="date" 
                                 id="booking_date"
                                 x-model="bookingDate"
                                 :min="minDate"
+                                @blur="validateField('date')"
+                                @change="validateField('date')"
                                 required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                :class="errors.date ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'"
+                                class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
                             >
-                            <p class="mt-1 text-sm text-gray-500">Choose a date for your booking</p>
+                            <p x-show="errors.date" x-text="errors.date" class="flex items-center gap-1 mt-1 text-sm text-red-600">
+                            </p>
+                            <p x-show="!errors.date" class="mt-1 text-sm text-gray-500">Choose a date for your booking</p>
                         </div>
 
                         {{-- Select Time --}}
                         <div x-show="bookingDate" x-transition>
                             <label for="time_slot" class="block mb-1 text-sm font-medium text-gray-700">
-                                Select Time
+                                Select Time <span class="text-red-500">*</span>
                             </label>
                             
                             {{-- Loading State --}}
@@ -202,8 +277,11 @@
                                 x-show="!loadingSlots && availableSlots.length > 0"
                                 x-model="selectedTimeSlot"
                                 id="time_slot"
+                                @blur="validateField('timeSlot')"
+                                @change="validateField('timeSlot')"
                                 required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                :class="errors.timeSlot ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'"
+                                class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
                             >
                                 <option value="">Choose a time slot</option>
                                 <template x-for="slot in availableSlots" :key="slot">
@@ -216,7 +294,9 @@
                                 <p class="text-sm text-yellow-800">No available time slots for this date. Please select another date.</p>
                             </div>
                             
-                            <p x-show="!loadingSlots && availableSlots.length > 0" class="mt-1 text-sm text-gray-500">
+                            <p x-show="errors.timeSlot" x-text="errors.timeSlot" class="flex items-center gap-1 mt-1 text-sm text-red-600">
+                            </p>
+                            <p x-show="!errors.timeSlot && !loadingSlots && availableSlots.length > 0" class="mt-1 text-sm text-gray-500">
                                 Available time slots (30-minute intervals)
                             </p>
                         </div>
@@ -233,13 +313,20 @@
                                 type="text" 
                                 id="customer_name"
                                 x-model="customerName"
-                                @blur="validateCustomerInfo()"
+                                @blur="validateField('name')"
+                                @input="if(touched.name) validateField('name')"
                                 required
                                 placeholder="John Doe"
                                 :class="errors.name ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'"
                                 class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
                             >
                             <p x-show="errors.name" x-text="errors.name" class="flex items-center gap-1 mt-1 text-sm text-red-600">
+                            </p>
+                            <p x-show="!errors.name && customerName.trim().length >= 2" class="flex items-center gap-1 mt-1 text-sm text-green-600">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                Valid
                             </p>
                         </div>
 
@@ -252,13 +339,20 @@
                                 type="email" 
                                 id="customer_email"
                                 x-model="customerEmail"
-                                @blur="validateCustomerInfo()"
+                                @blur="validateField('email')"
+                                @input="if(touched.email) validateField('email')"
                                 required
                                 placeholder="john@example.com"
                                 :class="errors.email ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'"
                                 class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
                             >
                             <p x-show="errors.email" x-text="errors.email" class="flex items-center gap-1 mt-1 text-sm text-red-600">
+                            </p>
+                            <p x-show="!errors.email && validateEmail(customerEmail)" class="flex items-center gap-1 mt-1 text-sm text-green-600">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                Valid
                             </p>
                         </div>
 
@@ -271,7 +365,8 @@
                                 type="tel" 
                                 id="customer_phone"
                                 x-model="customerPhone"
-                                @blur="validateCustomerInfo()"
+                                @blur="validateField('phone')"
+                                @input="if(touched.phone) validateField('phone')"
                                 required
                                 placeholder="+47 12345678"
                                 :class="errors.phone ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'"
@@ -279,7 +374,13 @@
                             >
                             <p x-show="errors.phone" x-text="errors.phone" class="flex items-center gap-1 mt-1 text-sm text-red-600">
                             </p>
-                            <p class="mt-1 text-sm text-gray-500">8-15 digits, international format accepted</p>
+                            <p x-show="!errors.phone && validatePhone(customerPhone)" class="flex items-center gap-1 mt-1 text-sm text-green-600">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                Valid
+                            </p>
+                            <p x-show="!errors.phone && !validatePhone(customerPhone) && customerPhone.length === 0" class="mt-1 text-sm text-gray-500">8-15 digits, international format accepted</p>
                         </div>
 
                         {{-- Customer Notes (Optional) --}}
@@ -323,10 +424,10 @@
                     {{-- Next Button (step 1) --}}
                     <button 
                         x-show="currentStep === 1"
-                        @click="nextStep()"
+                        @click="touched.date = true; touched.timeSlot = true; validateField('date'); validateField('timeSlot'); if(isStep1Valid()) nextStep();"
                         type="button"
-                        :disabled="!bookingDate || !selectedTimeSlot"
-                        :class="(bookingDate && selectedTimeSlot) ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'"
+                        :disabled="!isStep1Valid()"
+                        :class="isStep1Valid() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'"
                         class="px-4 py-2 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium"
                     >
                         Next
@@ -336,9 +437,9 @@
                     <button 
                         x-show="currentStep === 2"
                         type="button"
-                        @click="if(validateCustomerInfo()) { alert('Booking submitted! (Form submission not yet implemented)') }"
-                        :disabled="!customerName || !customerEmail || !customerPhone"
-                        :class="(customerName && customerEmail && customerPhone) ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'"
+                        @click="touched.name = true; touched.email = true; touched.phone = true; validateField('name'); validateField('email'); validateField('phone'); if(isStep2Valid()) { alert('Booking submitted! (Form submission not yet implemented)') }"
+                        :disabled="!isStep2Valid()"
+                        :class="isStep2Valid() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'"
                         class="px-4 py-2 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium"
                     >
                         Complete Booking

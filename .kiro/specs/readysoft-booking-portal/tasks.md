@@ -1107,7 +1107,7 @@ Implementer booking modal med dato-velger, tid-velger og kunde-info.
 - [x] Steg 1: Velg dato (date input, kun fremtidige datoer)
 - [x] Steg 2: Velg tid (dropdown med ledige slots fra AvailabilityService)
 - [x] Steg 3: Kunde-info (name, email, phone, notes)
-- [ ] Inline validering på alle felter
+- [x] Inline validering på alle felter
 - [ ] Submit knapp disabled til alle felter er gyldige
 - [ ] Loading state ved submit
 - [ ] Alpine.js for modal og form state

@@ -164,9 +164,9 @@ test('it includes date selection field in booking modal', function () {
     $response->assertSee('Select Date');
     $response->assertSee('Choose a date for your booking');
     
-    // Assert: Check that Next button is present and disabled when no date or time slot selected
+    // Assert: Check that Next button is present and disabled when step 1 is not valid
     $response->assertSee('Next');
-    $response->assertSee(':disabled="!bookingDate || !selectedTimeSlot"', false);
+    $response->assertSee(':disabled="!isStep1Valid()"', false);
 });
 
 test('it includes time slot selection field in booking modal', function () {
@@ -207,8 +207,8 @@ test('it includes time slot selection field in booking modal', function () {
     // Assert: Check that no slots available message exists
     $response->assertSee('No available time slots for this date');
     
-    // Assert: Check that Next button is disabled when no time slot selected
-    $response->assertSee(':disabled="!bookingDate || !selectedTimeSlot"', false);
+    // Assert: Check that Next button is disabled when step 1 is not valid
+    $response->assertSee(':disabled="!isStep1Valid()"', false);
 });
 
 test('it includes customer information fields in booking modal', function () {
@@ -323,9 +323,11 @@ test('it includes validation for customer information fields', function () {
     // Assert: Check that required field indicators are present
     $response->assertSee('<span class="text-red-500">*</span>', false);
     
-    // Assert: Check that validation triggers on blur
-    $response->assertSee('@blur="validateCustomerInfo()"', false);
+    // Assert: Check that validation triggers on blur for individual fields
+    $response->assertSee('@blur="validateField(\'name\')"', false);
+    $response->assertSee('@blur="validateField(\'email\')"', false);
+    $response->assertSee('@blur="validateField(\'phone\')"', false);
     
-    // Assert: Check that Complete Booking button is disabled when fields are empty
-    $response->assertSee(':disabled="!customerName || !customerEmail || !customerPhone"', false);
+    // Assert: Check that Complete Booking button is disabled when step 2 is not valid
+    $response->assertSee(':disabled="!isStep2Valid()"', false);
 });
