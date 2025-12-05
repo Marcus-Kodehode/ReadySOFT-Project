@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Tenant;
 use App\Models\Booking;
 use App\Models\Resource;
+use App\Services\AvailabilityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -103,6 +104,32 @@ class PublicBookingController extends Controller
         $booking = Booking::with('resource')->findOrFail($id);
 
         return view('public.booking-confirmation', compact('booking'));
+    }
+
+    /**
+     * Get available time slots for a resource on a specific date.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function availableSlots(Request $request)
+    {
+        // Valider input
+        $validated = $request->validate([
+            'resource_id' => 'required|exists:resources,id',
+            'date' => 'required|date|after:yesterday',
+        ]);
+
+        // Hent ressurs
+        $resource = Resource::findOrFail($validated['resource_id']);
+
+        // Hent ledige tidsluker via AvailabilityService
+        $availabilityService = new AvailabilityService();
+        $slots = $availabilityService->getAvailableSlots($resource, $validated['date']);
+
+        return response()->json([
+            'slots' => $slots,
+        ]);
     }
 }
 

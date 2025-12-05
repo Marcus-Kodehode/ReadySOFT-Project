@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 
 // API Routes
 Route::get('/api/check-slug', [SlugController::class, 'check'])->name('api.check-slug');
+Route::get('/api/available-slots', [PublicBookingController::class, 'availableSlots'])
+    ->middleware('throttle:60,1')
+    ->name('api.available-slots');
 
 Route::get('/', function () {
     return view('welcome');

@@ -1103,15 +1103,15 @@ Implementer booking modal med dato-velger, tid-velger og kunde-info.
 - `resources/views/public/booking.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Modal åpnes ved klikk på "Book Now"
-- [ ] Steg 1: Velg dato (date input, kun fremtidige datoer)
-- [ ] Steg 2: Velg tid (dropdown med ledige slots fra AvailabilityService)
-- [ ] Steg 3: Kunde-info (name, email, phone, notes)
+- [x] Modal åpnes ved klikk på "Book Now"
+- [x] Steg 1: Velg dato (date input, kun fremtidige datoer)
+- [x] Steg 2: Velg tid (dropdown med ledige slots fra AvailabilityService)
+- [x] Steg 3: Kunde-info (name, email, phone, notes)
 - [ ] Inline validering på alle felter
 - [ ] Submit knapp disabled til alle felter er gyldige
 - [ ] Loading state ved submit
 - [ ] Alpine.js for modal og form state
-- [ ] Følger design guide
+- [ ] Følger design guide i `resources/views/public/booking.blade.php`
 
 ---
 
