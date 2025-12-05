@@ -100,8 +100,8 @@ class PublicBookingController extends Controller
      */
     public function confirmation(int $id)
     {
-        // Finn booking med resource relationship
-        $booking = Booking::with('resource')->findOrFail($id);
+        // Finn booking med resource og tenant relationships
+        $booking = Booking::with('resource.tenant')->findOrFail($id);
 
         return view('public.booking-confirmation', compact('booking'));
     }
