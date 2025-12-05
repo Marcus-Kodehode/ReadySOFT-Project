@@ -140,6 +140,10 @@ class PublicBookingControllerTest extends TestCase
             'customer_email' => 'john@example.com',
             'status' => 'confirmed',
         ]);
+        
+        // Verify redirect goes to confirmation page with booking ID
+        $booking = \App\Models\Booking::where('customer_email', 'john@example.com')->first();
+        $response->assertRedirect(route('booking.confirmation', ['id' => $booking->id]));
     }
 
     /**
@@ -359,5 +363,53 @@ class PublicBookingControllerTest extends TestCase
             'customer_name' => 'Jane Doe',
             'status' => 'confirmed',
         ]);
+    }
+
+    /**
+     * Test that the confirmation page displays booking details.
+     */
+    public function test_confirmation_displays_booking_details(): void
+    {
+        // Arrange: Create a tenant, resource, and booking
+        $tenant = Tenant::factory()->create([
+            'name' => 'Test Salon',
+            'slug' => 'test-salon',
+        ]);
+        
+        $resource = Resource::factory()->create([
+            'tenant_id' => $tenant->id,
+            'name' => 'Chair 1',
+        ]);
+        
+        $booking = \App\Models\Booking::factory()->create([
+            'resource_id' => $resource->id,
+            'customer_name' => 'John Doe',
+            'booking_date' => now()->addDays(2)->format('Y-m-d'),
+            'start_time' => '10:00',
+            'end_time' => '11:00',
+        ]);
+
+        // Act: Visit the confirmation page
+        $response = $this->get(route('booking.confirmation', ['id' => $booking->id]));
+
+        // Assert: Page displays booking details
+        $response->assertStatus(200);
+        $response->assertSee('Booking Confirmed!');
+        $response->assertSee('#' . $booking->id);
+        $response->assertSee('Chair 1');
+        $response->assertSee('John Doe');
+        $response->assertSee('Book Another');
+    }
+
+    /**
+     * Test that the confirmation page returns 404 for non-existent booking.
+     */
+    public function test_confirmation_returns_404_for_nonexistent_booking(): void
+    {
+        // Act: Visit confirmation page with non-existent booking ID
+        $response = $this->get(route('booking.confirmation', ['id' => 99999]));
+
+        // Assert: Should return 404
+        $response->assertStatus(404);
     }
 }

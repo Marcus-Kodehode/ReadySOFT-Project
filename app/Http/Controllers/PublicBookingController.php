@@ -87,11 +87,22 @@ class PublicBookingController extends Controller
             'status' => 'confirmed',
         ]);
 
-        // Redirect til confirmation side (Task 8.4 vil implementere denne ruten)
-        // For nå redirecter vi tilbake til booking-siden med success melding
-        return redirect()->route('booking.show', ['slug' => $slug])
-            ->with('success', 'Your booking has been confirmed!')
-            ->with('booking_id', $booking->id);
+        // Redirect til confirmation side
+        return redirect()->route('booking.confirmation', ['id' => $booking->id]);
+    }
+
+    /**
+     * Display the booking confirmation page.
+     *
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
+    public function confirmation(int $id)
+    {
+        // Finn booking med resource relationship
+        $booking = Booking::with('resource')->findOrFail($id);
+
+        return view('public.booking-confirmation', compact('booking'));
     }
 }
 

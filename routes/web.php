@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 // Public Booking Page (Phase 8) - MUST BE LAST to avoid catching other routes
+Route::get('/booking/confirmation/{id}', [PublicBookingController::class, 'confirmation'])->name('booking.confirmation');
 Route::get('/{slug}', [PublicBookingController::class, 'show'])->name('booking.show');
 Route::post('/{slug}/bookings', [PublicBookingController::class, 'store'])
     ->middleware('throttle:10,1')
