@@ -331,3 +331,22 @@ test('it includes validation for customer information fields', function () {
     // Assert: Check that Complete Booking button is disabled when step 2 is not valid or submitting
     $response->assertSee(':disabled="!isStep2Valid() || submitting"', false);
 });
+
+test('it displays custom 404 page when tenant slug does not exist', function () {
+    // Act: Visit a non-existent tenant slug
+    $response = $this->get('/non-existent-tenant-slug');
+
+    // Assert: Check that 404 status is returned
+    $response->assertStatus(404);
+    
+    // Assert: Check that custom 404 page content is displayed
+    $response->assertSee('Tenant Not Found');
+    $response->assertSee("looking for doesn", false); // Partial match to avoid apostrophe issues
+    $response->assertSee('Go to Home Page');
+    
+    // Assert: Check that the error icon is present
+    $response->assertSee('bg-red-100', false);
+    
+    // Assert: Check that the home page link is present
+    $response->assertSee('href="' . url('/') . '"', false);
+});
