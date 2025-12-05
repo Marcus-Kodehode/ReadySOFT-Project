@@ -1058,8 +1058,8 @@ Lag controller som håndterer offentlig bookingside (/{slug}) og booking-prosess
 - [x] Validering: resource_id (required, exists:resources,id), booking_date (required, date, after:today), start_time (required, date_format:H:i), end_time (required, date_format:H:i, after:start_time), customer_name (required, max:255), customer_email (required, email), customer_phone (required, regex:/^[+]?[0-9]{8,15}$/)
 - [x] Konflikt-sjekk: Booking::where('resource_id', $resource_id)->where('booking_date', $date)->whereBetween('start_time', [$start, $end])->exists()
 - [x] Returnerer: redirect()->route('booking.confirmation', ['id' => $booking->id]) ved suksess
-- [ ] Ingen auth middleware
-- [ ] Rate limiting i route: ->middleware('throttle:10,60') (10 requests per time)
+- [x] Ingen auth middleware
+- [x] Rate limiting i route: ->middleware('throttle:10,60') (10 requests per time)
 - [ ] Fil-header: `// File: app/Http/Controllers/PublicBookingController.php`
 - [ ] Fil-footer: `// Public booking controller - håndterer offentlig bookingside uten autentisering`
 

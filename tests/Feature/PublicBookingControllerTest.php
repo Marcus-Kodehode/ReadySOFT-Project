@@ -412,4 +412,45 @@ class PublicBookingControllerTest extends TestCase
         // Assert: Should return 404
         $response->assertStatus(404);
     }
+
+    /**
+     * Test that rate limiting is applied to booking creation.
+     * Rate limit: 10 requests per 60 minutes
+     */
+    public function test_store_applies_rate_limiting(): void
+    {
+        // Arrange: Create a tenant and resource
+        $tenant = Tenant::factory()->create(['slug' => 'test-salon']);
+        $resource = Resource::factory()->create(['tenant_id' => $tenant->id]);
+
+        $bookingData = [
+            'resource_id' => $resource->id,
+            'booking_date' => now()->addDays(2)->format('Y-m-d'),
+            'start_time' => '10:00',
+            'end_time' => '11:00',
+            'customer_name' => 'John Doe',
+            'customer_email' => 'john@example.com',
+            'customer_phone' => '+4712345678',
+        ];
+
+        // Act: Make 10 requests (should all succeed)
+        for ($i = 0; $i < 10; $i++) {
+            $bookingData['customer_email'] = "customer{$i}@example.com";
+            $bookingData['start_time'] = sprintf('%02d:00', 10 + $i);
+            $bookingData['end_time'] = sprintf('%02d:00', 11 + $i);
+            
+            $response = $this->post('/test-salon/bookings', $bookingData);
+            $response->assertStatus(302); // Redirect on success
+        }
+
+        // Act: Make 11th request (should be rate limited)
+        $bookingData['customer_email'] = 'customer11@example.com';
+        $bookingData['start_time'] = '20:00';
+        $bookingData['end_time'] = '21:00';
+        
+        $response = $this->post('/test-salon/bookings', $bookingData);
+
+        // Assert: Should return 429 Too Many Requests
+        $response->assertStatus(429);
+    }
 }
