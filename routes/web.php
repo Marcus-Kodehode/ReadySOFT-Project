@@ -36,6 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Booking Management Routes (Phase 9)
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/bookings', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/dashboard/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
 });
 
 // Placeholder routes for Quick Actions (to be implemented in later phases)

@@ -51,6 +51,29 @@ class BookingController extends Controller
 
         return view('bookings.index', compact('bookings', 'filter'));
     }
+
+    /**
+     * Display the specified booking.
+     * 
+     * Viser detaljer for en enkelt booking. Sjekker at bookingen tilhører
+     * en ressurs som eies av innlogget tenant.
+     * 
+     * @param int $id
+     * @return \Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function show($id)
+    {
+        // Finn booking med eager loading av resource
+        $booking = Booking::with('resource')->findOrFail($id);
+
+        // Sjekk at booking tilhører en ressurs som eies av innlogget tenant
+        if ($booking->resource->tenant_id !== auth()->user()->tenant_id) {
+            abort(403, 'Unauthorized access to this booking.');
+        }
+
+        return view('bookings.show', compact('booking'));
+    }
 }
 
 // Booking management controller - tenant administrerer bookinger for sine ressurser
