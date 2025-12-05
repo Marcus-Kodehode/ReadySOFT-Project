@@ -389,3 +389,6 @@ Task 9 (Booking Management) er fullført med en komplett løsning som gir tenant
 - Empty states med hjelpsom tekst
 
 Systemet er nå klart for at tenant-administratorer kan administrere bookinger effektivt og sikkert.
+
+**Tid brukt:** ~120 minutter 
+**Sist oppdatert:** 5. desember 2025

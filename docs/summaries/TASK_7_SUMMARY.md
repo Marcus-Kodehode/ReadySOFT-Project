@@ -222,5 +222,5 @@ Task 7.2 er fullført. Neste task er:
 
 ---
 
-**Tid brukt:** ~ 160 minuter 
+**Tid brukt:** ~ 160 minutter 
 **Sist oppdatert:** 5. desember 2025
