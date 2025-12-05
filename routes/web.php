@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\SlugController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PublicBookingController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,11 @@ Route::get('/subscription/inactive', [SubscriptionController::class, 'inactive']
 // Resource Management Routes (Phase 6)
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('resources', ResourceController::class);
+});
+
+// Booking Management Routes (Phase 9)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard/bookings', [BookingController::class, 'index'])->name('bookings.index');
 });
 
 // Placeholder routes for Quick Actions (to be implemented in later phases)

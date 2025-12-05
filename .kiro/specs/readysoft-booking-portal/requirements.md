@@ -50,7 +50,7 @@ Når en ny kunde registrerer seg, skal systemet opprette både en bruker-konto o
 
 
 
-- [x] Prosessen tar maksimalt 2 minutter (PASS PÅ OG JOBB SYKRONISERT MED task.md (TASK 3) LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR1_SUMMARY.md FILEN OM HVA SOM ER GJORT)
+- [x] Prosessen tar maksimalt 2 minutter (PASS PÅ OG JOBB SYKRONISERT MED task.md (TASK 3) LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR2_SUMMARY.md FILEN OM HVA SOM ER GJORT)
 
 
 
@@ -73,13 +73,13 @@ Når en ny kunde registrerer seg, skal systemet opprette både en bruker-konto o
 Systemet skal ha et abonnementssystem som kontrollerer tilgang til booking-funksjoner. Kun tenants med aktiv subscription kan bruke systemet.
 
 **Akseptansekriterier:**
-- [ ] Tabell `plans` inneholder minimum én plan (f.eks. "Basic")
-- [ ] Tabell `subscriptions` kobler tenant til plan med active-status
-- [ ] Middleware `CheckActiveSubscription` sjekker subscription før tilgang til beskyttede ruter
-- [ ] Inaktive brukere redirectes til "Activate Subscription" side
-- [ ] Admin kan aktivere/deaktivere subscriptions fra admin-dashboard
-- [ ] Subscription-status vises prominent i tenant dashboard
-- [ ] Ingen mulighet til å omgå subscription-sjekk
+- [x] Tabell `plans` inneholder minimum én plan (f.eks. "Basic") (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR2_SUMMARY.md FILEN OM HVA SOM ER GJORT)
+- [x] Tabell `subscriptions` kobler tenant til plan med active-status (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR2_SUMMARY.md FILEN OM HVA SOM ER GJORT)
+- [x] Middleware `CheckActiveSubscription` sjekker subscription før tilgang til beskyttede ruter (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR2_SUMMARY.md FILEN OM HVA SOM ER GJORT)
+- [x] Inaktive brukere redirectes til "Activate Subscription" side (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR2_SUMMARY.md FILEN OM HVA SOM ER GJORT)
+- [x] Admin kan aktivere/deaktivere subscriptions fra admin-dashboard (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR2_SUMMARY.md FILEN OM HVA SOM ER GJORT)
+- [x] Subscription-status vises prominent i tenant dashboard (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR2_SUMMARY.md FILEN OM HVA SOM ER GJORT)
+- [x] Ingen mulighet til å omgå subscription-sjekk (PASS PÅ OG JOBB SYKRONISERT MED task.md LISTEN, TING SKAL FUNGERE SAMMEN OG IKKE DUPLISERES OM DET ER NOE SOM ER GJORT ALLEREDE LEGG TIL KORT AVSNITT I TASK_FR2_SUMMARY.md FILEN OM HVA SOM ER GJORT)
 
 **Teknisk:**
 - Middleware registreres i Kernel
@@ -97,16 +97,16 @@ Systemet skal ha et abonnementssystem som kontrollerer tilgang til booking-funks
 Tenants skal kunne opprette og administrere booking-ressurser (hytter, stoler, rom, etc.) med tilhørende tilgjengelighet.
 
 **Akseptansekriterier:**
-- [ ] Liste-visning viser alle ressurser for innlogget tenant
-- [ ] Opprett-skjema: name, description, type, capacity
-- [ ] Rediger-skjema: samme felter som opprett
-- [ ] Slett-funksjon med bekreftelse (modal)
-- [ ] Kan aktivere/deaktivere ressurs uten å slette
-- [ ] Tilgjengelighet: Definere åpningstider per ukedag (start_time, end_time)
-- [ ] Quick-setup: "Same hours every day" checkbox
-- [ ] Validering: Navn må være unikt innenfor tenant
-- [ ] Empty state: Hvis ingen ressurser, vis "Create your first resource" melding
-- [ ] Opprettelse tar under 30 sekunder
+- [x] Liste-visning viser alle ressurser for innlogget tenant
+- [x] Opprett-skjema: name, description, type, capacity
+- [x] Rediger-skjema: samme felter som opprett
+- [x] Slett-funksjon med bekreftelse (modal)
+- [x] Kan aktivere/deaktivere ressurs uten å slette
+- [x] Tilgjengelighet: Definere åpningstider per ukedag (start_time, end_time)
+- [x] Quick-setup: "Same hours every day" checkbox
+- [x] Validering: Navn må være unikt innenfor tenant
+- [x] Empty state: Hvis ingen ressurser, vis "Create your first resource" melding
+- [x] Opprettelse tar under 30 sekunder
 
 **Teknisk:**
 - Global scope sikrer tenant-isolasjon
@@ -124,18 +124,18 @@ Tenants skal kunne opprette og administrere booking-ressurser (hytter, stoler, r
 Hver tenant skal ha en offentlig tilgjengelig bookingside via deres unike slug hvor kunder kan se tilgjengelige ressurser og gjøre bookinger.
 
 **Akseptansekriterier:**
-- [ ] URL /{slug} viser tenant sin bookingside
-- [ ] Hvis slug ikke finnes: 404-side med "Tenant not found"
-- [ ] Viser tenant-info: name, business_type, description
-- [ ] Liste over aktive ressurser med navn og beskrivelse
-- [ ] Klikk på ressurs åpner booking-skjema
-- [ ] Booking-skjema: velg dato, velg tid, customer_name, customer_email, customer_phone, notes (valgfri)
-- [ ] Kalender viser kun ledige datoer (grønne)
-- [ ] Tidspunkter vises basert på resource_availabilities
-- [ ] Sanntids validering: Sjekk for konflikter før lagring
-- [ ] Bekreftelsesside viser: booking_id, ressurs, dato, tid, kunde-info
-- [ ] Fullført booking på under 2 minutter
-- [ ] Mobiloptimalisert (store touch-targets)
+- [x] URL /{slug} viser tenant sin bookingside
+- [x] Hvis slug ikke finnes: 404-side med "Tenant not found"
+- [x] Viser tenant-info: name, business_type, description
+- [x] Liste over aktive ressurser med navn og beskrivelse
+- [x] Klikk på ressurs åpner booking-skjema
+- [x] Booking-skjema: velg dato, velg tid, customer_name, customer_email, customer_phone, notes (valgfri)
+- [x] Kalender viser kun ledige datoer (grønne)
+- [x] Tidspunkter vises basert på resource_availabilities
+- [x] Sanntids validering: Sjekk for konflikter før lagring
+- [x] Bekreftelsesside viser: booking_id, ressurs, dato, tid, kunde-info
+- [x] Fullført booking på under 2 minutter
+- [x] Mobiloptimalisert (store touch-targets)
 
 **Validering:**
 - Dato: Må være i fremtiden
@@ -184,19 +184,19 @@ Tenants skal kunne se og administrere alle bookinger for sine ressurser.
 Dashboard skal gi tenant en rask oversikt over sin virksomhet og quick actions.
 
 **Akseptansekriterier:**
-- [ ] Stat cards viser:
+- [x] Stat cards viser:
   - Antall bookinger i dag
   - Antall bookinger denne uken
   - Antall aktive ressurser
   - Subscription status
-- [ ] Liste over neste 5 kommende bookinger
-- [ ] Quick actions:
+- [x] Liste over neste 5 kommende bookinger
+- [x] Quick actions:
   - "New Resource" knapp
   - "SMS Settings" knapp
   - "Share Booking Page" knapp (kopierer link)
-- [ ] Link til full bookingside (/{slug})
-- [ ] Velkomstmelding: "Welcome, [Name]!"
-- [ ] Laster på under 1 sekund
+- [x] Link til full bookingside (/{slug})
+- [x] Velkomstmelding: "Welcome, [Name]!"
+- [x] Laster på under 1 sekund
 
 **Teknisk:**
 - Optimaliserte queries (count, limit)

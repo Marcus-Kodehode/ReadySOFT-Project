@@ -1173,14 +1173,14 @@ Lag controller for tenant å se og administrere bookinger for sine ressurser.
 - `app/Http/Controllers/BookingController.php`
 
 **Akseptansekriterier:**
-- [ ] Metode: index(Request $request) - hent bookinger via Resource::where('tenant_id', auth()->user()->tenant_id)->pluck('id'), filtrer med $request->filter ('upcoming'/'past'/'all'), sorter orderBy('booking_date', 'desc')
+- [x] Metode: index(Request $request) - hent bookinger via Resource::where('tenant_id', auth()->user()->tenant_id)->pluck('id'), filtrer med $request->filter ('upcoming'/'past'/'all'), sorter orderBy('booking_date', 'desc')
 - [ ] Metode: show($id) - finn booking, sjekk at booking->resource->tenant_id === auth()->user()->tenant_id, returner view
 - [ ] Metode: updateStatus($id, Request $request) - valider status (in:pending,confirmed,cancelled), oppdater booking->status, returner redirect med flash message
 - [ ] Filtrering: if($filter === 'upcoming') whereDate('booking_date', '>=', now()), if($filter === 'past') whereDate('booking_date', '<', now())
 - [ ] Sortering: ->orderBy('booking_date', 'desc')->orderBy('start_time', 'desc')
 - [ ] Eager loading: Booking::with('resource')->whereIn('resource_id', $resourceIds)
 - [ ] Fil-header: `// File: app/Http/Controllers/BookingController.php`
-- [ ] Fil-footer: `// Booking management controller - tenant administrerer bookinger for sine ressurser`
+- [ ] Fil-footer: `// Booking management controller - tenant administrerer bookinger for sine ressurser` (LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_9_SUMMARY.md FILEN)
 
 ---
 
@@ -1203,8 +1203,8 @@ Lag liste-visning av bookinger for tenant.
 - [ ] Actions: View Details, Cancel
 - [ ] Paginering (20 per side)
 - [ ] Responsivt design
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Følger design guide i `resources/views/bookings/index.blade.php`
+- [ ] Fil-header og footer i `resources/views/bookings/index.blade.php` (LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_9_SUMMARY.md FILEN)
 
 ---
 
@@ -1224,8 +1224,8 @@ Lag detaljvisning for én booking.
 - [ ] Viser all info: Resource, Date, Time, Customer (name, email, phone), Notes, Status
 - [ ] Knapper: "Confirm", "Cancel" (hvis ikke allerede cancelled)
 - [ ] Tilbake-knapp til liste
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Følger design guide i `resources/views/bookings/show.blade.php`
+- [ ] Fil-header og footer i `resources/views/bookings/show.blade.php` (LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_9_SUMMARY.md FILEN)
 
 ---
 
