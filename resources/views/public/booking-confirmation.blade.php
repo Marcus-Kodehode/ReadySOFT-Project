@@ -14,7 +14,7 @@
             <!-- Success Icon -->
             <div class="flex justify-center mb-6">
                 <div class="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
                 </div>
@@ -50,10 +50,17 @@
                 </div>
 
                 <!-- Notification Message -->
-                <div class="bg-blue-50 border-l-4 border-blue-500 rounded p-4 mb-6">
-                    <p class="text-sm text-blue-700">
-                        You will receive a confirmation via email/SMS
-                    </p>
+                <div class="p-4 border-l-4 border-blue-500 rounded bg-blue-50 mb-6">
+                    <div class="flex items-start gap-3">
+                        <svg class="flex-shrink-0 w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <p class="text-sm text-blue-700">
+                                You will receive a confirmation via email/SMS
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Action Button -->

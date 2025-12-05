@@ -1130,10 +1130,10 @@ Lag bekreftelsesside som vises etter vellykket booking.
 **Akseptansekriterier:**
 - [x] Success melding: "Booking Confirmed!"
 - [x] Viser: Booking ID, Resource name, Date, Time, Customer name
-- [ ] Melding: "You will receive a confirmation via email/SMS"
-- [ ] Knapp: "Book Another" (går tilbake til /{slug})
-- [ ] Følger design guide i `resources/views/public/booking-confirmation.blade.php`
-- [ ] Fil-header og footer i `resources/views/public/booking-confirmation.blade.php`
+- [x] Melding: "You will receive a confirmation via email/SMS"
+- [x] Knapp: "Book Another" (går tilbake til /{slug})
+- [x] Følger design guide i `resources/views/public/booking-confirmation.blade.php`
+- [x] Fil-header og footer i `resources/views/public/booking-confirmation.blade.php`
 
 ---
 
