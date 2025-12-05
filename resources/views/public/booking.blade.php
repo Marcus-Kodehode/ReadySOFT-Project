@@ -26,6 +26,34 @@
         customerNotes: '',
         errors: {},
         touched: {},
+        
+        // Computed properties for form submission
+        get startTime() {
+            return this.selectedTimeSlot ? this.selectedTimeSlot.split(' - ')[0] : '';
+        },
+        get endTime() {
+            return this.selectedTimeSlot ? this.selectedTimeSlot.split(' - ')[1] : '';
+        },
+        
+        // Submit booking
+        submitBooking() {
+            // Validate all fields
+            this.touched.name = true;
+            this.touched.email = true;
+            this.touched.phone = true;
+            this.validateField('name');
+            this.validateField('email');
+            this.validateField('phone');
+            
+            if (this.isStep2Valid()) {
+                this.submitting = true;
+                // Use native form submission
+                const form = document.getElementById('bookingForm');
+                if (form) {
+                    form.submit();
+                }
+            }
+        },
         async fetchAvailableSlots() {
             if (!this.bookingDate || !this.selectedResourceId) {
                 this.availableSlots = [];
@@ -239,7 +267,21 @@
                 </div>
                 
                 {{-- Booking Form --}}
-                <form class="space-y-4">
+                <form id="bookingForm" 
+                      action="{{ route('booking.store', $tenant->slug) }}" 
+                      method="POST" 
+                      class="space-y-4">
+                    @csrf
+                    
+                    {{-- Hidden Fields --}}
+                    <input type="hidden" name="resource_id" :value="selectedResourceId">
+                    <input type="hidden" name="booking_date" :value="bookingDate">
+                    <input type="hidden" name="start_time" :value="startTime">
+                    <input type="hidden" name="end_time" :value="endTime">
+                    <input type="hidden" name="customer_name" :value="customerName">
+                    <input type="hidden" name="customer_email" :value="customerEmail">
+                    <input type="hidden" name="customer_phone" :value="customerPhone">
+                    <input type="hidden" name="notes" :value="customerNotes">
                     {{-- Step 1: Select Date & Time --}}
                     <div x-show="currentStep === 1" x-transition>
                         {{-- Select Date --}}
@@ -439,7 +481,7 @@
                     <button 
                         x-show="currentStep === 2"
                         type="button"
-                        @click="touched.name = true; touched.email = true; touched.phone = true; validateField('name'); validateField('email'); validateField('phone'); if(isStep2Valid()) { submitting = true; setTimeout(() => { alert('Booking submitted! (Form submission not yet implemented)'); submitting = false; }, 1500); }"
+                        @click="submitBooking()"
                         :disabled="!isStep2Valid() || submitting"
                         :class="(isStep2Valid() && !submitting) ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'"
                         class="px-4 py-2 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium flex items-center gap-2"

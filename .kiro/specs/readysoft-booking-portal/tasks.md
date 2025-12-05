@@ -1197,7 +1197,7 @@ Lag liste-visning av bookinger for tenant.
 - `resources/views/bookings/index.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Tabell: Booking ID, Resource, Customer, Date, Time, Status, Actions
+- [x] Tabell: Booking ID, Resource, Customer, Date, Time, Status, Actions
 - [ ] Status badge: Confirmed (grønn), Pending (gul), Cancelled (rød)
 - [ ] Filter tabs: Upcoming, Past, All
 - [ ] Actions: View Details, Cancel

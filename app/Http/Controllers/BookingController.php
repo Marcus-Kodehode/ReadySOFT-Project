@@ -45,9 +45,11 @@ class BookingController extends Controller
         // 'all' krever ingen ekstra filtrering
 
         // Sorter etter booking_date og start_time (nyeste først)
+        // Paginer med 20 bookinger per side
         $bookings = $query->orderBy('booking_date', 'desc')
             ->orderBy('start_time', 'desc')
-            ->get();
+            ->paginate(20)
+            ->appends(['filter' => $filter]);
 
         return view('bookings.index', compact('bookings', 'filter'));
     }
