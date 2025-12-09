@@ -1286,7 +1286,7 @@ Lag liste-visning av alle tenants for admin.
 - `resources/views/admin/tenants.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Tabell: Name, Slug, Business Type, Status, Created, Actions
+- [x] Tabell: Name, Slug, Business Type, Status, Created, Actions
 - [ ] Status toggle (inline switch med Alpine.js)
 - [ ] Søk på name eller slug
 - [ ] Filter: Active / Inactive / All
