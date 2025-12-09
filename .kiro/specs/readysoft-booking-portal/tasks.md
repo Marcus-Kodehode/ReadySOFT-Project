@@ -1405,17 +1405,17 @@ Lag SMS settings side med API-nøkkel form og test-funksjon.
 - `resources/views/sms/index.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Form: API Key (password input, maskert)
-- [ ] Checkbox: "Enable SMS notifications"
-- [ ] Save knapp
-- [ ] Seksjon: "Test SMS"
-- [ ] Input: Phone number
-- [ ] Knapp: "Send Test SMS"
-- [ ] Loading state ved test (Alpine.js)
-- [ ] Success/error melding
-- [ ] Hjelpetekst: "Where to find your API key?" med link
-- [ ] Følger design guide i `resources/views/sms/index.blade.php`
-- [ ] Fil-header og footer i `resources/views/sms/index.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
+- [x] Form: API Key (password input, maskert)
+- [x] Checkbox: "Enable SMS notifications"
+- [x] Save knapp
+- [x] Seksjon: "Test SMS"
+- [x] Input: Phone number
+- [x] Knapp: "Send Test SMS"
+- [x] Loading state ved test (Alpine.js)
+- [x] Success/error melding
+- [x] Hjelpetekst: "Where to find your API key?" med link
+- [x] Følger design guide i `resources/views/sms/index.blade.php`
+- [x] Fil-header og footer i `resources/views/sms/index.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
 ---
 
@@ -1437,7 +1437,8 @@ Lag controller for landingsside.
 - [ ] Metode: index() - henter alle aktive tenants
 - [ ] Caching: Cache tenant list i 5 minutter
 - [ ] Sortering: Nyeste først
-- [ ] Fil-header og footer
+- [ ] Fil-header og footer i `app/Http/Controllers/LandingController.php`. LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_12_SUMMARY.md FILEN
+
 
 ---
 
@@ -1461,7 +1462,7 @@ Lag landingsside med hero og tenant listing. Dette er forsiden (/) som alle bes�
 - [ ] Footer: <footer class="bg-gray-800 text-white py-8 mt-20">, links til About, Contact, Privacy (href="#" placeholder)
 - [ ] Tailwind: max-w-7xl mx-auto px-4 for container
 - [ ] Fil-header: `{{-- File: resources/views/welcome.blade.php --}}`
-- [ ] Fil-footer: `{{-- Landing page - viser hero og liste over alle aktive tenants --}}`
+- [ ] Fil-footer: `{{-- Landing page - viser hero og liste over alle aktive tenants --}}` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_12_SUMMARY.md FILEN
 
 ---
 
@@ -1482,7 +1483,7 @@ Implementer søk og filter på landingsside med Alpine.js.
 - [ ] Filter chips: Business types (klikk for å filtrere)
 - [ ] Alpine.js for client-side filtering
 - [ ] Smooth transitions ved filtering
-- [ ] "No results" melding hvis ingen match
+- [ ] "No results" melding hvis ingen match LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_12_SUMMARY.md FILEN
 
 ---
 
