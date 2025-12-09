@@ -766,3 +766,123 @@ Task 11.5 vil opprette fullstendig view med:
 **Sist oppdatert:** 9. desember 2025
 
 SmsController sin `update()` metode er nå fullstendig implementert med validering, kryptering og omfattende testing. Metoden håndterer både opprettelse av nye settings og oppdatering av eksisterende settings. Routing er oppdatert og alle tester passerer.
+
+
+---
+
+## Task 11.4: test() Method Implementation (✅ Fullført)
+
+### Hva ble implementert
+
+Vi implementerte `test()` metoden i `SmsController` som lar tenant-administratorer sende en test-SMS for å verifisere at deres API-nøkkel er korrekt konfigurert.
+
+#### Funksjonalitet
+
+**Metode:** `test(Request $request)`
+
+**Validering:**
+- `phone_number` - Påkrevd, må matche regex `/^[+]?[0-9]{8,15}$/`
+  - Støtter internasjonale telefonnumre med eller uten `+` prefix
+  - Minimum 8 siffer, maksimum 15 siffer
+
+**Prosess:**
+1. Henter innlogget brukers tenant ID
+2. Validerer telefonnummer format
+3. Sjekker om SMS settings eksisterer for tenant
+4. Sjekker om API-nøkkel er konfigurert
+5. Bruker `TeletopiaSmsService` til å sende test-melding
+6. Returnerer JSON response med resultat
+
+**Test-melding:**
+```
+"This is a test SMS from ReadySoft. Your SMS configuration is working correctly!"
+```
+
+**Response format:**
+```json
+{
+  "success": true/false,
+  "message": "Success melding eller feilmelding"
+}
+```
+
+**HTTP statuskoder:**
+- `200` - SMS sendt vellykket
+- `400` - Feil ved sending (mangler API-nøkkel, API feil, etc.)
+- `422` - Valideringsfeil (ugyldig telefonnummer)
+
+#### Route
+
+Ny route ble lagt til i `routes/web.php`:
+```php
+Route::post('/dashboard/sms/test', [SmsController::class, 'test'])
+    ->name('dashboard.sms.test');
+```
+
+**Middleware:**
+- `auth` - Krever innlogging
+- `verified` - Krever verifisert e-post
+
+### Tekniske valg
+
+1. **JSON response**: Returnerer JSON i stedet for redirect
+   - Gjør det enkelt å håndtere med Alpine.js/JavaScript
+   - Gir umiddelbar feedback til bruker
+   - Støtter AJAX-kall fra frontend
+
+2. **Regex validering**: Streng validering av telefonnummer
+   - Forhindrer ugyldige telefonnumre
+   - Støtter både norske og internasjonale numre
+   - Aksepterer `+` prefix (valgfritt)
+
+3. **Sjekk API-nøkkel først**: Validerer at API-nøkkel er konfigurert før sending
+   - Gir tydelig feilmelding hvis ikke konfigurert
+   - Sparer API-kall til Teletopia
+   - Bedre brukeropplevelse
+
+4. **Bruk av TeletopiaSmsService**: Gjenbruker eksisterende service
+   - DRY (Don't Repeat Yourself) prinsipp
+   - Konsistent error handling
+   - Enklere å vedlikeholde
+
+### Testing
+
+Omfattende tester ble lagt til i `tests/Feature/SmsControllerTest.php`:
+
+**Nye tester:**
+1. ✅ `test_test_sms_requires_phone_number()` - Verifiserer at telefonnummer er påkrevd
+2. ✅ `test_test_sms_validates_phone_number_format()` - Verifiserer telefonnummer format validering
+3. ✅ `test_test_sms_fails_without_api_key()` - Verifiserer at det feiler uten API-nøkkel
+
+**Test resultater:**
+```
+PASS  Tests\Feature\SmsControllerTest
+✓ sms settings page displays correctly
+✓ api key can be saved
+✓ api key can be updated
+✓ api key is required
+✓ api key must be at least 10 characters
+✓ enabled defaults to false when not checked
+✓ test sms requires phone number
+✓ test sms validates phone number format
+✓ test sms fails without api key
+
+Tests:    9 passed (27 assertions)
+```
+
+### Sikkerhet
+
+1. **Autentisering**: Kun innloggede brukere kan sende test-SMS
+2. **Tenant-isolasjon**: Bruker kun sin egen tenant's API-nøkkel
+3. **Input validering**: Streng validering av telefonnummer
+4. **Rate limiting**: Kan legges til på route-nivå hvis nødvendig (ikke implementert ennå)
+
+### Neste steg
+
+For å fullføre SMS test-funksjonaliteten, må følgende implementeres:
+- Task 11.5: Oppdatere `resources/views/sms/index.blade.php` med test-SMS UI
+  - Form for telefonnummer input
+  - "Send Test SMS" knapp
+  - Alpine.js for AJAX-kall til test endpoint
+  - Visning av success/error meldinger
+  - Loading state under sending

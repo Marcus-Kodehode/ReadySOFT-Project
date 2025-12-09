@@ -72,6 +72,51 @@ class SmsController extends Controller
         return redirect()->route('dashboard.sms')
             ->with('success', 'SMS settings saved successfully');
     }
+
+    /**
+     * Send a test SMS to verify configuration.
+     * 
+     * Sender en test-SMS til angitt telefonnummer for å verifisere
+     * at API-nøkkelen er korrekt konfigurert og at SMS-sending fungerer.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function test(Request $request)
+    {
+        $user = Auth::user();
+        $tenantId = $user->tenant_id;
+
+        // Valider input
+        $validated = $request->validate([
+            'phone_number' => 'required|string|regex:/^[+]?[0-9]{8,15}$/',
+        ]);
+
+        // Hent SMS settings for tenant
+        $smsSettings = SmsSettings::where('tenant_id', $tenantId)->first();
+
+        // Sjekk om settings eksisterer
+        if (!$smsSettings || empty($smsSettings->api_key)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please configure your API key first'
+            ], 400);
+        }
+
+        // Opprett SMS service og send test-melding
+        $smsService = app(\App\Services\TeletopiaSmsService::class);
+        $result = $smsService->sendSms(
+            $tenantId,
+            $validated['phone_number'],
+            'This is a test SMS from ReadySoft. Your SMS configuration is working correctly!'
+        );
+
+        // Returner resultat som JSON
+        return response()->json([
+            'success' => $result['success'],
+            'message' => $result['message']
+        ], $result['success'] ? 200 : 400);
+    }
 }
 
 // SMS Controller - håndterer SMS settings og test-funksjon for tenant

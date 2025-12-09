@@ -220,6 +220,110 @@ class SmsControllerTest extends TestCase
         $smsSettings = SmsSettings::where('tenant_id', $tenant->id)->first();
         $this->assertFalse($smsSettings->enabled);
     }
+
+    /**
+     * Test at test SMS krever telefonnummer
+     */
+    public function test_test_sms_requires_phone_number(): void
+    {
+        // Opprett tenant og bruker
+        $tenant = Tenant::factory()->create();
+        $plan = Plan::factory()->create();
+        Subscription::factory()->create([
+            'tenant_id' => $tenant->id,
+            'plan_id' => $plan->id,
+            'active' => true,
+        ]);
+        
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Opprett SMS settings
+        SmsSettings::create([
+            'tenant_id' => $tenant->id,
+            'api_key' => 'test-api-key-12345',
+            'enabled' => true,
+        ]);
+
+        // Send POST uten telefonnummer
+        $response = $this->actingAs($user)->postJson(route('dashboard.sms.test'), []);
+
+        // Sjekk at validering feiler
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors('phone_number');
+    }
+
+    /**
+     * Test at test SMS validerer telefonnummer format
+     */
+    public function test_test_sms_validates_phone_number_format(): void
+    {
+        // Opprett tenant og bruker
+        $tenant = Tenant::factory()->create();
+        $plan = Plan::factory()->create();
+        Subscription::factory()->create([
+            'tenant_id' => $tenant->id,
+            'plan_id' => $plan->id,
+            'active' => true,
+        ]);
+        
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Opprett SMS settings
+        SmsSettings::create([
+            'tenant_id' => $tenant->id,
+            'api_key' => 'test-api-key-12345',
+            'enabled' => true,
+        ]);
+
+        // Send POST med ugyldig telefonnummer
+        $response = $this->actingAs($user)->postJson(route('dashboard.sms.test'), [
+            'phone_number' => 'invalid-phone',
+        ]);
+
+        // Sjekk at validering feiler
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors('phone_number');
+    }
+
+    /**
+     * Test at test SMS feiler hvis API-nøkkel ikke er konfigurert
+     */
+    public function test_test_sms_fails_without_api_key(): void
+    {
+        // Opprett tenant og bruker
+        $tenant = Tenant::factory()->create();
+        $plan = Plan::factory()->create();
+        Subscription::factory()->create([
+            'tenant_id' => $tenant->id,
+            'plan_id' => $plan->id,
+            'active' => true,
+        ]);
+        
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Ikke opprett SMS settings (ingen API-nøkkel)
+
+        // Send POST med telefonnummer
+        $response = $this->actingAs($user)->postJson(route('dashboard.sms.test'), [
+            'phone_number' => '+4712345678',
+        ]);
+
+        // Sjekk at det feiler med riktig melding
+        $response->assertStatus(400);
+        $response->assertJson([
+            'success' => false,
+            'message' => 'Please configure your API key first',
+        ]);
+    }
 }
 
 // Test for SmsController - verifiserer lagring og oppdatering av SMS settings

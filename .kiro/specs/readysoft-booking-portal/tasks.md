@@ -1385,7 +1385,7 @@ Lag controller for SMS settings og test-funksjon.
 **Akseptansekriterier:**
 - [x] Metode: index() - vis SMS settings side
 - [x] Metode: update() - lagre API-nøkkel
-- [ ] Metode: test() - send test SMS
+- [x] Metode: test() - send test SMS
 - [ ] Validering: api_key (required), phone_number (required for test)
 - [ ] Middleware: subscription
 - [ ] Fil-header og footer i `app/Http/Controllers/SmsController.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
