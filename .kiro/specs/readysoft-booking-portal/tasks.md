@@ -1291,9 +1291,9 @@ Lag liste-visning av alle tenants for admin.
 - [x] Søk på name eller slug
 - [x] Filter: Active / Inactive / All
 - [x] Sortering på alle kolonner
-- [-] Paginering (20 per side) i `resources/views/admin/tenants.blade.php`
-- [ ] Følger design guide i `resources/views/admin/tenants.blade.php`
-- [ ] Fil-header og footer i `resources/views/admin/tenants.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_10_SUMMARY.md FILEN
+- [x] Paginering (20 per side) i `resources/views/admin/tenants.blade.php`
+- [x] Følger design guide i `resources/views/admin/tenants.blade.php`
+- [x] Fil-header og footer i `resources/views/admin/tenants.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_10_SUMMARY.md FILEN
 
 ---
 
@@ -1313,9 +1313,9 @@ Lag migration for SMS settings tabell.
 - `database/migrations/YYYY_MM_DD_000008_create_sms_settings_table.php`
 
 **Akseptansekriterier:**
-- [ ] Kolonner: id, tenant_id (FK, unique), api_key (text), enabled (boolean), timestamps
+- [x] Kolonner: id, tenant_id (FK, unique), api_key (text), enabled (boolean), timestamps
 - [ ] Foreign key til tenants.id
-- [ ] `php artisan migrate` kjører uten feil. LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
+- [x] `php artisan migrate` kjører uten feil. LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
 ---
 
