@@ -1291,7 +1291,7 @@ Lag liste-visning av alle tenants for admin.
 - [x] Søk på name eller slug
 - [x] Filter: Active / Inactive / All
 - [x] Sortering på alle kolonner
-- [ ] Paginering (20 per side) i `resources/views/admin/tenants.blade.php`
+- [-] Paginering (20 per side) i `resources/views/admin/tenants.blade.php`
 - [ ] Følger design guide i `resources/views/admin/tenants.blade.php`
 - [ ] Fil-header og footer i `resources/views/admin/tenants.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_10_SUMMARY.md FILEN
 
