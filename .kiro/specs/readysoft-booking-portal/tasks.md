@@ -1289,7 +1289,7 @@ Lag liste-visning av alle tenants for admin.
 - [x] Tabell: Name, Slug, Business Type, Status, Created, Actions
 - [x] Status toggle (inline switch med Alpine.js)
 - [x] Søk på name eller slug
-- [ ] Filter: Active / Inactive / All
+- [x] Filter: Active / Inactive / All
 - [ ] Sortering på alle kolonner
 - [ ] Paginering (20 per side) i `resources/views/admin/tenants.blade.php`
 - [ ] Følger design guide i `resources/views/admin/tenants.blade.php`

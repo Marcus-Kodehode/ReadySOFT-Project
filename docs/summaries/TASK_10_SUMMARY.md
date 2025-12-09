@@ -729,25 +729,53 @@ Lagt til 7 nye tester i `AdminTenantManagementTest.php`:
 
 ---
 
+### Filter Implementation (Task 10.3 - Filter)
+
+**Implementert:** Filter tabs for Active / Inactive / All tenants
+
+**Funksjonalitet:**
+- ✅ Filter tabs vises øverst på siden
+- ✅ "All" tab viser alle tenants med total count
+- ✅ "Active" tab viser kun aktive tenants med count (grønn styling)
+- ✅ "Inactive" tab viser kun inaktive tenants med count (rød styling)
+- ✅ Aktiv tab highlightes med farge-kodet border og tekst
+- ✅ Filter bevarer søkeparameter når man bytter tabs
+- ✅ Søk bevarer filter parameter
+- ✅ Filter og søk fungerer sammen
+- ✅ Counts oppdateres dynamisk basert på database
+
+**Teknisk implementering:**
+- Filter tabs bruker query parameter `?filter=active|inactive|all`
+- Controller har allerede logikk for filtrering (implementert tidligere)
+- View viser tabs med badge counts
+- Tabs bruker Tailwind CSS for styling
+- Alle tester passerer (20/20 tests)
+
+**Status:** ✅ Fullført
+
+---
+
 ### Gjenstående arbeid (Task 10.3)
 
 Følgende akseptansekriterier er ikke implementert ennå:
-- [ ] Filter: Active / Inactive / All
 - [ ] Sortering på alle kolonner
 
-Disse vil bli implementert i neste iterasjon av Task 10.3.
+Dette vil bli implementert i neste iterasjon av Task 10.3.
 
 ### Status
 
 **Task 10.1:** ✅ Fullført  
 **Task 10.2:** ✅ Fullført  
-**Task 10.3:** 🟡 Delvis fullført (tabell og toggle implementert, søk/filter/sortering gjenstår)
+**Task 10.3:** 🟡 Delvis fullført (tabell, toggle, søk og filter implementert, sortering gjenstår)
 
 **Samlet status for Task 10:** 🟢 På sporet - Hovedfunksjonalitet fullført
 
 Admin dashboard er nå fullt funksjonelt og klar for bruk. System-administratorer kan:
 - Se system-oversikt med stat cards
 - Se liste over alle tenants i en tabell
+- Filtrere tenants på status (Active/Inactive/All)
+- Søke etter tenants på navn eller slug
+- Toggle tenant status inline
 - Toggle tenant status inline med Alpine.js switch
 - Navigere til tenant sine bookingsider
 - Få oversikt over status (aktiv/inaktiv) og opprettelsesdato

@@ -15,9 +15,43 @@
                 </h1>
             </div>
 
+            <!-- Filter Tabs -->
+            <div class="mb-6">
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                        <a href="{{ route('admin.tenants', ['search' => request('search')]) }}" 
+                           class="@if(!request('filter') || request('filter') === 'all') border-blue-500 text-blue-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            All
+                            <span class="@if(!request('filter') || request('filter') === 'all') bg-blue-100 text-blue-600 @else bg-gray-100 text-gray-900 @endif ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium">
+                                {{ \App\Models\Tenant::count() }}
+                            </span>
+                        </a>
+                        <a href="{{ route('admin.tenants', ['filter' => 'active', 'search' => request('search')]) }}" 
+                           class="@if(request('filter') === 'active') border-green-500 text-green-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            Active
+                            <span class="@if(request('filter') === 'active') bg-green-100 text-green-600 @else bg-gray-100 text-gray-900 @endif ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium">
+                                {{ \App\Models\Tenant::where('active', true)->count() }}
+                            </span>
+                        </a>
+                        <a href="{{ route('admin.tenants', ['filter' => 'inactive', 'search' => request('search')]) }}" 
+                           class="@if(request('filter') === 'inactive') border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            Inactive
+                            <span class="@if(request('filter') === 'inactive') bg-red-100 text-red-600 @else bg-gray-100 text-gray-900 @endif ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium">
+                                {{ \App\Models\Tenant::where('active', false)->count() }}
+                            </span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
             <!-- Search Bar -->
             <div class="mb-6">
                 <form method="GET" action="{{ route('admin.tenants') }}" class="flex gap-4">
+                    <!-- Preserve filter parameter -->
+                    @if(request('filter'))
+                        <input type="hidden" name="filter" value="{{ request('filter') }}">
+                    @endif
+                    
                     <div class="flex-1">
                         <label for="search" class="sr-only">Search tenants</label>
                         <div class="relative">
@@ -42,7 +76,7 @@
                     </button>
                     @if(request('search'))
                         <a 
-                            href="{{ route('admin.tenants') }}"
+                            href="{{ route('admin.tenants', ['filter' => request('filter')]) }}"
                             class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium">
                             Clear
                         </a>
