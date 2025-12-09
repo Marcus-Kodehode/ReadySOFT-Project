@@ -52,6 +52,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Admin Routes (Phase 10)
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/tenants', [AdminController::class, 'tenants'])->name('admin.tenants');
+    Route::post('/admin/tenants/{id}/toggle', [AdminController::class, 'toggleTenantStatus'])->name('admin.tenants.toggle');
 });
 
 Route::middleware('auth')->group(function () {

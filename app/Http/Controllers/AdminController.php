@@ -53,6 +53,23 @@ class AdminController extends Controller
 
         return view('admin.tenants', compact('tenants'));
     }
+
+    /**
+     * Toggle aktiv status for en tenant
+     * 
+     * Finner tenant og bytter active status (true -> false eller false -> true)
+     * Returnerer tilbake til forrige side med flash message
+     */
+    public function toggleTenantStatus($id)
+    {
+        $tenant = Tenant::findOrFail($id);
+        
+        $tenant->update(['active' => !$tenant->active]);
+        
+        $status = $tenant->active ? 'activated' : 'deactivated';
+        
+        return back()->with('success', "Tenant '{$tenant->name}' has been {$status} successfully.");
+    }
 }
 
 // Admin controller - viser statistikk for system-administrator
