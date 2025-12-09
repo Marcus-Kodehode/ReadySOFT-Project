@@ -11,7 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Registrer middleware aliases
+        // Registrer middleware aliases for tilgangskontroll
+        // 'subscription' - Sjekker om bruker har aktiv subscription (brukes på /dashboard/* ruter)
+        // 'admin' - Sjekker om bruker har admin-rolle (brukes på /admin/* ruter)
         $middleware->alias([
             'subscription' => \App\Http\Middleware\CheckActiveSubscription::class,
             'admin' => \App\Http\Middleware\CheckAdminRole::class,

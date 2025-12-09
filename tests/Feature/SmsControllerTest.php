@@ -324,6 +324,60 @@ class SmsControllerTest extends TestCase
             'message' => 'Please configure your API key first',
         ]);
     }
+
+    /**
+     * Test at subscription middleware blokkerer tilgang til SMS settings
+     * når subscription er inaktiv
+     */
+    public function test_subscription_middleware_blocks_access_when_inactive(): void
+    {
+        // Opprett tenant og bruker med INAKTIV subscription
+        $tenant = Tenant::factory()->create();
+        $plan = Plan::factory()->create();
+        Subscription::factory()->create([
+            'tenant_id' => $tenant->id,
+            'plan_id' => $plan->id,
+            'active' => false, // INAKTIV subscription
+        ]);
+        
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Prøv å aksessere SMS settings siden
+        $response = $this->actingAs($user)->get(route('dashboard.sms'));
+
+        // Sjekk at bruker redirectes til subscription.inactive
+        $response->assertRedirect(route('subscription.inactive'));
+    }
+
+    /**
+     * Test at subscription middleware tillater tilgang når subscription er aktiv
+     */
+    public function test_subscription_middleware_allows_access_when_active(): void
+    {
+        // Opprett tenant og bruker med AKTIV subscription
+        $tenant = Tenant::factory()->create();
+        $plan = Plan::factory()->create();
+        Subscription::factory()->create([
+            'tenant_id' => $tenant->id,
+            'plan_id' => $plan->id,
+            'active' => true, // AKTIV subscription
+        ]);
+        
+        $user = User::factory()->create([
+            'tenant_id' => $tenant->id,
+            'role' => 'tenant_admin',
+        ]);
+
+        // Prøv å aksessere SMS settings siden
+        $response = $this->actingAs($user)->get(route('dashboard.sms'));
+
+        // Sjekk at siden vises (ikke redirect)
+        $response->assertStatus(200);
+        $response->assertViewIs('sms.index');
+    }
 }
 
 // Test for SmsController - verifiserer lagring og oppdatering av SMS settings

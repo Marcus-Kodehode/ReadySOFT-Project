@@ -1386,9 +1386,9 @@ Lag controller for SMS settings og test-funksjon.
 - [x] Metode: index() - vis SMS settings side
 - [x] Metode: update() - lagre API-nøkkel
 - [x] Metode: test() - send test SMS
-- [ ] Validering: api_key (required), phone_number (required for test)
-- [ ] Middleware: subscription
-- [ ] Fil-header og footer i `app/Http/Controllers/SmsController.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
+- [x] Validering: api_key (required), phone_number (required for test)
+- [x] Middleware: subscription
+- [x] Fil-header og footer i `app/Http/Controllers/SmsController.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN OGSÅ DOBBELSJEKK AT MIDDLEWARE: SUBSCRIPTION FUNKER RIKTIG
 
 ---
 

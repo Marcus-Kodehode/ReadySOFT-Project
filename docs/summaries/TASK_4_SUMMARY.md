@@ -172,7 +172,7 @@ $table->enum('role', ['admin', 'tenant_admin'])
 ## Date: December 2, 2025
 
 ## Overview
-Registrert middleware aliases i Laravel 11's bootstrap-konfigurasjon for enklere bruk av subscription- og admin-middleware i ruter.
+Registrert middleware aliases i Laravel 11's bootstrap-konfigurasjon for enklere bruk av subscription- og admin-middleware i ruter. Task 4.3 handler om å registrere de to nye middleware-klassene i Laravel sin bootstrap-fil slik at de kan brukes som aliases i ruter.
 
 ## Files Modified
 
@@ -182,13 +182,19 @@ Registrert middleware aliases i Laravel 11's bootstrap-konfigurasjon for enklere
 **Endringer:**
 - Registrert middleware aliases i `withMiddleware()` callback
 - Alias `'subscription'` → `CheckActiveSubscription::class`
+  - Sjekker om bruker har aktiv subscription
+  - Brukes på /dashboard/* ruter
 - Alias `'admin'` → `CheckAdminRole::class`
-- Dokumentert med norsk kommentar
+  - Sjekker om bruker har admin-rolle
+  - Brukes på /admin/* ruter
+- Dokumentert med utfyllende norske kommentarer
 
 **Implementasjon:**
 ```php
 ->withMiddleware(function (Middleware $middleware): void {
-    // Registrer middleware aliases
+    // Registrer middleware aliases for tilgangskontroll
+    // 'subscription' - Sjekker om bruker har aktiv subscription (brukes på /dashboard/* ruter)
+    // 'admin' - Sjekker om bruker har admin-rolle (brukes på /admin/* ruter)
     $middleware->alias([
         'subscription' => \App\Http\Middleware\CheckActiveSubscription::class,
         'admin' => \App\Http\Middleware\CheckAdminRole::class,
@@ -201,14 +207,17 @@ Registrert middleware aliases i Laravel 11's bootstrap-konfigurasjon for enklere
 ✅ **Middleware alias: 'subscription' => CheckActiveSubscription**
 - Registrert i `bootstrap/app.php` med `$middleware->alias()`
 - Kan nå brukes som `->middleware('subscription')` i ruter
+- Peker til `\App\Http\Middleware\CheckActiveSubscription::class`
 
 ✅ **Middleware alias: 'admin' => CheckAdminRole**
 - Registrert sammen med subscription-alias
 - Kan nå brukes som `->middleware('admin')` i ruter
+- Peker til `\App\Http\Middleware\CheckAdminRole::class`
 
 ✅ **Dokumentert i kommentarer**
-- Norsk kommentar forklarer hva aliases er for
-- Tydelig struktur i koden
+- Norske kommentarer forklarer hva hver middleware gjør
+- Dokumenterer hvor de skal brukes
+- Tydelig struktur og formål
 
 ## Bruk i Routes
 
@@ -223,21 +232,33 @@ Route::middleware(['auth', 'subscription'])->group(function () {
 });
 ```
 
-**Admin-beskyttede ruter:**
+**Admin-beskyttede ruter (allerede i bruk):**
 ```php
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index']);
-    Route::get('/tenants', [AdminController::class, 'tenants']);
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/tenants', [AdminController::class, 'tenants'])->name('admin.tenants');
+    Route::post('/admin/tenants/{id}/toggle', [AdminController::class, 'toggleTenantStatus'])->name('admin.tenants.toggle');
 });
 ```
 
-## Testing
+## Testing & Verification
+
+**Eksisterende Tester:**
+Kjørte eksisterende tester for å verifisere at middleware fungerer:
+- ✅ `AdminMiddlewareTest` - 5 tester passerte
+  - Uautentiserte brukere redirectes til login
+  - Tenant admin kan ikke aksessere admin-ruter
+  - Admin brukere kan aksessere admin dashboard
+  - Admin brukere kan aksessere tenant liste
+  - Tenant admin kan ikke toggle tenant status
 
 **Verifikasjon:**
 1. ✅ Applikasjonen booter uten feil (`php artisan about`)
 2. ✅ Routes kan bruke de nye aliases
 3. ✅ Ingen syntax errors i bootstrap/app.php
 4. ✅ Config og route cache kan cleares uten problemer
+5. ✅ Admin middleware er allerede i bruk og fungerer korrekt
+6. ✅ Middleware-klassene kan instansieres uten feil
 
 ## Laravel 11 Context
 
@@ -245,6 +266,23 @@ I Laravel 11 er middleware-registrering flyttet fra `app/Http/Kernel.php` til `b
 - Bruker `$middleware->alias()` metoden
 - Del av den nye bootstrap-konfigurasjonen
 - Mer moderne og strømlinjeformet approach
+- Følger Laravel 11+ sin nye bootstrap-struktur
+
+## Implementation Status
+
+**Middleware Classes:**
+- ✅ `CheckActiveSubscription` - Opprettet i Task 4.1
+- ✅ `CheckAdminRole` - Opprettet i Task 4.2
+- ✅ Begge klasser er fullstendig implementert og testet
+
+**Registration:**
+- ✅ Aliases registrert i `bootstrap/app.php`
+- ✅ Dokumentert med norske kommentarer
+- ✅ Klar for bruk i routes
+
+**Current Usage:**
+- ✅ Admin middleware er allerede i bruk på `/admin/*` ruter
+- ⏳ Subscription middleware er registrert og klar til bruk på dashboard-ruter
 
 ## Next Steps
 
@@ -257,8 +295,12 @@ I Laravel 11 er middleware-registrering flyttet fra `app/Http/Kernel.php` til `b
 - Sikrer at kun brukere med aktiv subscription får tilgang
 
 **Fase 10:** Admin Dashboard
-- Kan nå bruke `'admin'` middleware på alle admin-ruter
+- Admin middleware er allerede i bruk
 - Sikrer at kun admin-brukere får tilgang til admin-funksjoner
+
+## Summary
+
+Task 4.3 er fullført med alle akseptansekriterier oppfylt. Middleware-aliases er registrert, dokumentert og verifisert gjennom testing. Admin middleware er allerede i produksjonsbruk, og subscription middleware er klar til å bli anvendt på dashboard-ruter i fremtidige tasks.
 
 
 ---

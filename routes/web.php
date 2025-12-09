@@ -22,7 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'subscription'])
     ->name('dashboard');
 
 // Subscription Routes
@@ -31,19 +31,19 @@ Route::get('/subscription/inactive', [SubscriptionController::class, 'inactive']
     ->name('subscription.inactive');
 
 // Resource Management Routes (Phase 6)
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'subscription'])->group(function () {
     Route::resource('resources', ResourceController::class);
 });
 
 // Booking Management Routes (Phase 9)
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'subscription'])->group(function () {
     Route::get('/dashboard/bookings', [BookingController::class, 'index'])->name('bookings.index');
     Route::get('/dashboard/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
     Route::patch('/dashboard/bookings/{id}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
 });
 
 // SMS Settings Routes (Phase 11)
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'subscription'])->group(function () {
     Route::get('/dashboard/sms', [SmsController::class, 'index'])->name('dashboard.sms');
     Route::post('/dashboard/sms', [SmsController::class, 'update'])->name('dashboard.sms.update');
     Route::post('/dashboard/sms/test', [SmsController::class, 'test'])->name('dashboard.sms.test');
