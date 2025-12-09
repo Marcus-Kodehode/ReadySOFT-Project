@@ -29,6 +29,30 @@ class AdminController extends Controller
             'total_bookings'
         ));
     }
+
+    /**
+     * Hent alle tenants med søk og filter
+     * 
+     * Støtter søk på navn og filtrering på aktiv status
+     * Returnerer paginerte resultater (20 per side)
+     */
+    public function tenants(Request $request)
+    {
+        $tenants = Tenant::query()
+            ->when($request->search, function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->search}%");
+            })
+            ->when($request->filter === 'active', function ($query) {
+                $query->where('active', true);
+            })
+            ->when($request->filter === 'inactive', function ($query) {
+                $query->where('active', false);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+
+        return view('admin.tenants', compact('tenants'));
+    }
 }
 
 // Admin controller - viser statistikk for system-administrator
