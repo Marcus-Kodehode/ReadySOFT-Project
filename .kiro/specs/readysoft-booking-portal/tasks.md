@@ -1334,8 +1334,8 @@ Lag Eloquent model for SMS settings.
 **Akseptansekriterier:**
 - [x] Relationship: belongsTo(tenant)
 - [x] Casts: api_key → encrypted, enabled → boolean
-- [ ] Fillable: api_key, enabled
-- [ ] Fil-header og footer i `app/Models/SmsSettings.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
+- [x] Fillable: api_key, enabled
+- [x] Fil-header og footer i `app/Models/SmsSettings.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
 ---
 
@@ -1352,7 +1352,7 @@ Lag service class for Teletopia SMS API integrasjon. Håndterer sending av SMS v
 - `app/Services/TeletopiaSmsService.php`
 
 **Akseptansekriterier:**
-- [ ] Metode: sendSms($tenantId, $phoneNumber, $message) - hent SmsSettings::where('tenant_id', $tenantId)->first(), sjekk enabled, send HTTP POST til Teletopia API, returner ['success' => true/false, 'message' => '...']
+- [x] Metode: sendSms($tenantId, $phoneNumber, $message) - hent SmsSettings::where('tenant_id', $tenantId)->first(), sjekk enabled, send HTTP POST til Teletopia API, returner ['success' => true/false, 'message' => '...']
 - [ ] Henter API-nøkkel: $settings = SmsSettings::where('tenant_id', $tenantId)->first(), $apiKey = $settings->api_key (automatisk dekryptert via cast)
 - [ ] HTTP client: use Illuminate\Support\Facades\Http; Http::timeout(5)->withHeaders(['Authorization' => "Bearer {$apiKey}"])->post('https://api.teletopia.no/sms/send', ['to' => $phoneNumber, 'message' => $message])
 - [ ] Error handling: try-catch, hvis exception returner ['success' => false, 'message' => $e->getMessage()], hvis HTTP error returner ['success' => false, 'message' => 'Failed to send SMS']
