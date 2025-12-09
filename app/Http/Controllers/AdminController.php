@@ -72,4 +72,4 @@ class AdminController extends Controller
     }
 }
 
-// Admin controller - viser statistikk for system-administrator
+// Admin controller - system administrator dashboard og tenant management

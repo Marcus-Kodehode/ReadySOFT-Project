@@ -1247,11 +1247,10 @@ Lag controller for admin dashboard. Kun tilgjengelig for brukere med role='admin
 - [x] Metode: index() - hent statistikk: Tenant::count(), Tenant::where('active', true)->count(), Tenant::where('active', false)->count(), Booking::count(), returner view('admin.dashboard', compact('total_tenants', 'active_tenants', 'inactive_tenants', 'total_bookings'))
 - [x] Metode: tenants(Request $request) - hent alle tenants med søk/filter: Tenant::when($request->search, fn($q) => $q->where('name', 'like', "%{$request->search}%")), when($request->filter === 'active', fn($q) => $q->where('active', true)), paginate(20)
 - [x] Metode: toggleTenantStatus($id) - finn tenant, toggle active status: $tenant->update(['active' => !$tenant->active]), returner back() med flash message
-- [ ] Data variabler: $total_tenants, $active_tenants, $inactive_tenants, $total_bookings (alle integers)
-- [ ] Middleware: Må ha 'admin' middleware på alle routes
-- [ ] Fil-header: `// File: app/Http/Controllers/AdminController.php`
-- [ ] Fil-footer: `// Admin controller - system administrator dashboard og tenant management`
-
+- [x] Data variabler: $total_tenants, $active_tenants, $inactive_tenants, $total_bookings (alle integers)
+- [x] Middleware: Må ha 'admin' middleware på alle routes
+- [x] Fil-header: `// File: app/Http/Controllers/AdminController.php`
+- [x] Fil-footer: `// Admin controller - system administrator dashboard og tenant management`
 ---
 
 ### Task 10.2: Opprett admin dashboard view

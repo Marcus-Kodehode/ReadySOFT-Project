@@ -213,7 +213,7 @@ Dashboard skal gi tenant en rask oversikt over sin virksomhet og quick actions.
 System-admin skal kunne overvåke og administrere alle tenants i systemet.
 
 **Akseptansekriterier:**
-- [ ] Stat cards viser:
+- [x] Stat cards viser:
   - Totalt antall tenants
   - Aktive tenants
   - Inaktive tenants
