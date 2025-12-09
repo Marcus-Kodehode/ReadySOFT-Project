@@ -580,3 +580,189 @@ Task 11.4 (update() og test() metoder) vil også implementeres for å håndtere:
 **Sist oppdatert:** 9. desember 2025
 
 SmsController sin `index()` metode er nå implementert og klar til bruk. Metoden henter eller oppretter SMS settings for innlogget tenant og viser dem i en view. Routing er oppdatert og verifisert.
+
+## Task 11.4: SmsController - update() Method (✅ Fullført)
+
+### Hva ble implementert
+
+Vi implementerte `update()` metoden i `SmsController` som håndterer lagring og oppdatering av SMS settings (API-nøkkel og enabled status).
+
+#### Metode: update(Request $request)
+
+Lagrer eller oppdaterer SMS settings for innlogget tenant.
+
+**Implementasjon:**
+```php
+public function update(Request $request)
+{
+    $user = Auth::user();
+    $tenantId = $user->tenant_id;
+
+    // Valider input
+    $validated = $request->validate([
+        'api_key' => 'required|string|min:10',
+        'enabled' => 'boolean',
+    ]);
+
+    // Hent eller opprett SMS settings
+    $smsSettings = SmsSettings::firstOrNew(['tenant_id' => $tenantId]);
+    
+    // Oppdater verdier
+    $smsSettings->api_key = $validated['api_key'];
+    $smsSettings->enabled = $request->has('enabled') ? true : false;
+    $smsSettings->tenant_id = $tenantId;
+    
+    // Lagre til database (API-nøkkel krypteres automatisk)
+    $smsSettings->save();
+
+    // Redirect tilbake med success melding
+    return redirect()->route('dashboard.sms')
+        ->with('success', 'SMS settings saved successfully');
+}
+```
+
+### Tekniske valg
+
+1. **Validering**:
+   - `api_key`: required, string, minimum 10 tegn
+   - `enabled`: boolean (valgfri)
+   - Følger kravene fra FR-8 i requirements.md
+
+2. **firstOrNew() Pattern**:
+   - Henter eksisterende settings hvis de finnes
+   - Oppretter ny instans hvis de ikke finnes
+   - Samme pattern som i `index()` metoden
+   - Forenkler logikk (ingen if/else nødvendig)
+
+3. **Checkbox Handling**:
+   - `$request->has('enabled')` sjekker om checkbox er checked
+   - Returnerer `true` hvis checked, `false` hvis ikke
+   - HTML checkboxes sender ikke verdi hvis unchecked
+   - Eksplisitt håndtering sikrer korrekt boolean verdi
+
+4. **Automatisk Kryptering**:
+   - API-nøkkel krypteres automatisk ved lagring
+   - Laravel sin `encrypted` cast håndterer dette
+   - Ingen manuell kryptering nødvendig
+   - Sikker lagring av sensitive data
+
+5. **Flash Message**:
+   - Success melding lagres i session
+   - Vises i view etter redirect
+   - Standard Laravel pattern for user feedback
+
+### Routing
+
+Oppdaterte `routes/web.php` med POST route:
+
+```php
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard/sms', [SmsController::class, 'index'])->name('dashboard.sms');
+    Route::post('/dashboard/sms', [SmsController::class, 'update'])->name('dashboard.sms.update');
+});
+```
+
+**Tekniske valg:**
+- POST metode for å lagre data (følger REST convention)
+- Samme URL som GET, men forskjellig HTTP verb
+- Samme middleware som index() metoden
+
+### Testing
+
+Opprettet omfattende test suite i `tests/Feature/SmsControllerTest.php`:
+
+✅ **test_sms_settings_page_displays_correctly**
+- Verifiserer at SMS settings siden vises
+- Sjekker at view er korrekt (sms.index)
+- Bekrefter at smsSettings variabel sendes til view
+
+✅ **test_api_key_can_be_saved**
+- Verifiserer at ny API-nøkkel kan lagres
+- Sjekker redirect til dashboard.sms
+- Bekrefter success melding i session
+- Verifiserer at data lagres i database
+- Sjekker at API-nøkkel dekrypteres korrekt
+- Bekrefter at enabled status lagres
+
+✅ **test_api_key_can_be_updated**
+- Verifiserer at eksisterende API-nøkkel kan oppdateres
+- Oppretter først eksisterende settings
+- Sender ny API-nøkkel
+- Bekrefter at data oppdateres (ikke duplikeres)
+
+✅ **test_api_key_is_required**
+- Verifiserer at validering krever API-nøkkel
+- Sender POST uten api_key
+- Bekrefter at validering feiler med error
+
+✅ **test_api_key_must_be_at_least_10_characters**
+- Verifiserer minimum lengde validering
+- Sender for kort API-nøkkel (5 tegn)
+- Bekrefter at validering feiler
+
+✅ **test_enabled_defaults_to_false_when_not_checked**
+- Verifiserer checkbox handling
+- Sender POST uten enabled checkbox
+- Bekrefter at enabled settes til false
+
+**Test Resultater:**
+```
+PASS  Tests\Feature\SmsControllerTest
+✓ sms settings page displays correctly
+✓ api key can be saved
+✓ api key can be updated
+✓ api key is required
+✓ api key must be at least 10 characters
+✓ enabled defaults to false when not checked
+
+Tests:    6 passed (19 assertions)
+Duration: 1.16s
+```
+
+### Validering
+
+**API-nøkkel validering:**
+- `required` - Må være til stede
+- `string` - Må være tekst
+- `min:10` - Minimum 10 tegn (sikrer ikke for korte nøkler)
+
+**Enabled validering:**
+- `boolean` - Må være true/false (hvis til stede)
+- Valgfri - Kan utelates (defaults til false)
+
+**Feilmeldinger:**
+Laravel genererer automatisk feilmeldinger:
+- "The api key field is required."
+- "The api key must be at least 10 characters."
+
+### Sikkerhet
+
+1. **Kryptering**: API-nøkkel krypteres automatisk i database
+2. **Validering**: Input valideres før lagring
+3. **Tenant Isolation**: Bruker kan kun oppdatere sine egne settings
+4. **CSRF Protection**: Laravel sin CSRF middleware beskytter POST request
+5. **Authentication**: Krever innlogging via middleware
+
+### Neste steg
+
+Task 11.4 (test() metode) vil implementere:
+- `test()` metode for å sende test-SMS
+- Validering av telefonnummer
+- Bruk av TeletopiaSmsService
+- Success/error håndtering
+- Flash messages for user feedback
+
+Task 11.5 vil opprette fullstendig view med:
+- Form for API-nøkkel (password input)
+- Checkbox for enabled
+- Save knapp
+- Test SMS seksjon
+- Success/error meldinger
+
+---
+
+**Status:** ✅ update() metode fullført
+**Tid brukt:** 45 minutter
+**Sist oppdatert:** 9. desember 2025
+
+SmsController sin `update()` metode er nå fullstendig implementert med validering, kryptering og omfattende testing. Metoden håndterer både opprettelse av nye settings og oppdatering av eksisterende settings. Routing er oppdatert og alle tester passerer.

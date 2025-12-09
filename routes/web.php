@@ -45,6 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // SMS Settings Routes (Phase 11)
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/sms', [SmsController::class, 'index'])->name('dashboard.sms');
+    Route::post('/dashboard/sms', [SmsController::class, 'update'])->name('dashboard.sms.update');
 });
 
 // Admin Routes (Phase 10)

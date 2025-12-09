@@ -1384,7 +1384,7 @@ Lag controller for SMS settings og test-funksjon.
 
 **Akseptansekriterier:**
 - [x] Metode: index() - vis SMS settings side
-- [ ] Metode: update() - lagre API-nøkkel
+- [x] Metode: update() - lagre API-nøkkel
 - [ ] Metode: test() - send test SMS
 - [ ] Validering: api_key (required), phone_number (required for test)
 - [ ] Middleware: subscription
