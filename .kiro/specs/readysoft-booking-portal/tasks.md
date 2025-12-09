@@ -1267,7 +1267,7 @@ Lag admin dashboard med oversikt.
 
 **Akseptansekriterier:**
 - [x] 4 stat cards: Total Tenants, Active, Inactive, Total Bookings
-- [ ] Link til tenant management
+- [x] Link til tenant management
 - [ ] Følger design guide i `resources/views/admin/dashboard.blade.php` 
 - [ ] Fil-header og footer i `resources/views/admin/dashboard.blade.php`LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_10_SUMMARY.md FILEN
 

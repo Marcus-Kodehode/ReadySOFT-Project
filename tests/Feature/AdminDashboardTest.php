@@ -126,6 +126,25 @@ class AdminDashboardTest extends TestCase
         $response->assertSee('Quick Actions');
         $response->assertSee('View All Tenants');
     }
+
+    /**
+     * Test at "View All Tenants" link peker til riktig route
+     */
+    public function test_view_all_tenants_link_points_to_correct_route(): void
+    {
+        // Opprett admin bruker
+        $admin = User::factory()->create([
+            'role' => 'admin',
+            'tenant_id' => null,
+        ]);
+
+        $response = $this->actingAs($admin)->get('/admin');
+
+        $response->assertStatus(200);
+        
+        // Verifiser at linken til admin.tenants route finnes
+        $response->assertSee(route('admin.tenants'), false);
+    }
 }
 
 // Test suite som verifiserer at admin dashboard viser korrekt statistikk
