@@ -1290,7 +1290,7 @@ Lag liste-visning av alle tenants for admin.
 - [x] Status toggle (inline switch med Alpine.js)
 - [x] Søk på name eller slug
 - [x] Filter: Active / Inactive / All
-- [ ] Sortering på alle kolonner
+- [x] Sortering på alle kolonner
 - [ ] Paginering (20 per side) i `resources/views/admin/tenants.blade.php`
 - [ ] Følger design guide i `resources/views/admin/tenants.blade.php`
 - [ ] Fil-header og footer i `resources/views/admin/tenants.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_10_SUMMARY.md FILEN

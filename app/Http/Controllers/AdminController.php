@@ -31,13 +31,31 @@ class AdminController extends Controller
     }
 
     /**
-     * Hent alle tenants med søk og filter
+     * Hent alle tenants med søk, filter og sortering
      * 
      * Støtter søk på navn og slug, samt filtrering på aktiv status
+     * Støtter sortering på alle kolonner (name, slug, business_type, active, created_at)
      * Returnerer paginerte resultater (20 per side)
      */
     public function tenants(Request $request)
     {
+        // Definer tillatte sorteringskolonner
+        $allowedSortColumns = ['name', 'slug', 'business_type', 'active', 'created_at'];
+        
+        // Hent sorteringsparametere fra request, med defaults
+        $sortBy = $request->get('sort', 'created_at');
+        $sortDirection = $request->get('direction', 'desc');
+        
+        // Valider sorteringskolonne
+        if (!in_array($sortBy, $allowedSortColumns)) {
+            $sortBy = 'created_at';
+        }
+        
+        // Valider sorteringsretning
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
         $tenants = Tenant::query()
             ->when($request->search, function ($query) use ($request) {
                 $query->where(function ($q) use ($request) {
@@ -51,7 +69,7 @@ class AdminController extends Controller
             ->when($request->filter === 'inactive', function ($query) {
                 $query->where('active', false);
             })
-            ->orderBy('created_at', 'desc')
+            ->orderBy($sortBy, $sortDirection)
             ->paginate(20);
 
         return view('admin.tenants', compact('tenants'));

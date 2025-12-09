@@ -1,4 +1,10 @@
 {{-- File: resources/views/admin/tenants.blade.php --}}
+@php
+    // Sorteringsvariabler
+    $currentSort = request('sort', 'created_at');
+    $currentDirection = request('direction', 'desc');
+@endphp
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -90,21 +96,137 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
+                                <!-- Sortable: Name -->
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Name
+                                    @php
+                                        $newDirection = ($currentSort === 'name' && $currentDirection === 'asc') ? 'desc' : 'asc';
+                                        $sortUrl = route('admin.tenants', array_merge(request()->query(), ['sort' => 'name', 'direction' => $newDirection]));
+                                    @endphp
+                                    <a href="{{ $sortUrl }}" class="group inline-flex items-center gap-1 hover:text-gray-700">
+                                        Name
+                                        @if($currentSort === 'name')
+                                            @if($currentDirection === 'asc')
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            @endif
+                                        @else
+                                            <svg class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                            </svg>
+                                        @endif
+                                    </a>
                                 </th>
+                                
+                                <!-- Sortable: Slug -->
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Slug
+                                    @php
+                                        $newDirection = ($currentSort === 'slug' && $currentDirection === 'asc') ? 'desc' : 'asc';
+                                        $sortUrl = route('admin.tenants', array_merge(request()->query(), ['sort' => 'slug', 'direction' => $newDirection]));
+                                    @endphp
+                                    <a href="{{ $sortUrl }}" class="group inline-flex items-center gap-1 hover:text-gray-700">
+                                        Slug
+                                        @if($currentSort === 'slug')
+                                            @if($currentDirection === 'asc')
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            @endif
+                                        @else
+                                            <svg class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                            </svg>
+                                        @endif
+                                    </a>
                                 </th>
+                                
+                                <!-- Sortable: Business Type -->
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Business Type
+                                    @php
+                                        $newDirection = ($currentSort === 'business_type' && $currentDirection === 'asc') ? 'desc' : 'asc';
+                                        $sortUrl = route('admin.tenants', array_merge(request()->query(), ['sort' => 'business_type', 'direction' => $newDirection]));
+                                    @endphp
+                                    <a href="{{ $sortUrl }}" class="group inline-flex items-center gap-1 hover:text-gray-700">
+                                        Business Type
+                                        @if($currentSort === 'business_type')
+                                            @if($currentDirection === 'asc')
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            @endif
+                                        @else
+                                            <svg class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                            </svg>
+                                        @endif
+                                    </a>
                                 </th>
+                                
+                                <!-- Sortable: Status -->
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status
+                                    @php
+                                        $newDirection = ($currentSort === 'active' && $currentDirection === 'asc') ? 'desc' : 'asc';
+                                        $sortUrl = route('admin.tenants', array_merge(request()->query(), ['sort' => 'active', 'direction' => $newDirection]));
+                                    @endphp
+                                    <a href="{{ $sortUrl }}" class="group inline-flex items-center gap-1 hover:text-gray-700">
+                                        Status
+                                        @if($currentSort === 'active')
+                                            @if($currentDirection === 'asc')
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            @endif
+                                        @else
+                                            <svg class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                            </svg>
+                                        @endif
+                                    </a>
                                 </th>
+                                
+                                <!-- Sortable: Created -->
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Created
+                                    @php
+                                        $newDirection = ($currentSort === 'created_at' && $currentDirection === 'asc') ? 'desc' : 'asc';
+                                        $sortUrl = route('admin.tenants', array_merge(request()->query(), ['sort' => 'created_at', 'direction' => $newDirection]));
+                                    @endphp
+                                    <a href="{{ $sortUrl }}" class="group inline-flex items-center gap-1 hover:text-gray-700">
+                                        Created
+                                        @if($currentSort === 'created_at')
+                                            @if($currentDirection === 'asc')
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            @endif
+                                        @else
+                                            <svg class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                            </svg>
+                                        @endif
+                                    </a>
                                 </th>
+                                
+                                <!-- Non-sortable: Actions -->
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Actions
                                 </th>
