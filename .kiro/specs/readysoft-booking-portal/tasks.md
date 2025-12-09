@@ -1266,10 +1266,10 @@ Lag admin dashboard med oversikt.
 - `resources/views/admin/dashboard.blade.php`
 
 **Akseptansekriterier:**
-- [ ] 4 stat cards: Total Tenants, Active, Inactive, Total Bookings
+- [x] 4 stat cards: Total Tenants, Active, Inactive, Total Bookings
 - [ ] Link til tenant management
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Følger design guide i `resources/views/admin/dashboard.blade.php` 
+- [ ] Fil-header og footer i `resources/views/admin/dashboard.blade.php`LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_10_SUMMARY.md FILEN
 
 ---
 
@@ -1291,9 +1291,9 @@ Lag liste-visning av alle tenants for admin.
 - [ ] Søk på name eller slug
 - [ ] Filter: Active / Inactive / All
 - [ ] Sortering på alle kolonner
-- [ ] Paginering (20 per side)
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Paginering (20 per side) i `resources/views/admin/tenants.blade.php`
+- [ ] Følger design guide i `resources/views/admin/tenants.blade.php`
+- [ ] Fil-header og footer i `resources/views/admin/tenants.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_10_SUMMARY.md FILEN
 
 ---
 
@@ -1315,7 +1315,7 @@ Lag migration for SMS settings tabell.
 **Akseptansekriterier:**
 - [ ] Kolonner: id, tenant_id (FK, unique), api_key (text), enabled (boolean), timestamps
 - [ ] Foreign key til tenants.id
-- [ ] `php artisan migrate` kjører uten feil
+- [ ] `php artisan migrate` kjører uten feil. LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
 ---
 
@@ -1335,7 +1335,7 @@ Lag Eloquent model for SMS settings.
 - [ ] Relationship: belongsTo(tenant)
 - [ ] Casts: api_key → encrypted, enabled → boolean
 - [ ] Fillable: api_key, enabled
-- [ ] Fil-header og footer
+- [ ] Fil-header og footer i `app/Models/SmsSettings.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
 ---
 
@@ -1359,7 +1359,7 @@ Lag service class for Teletopia SMS API integrasjon. Håndterer sending av SMS v
 - [ ] Logging: Log::info("SMS sent to {$phoneNumber}", ['tenant_id' => $tenantId, 'success' => $success])
 - [ ] Timeout: Http::timeout(5) (5 sekunder)
 - [ ] Fil-header: `// File: app/Services/TeletopiaSmsService.php`
-- [ ] Fil-footer: `// Teletopia SMS service - sender SMS via Teletopia API med error handling og logging`
+- [ ] Fil-footer: `// Teletopia SMS service - sender SMS via Teletopia API med error handling og logging` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
 **API Endpoint:**
 ```
@@ -1388,7 +1388,7 @@ Lag controller for SMS settings og test-funksjon.
 - [ ] Metode: test() - send test SMS
 - [ ] Validering: api_key (required), phone_number (required for test)
 - [ ] Middleware: subscription
-- [ ] Fil-header og footer
+- [ ] Fil-header og footer i `app/Http/Controllers/SmsController.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
 ---
 
@@ -1414,8 +1414,8 @@ Lag SMS settings side med API-nøkkel form og test-funksjon.
 - [ ] Loading state ved test (Alpine.js)
 - [ ] Success/error melding
 - [ ] Hjelpetekst: "Where to find your API key?" med link
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Følger design guide i `resources/views/sms/index.blade.php`
+- [ ] Fil-header og footer i `resources/views/sms/index.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
 ---
 
