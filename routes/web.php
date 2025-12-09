@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PublicBookingController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 // API Routes
@@ -46,6 +47,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/sms', function () {
         return redirect()->route('dashboard')->with('info', 'SMS settings coming soon!');
     })->name('dashboard.sms');
+});
+
+// Admin Routes (Phase 10)
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 });
 
 Route::middleware('auth')->group(function () {
