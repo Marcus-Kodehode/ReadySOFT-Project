@@ -632,10 +632,106 @@ Opprettet `tests/Feature/AdminTenantToggleTest.php` med 6 omfattende tester:
 
 ---
 
+### Task 10.3: Search Functionality Implementation
+
+**Hva ble gjort:**
+
+Implementerte søkefunksjonalitet for tenant management view som lar admin søke på både tenant navn og slug.
+
+**Implementasjonsdetaljer:**
+
+1. **Backend - AdminController.php**
+   - Oppdaterte `tenants()` metoden for å støtte søk på både `name` og `slug`
+   - Bruker `orWhere` for å søke i begge kolonner samtidig
+   - Case-insensitive søk med `LIKE` operator
+   - Partial match støtte (søk på "beau" finner "Beautiful Salon")
+
+```php
+->when($request->search, function ($query) use ($request) {
+    $query->where(function ($q) use ($request) {
+        $q->where('name', 'like', "%{$request->search}%")
+          ->orWhere('slug', 'like', "%{$request->search}%");
+    });
+})
+```
+
+2. **Frontend - tenants.blade.php**
+   - Lagt til søkebar over tabellen med search icon
+   - Search input field med placeholder "Search by name or slug..."
+   - "Search" knapp for å utføre søk
+   - "Clear" knapp som vises når søk er aktivt
+   - Pagination bevarer søkeparametere med `appends(request()->query())`
+
+**Design:**
+- Search input med ikon til venstre (magnifying glass)
+- Full bredde input field med responsive layout
+- Primary button for "Search" (blå)
+- Secondary button for "Clear" (hvit med border)
+- Følger design guide for form inputs og buttons
+
+**Testing:**
+
+Lagt til 7 nye tester i `AdminTenantManagementTest.php`:
+
+1. **test_search_by_name_filters_tenants**
+   - Verifiserer at søk på navn filtrerer korrekt
+   - Oppretter 3 tenants, søker på "Salon"
+   - Verifiserer at kun matching tenant vises
+
+2. **test_search_by_slug_filters_tenants**
+   - Verifiserer at søk på slug filtrerer korrekt
+   - Søker på "cozy-cabin"
+   - Verifiserer at kun matching tenant vises
+
+3. **test_search_works_with_partial_match**
+   - Verifiserer at partial match fungerer
+   - Søker på "beau" og finner "Beautiful Salon"
+
+4. **test_search_is_case_insensitive**
+   - Verifiserer at søk er case-insensitive
+   - Søker med både lowercase og uppercase
+   - Begge skal finne samme tenant
+
+5. **test_empty_search_returns_all_tenants**
+   - Verifiserer at tom søk returnerer alle tenants
+   - Ingen filtrering når search parameter er tom
+
+6. **test_search_with_no_matches_shows_empty_state**
+   - Verifiserer at empty state vises når søk ikke matcher noe
+   - Søker på "nonexistent"
+   - Skal vise "No Tenants Found" melding
+
+**Test resultater:** ✅ Alle 14 tester passerer (50 assertions)
+
+**Tekniske valg:**
+
+1. **OR Query**: Bruker `orWhere` for å søke i både name og slug samtidig
+2. **Nested Where**: Wrapper OR conditions i egen where clause for å unngå konflikt med andre filters
+3. **LIKE Operator**: Støtter partial match med wildcards (`%search%`)
+4. **Query Preservation**: Pagination bevarer søkeparametere med `appends()`
+5. **UX**: "Clear" knapp vises kun når søk er aktivt
+6. **Accessibility**: Label med `sr-only` for screen readers
+
+**Validering:**
+
+- ✅ Søk på name fungerer korrekt
+- ✅ Søk på slug fungerer korrekt
+- ✅ Partial match støttes
+- ✅ Case-insensitive søk
+- ✅ Tom søk returnerer alle tenants
+- ✅ Empty state vises ved ingen matches
+- ✅ Pagination bevarer søkeparametere
+- ✅ "Clear" knapp fjerner søk
+- ✅ Følger design guide for forms
+- ✅ Alle tester passerer
+
+**Status:** ✅ Fullført
+
+---
+
 ### Gjenstående arbeid (Task 10.3)
 
 Følgende akseptansekriterier er ikke implementert ennå:
-- [ ] Søk på name eller slug
 - [ ] Filter: Active / Inactive / All
 - [ ] Sortering på alle kolonner
 

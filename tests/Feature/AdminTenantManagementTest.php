@@ -220,6 +220,195 @@ class AdminTenantManagementTest extends TestCase
 
         $response->assertStatus(403);
     }
+
+    /**
+     * Test at søk på name fungerer
+     */
+    public function test_search_by_name_filters_tenants(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'tenant_id' => null]);
+        $plan = Plan::factory()->create();
+
+        // Opprett flere tenants
+        $tenant1 = Tenant::factory()->create([
+            'name' => 'Beautiful Salon',
+            'slug' => 'beautiful-salon',
+        ]);
+        $tenant2 = Tenant::factory()->create([
+            'name' => 'Cozy Cabin',
+            'slug' => 'cozy-cabin',
+        ]);
+        $tenant3 = Tenant::factory()->create([
+            'name' => 'Spa Retreat',
+            'slug' => 'spa-retreat',
+        ]);
+
+        foreach ([$tenant1, $tenant2, $tenant3] as $tenant) {
+            Subscription::factory()->create([
+                'tenant_id' => $tenant->id,
+                'plan_id' => $plan->id,
+            ]);
+        }
+
+        // Søk på "Salon"
+        $response = $this->actingAs($admin)->get(route('admin.tenants', ['search' => 'Salon']));
+
+        $response->assertStatus(200);
+        $response->assertSee('Beautiful Salon');
+        $response->assertDontSee('Cozy Cabin');
+        $response->assertDontSee('Spa Retreat');
+    }
+
+    /**
+     * Test at søk på slug fungerer
+     */
+    public function test_search_by_slug_filters_tenants(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'tenant_id' => null]);
+        $plan = Plan::factory()->create();
+
+        // Opprett flere tenants
+        $tenant1 = Tenant::factory()->create([
+            'name' => 'Beautiful Salon',
+            'slug' => 'beautiful-salon',
+        ]);
+        $tenant2 = Tenant::factory()->create([
+            'name' => 'Cozy Cabin',
+            'slug' => 'cozy-cabin',
+        ]);
+        $tenant3 = Tenant::factory()->create([
+            'name' => 'Spa Retreat',
+            'slug' => 'spa-retreat',
+        ]);
+
+        foreach ([$tenant1, $tenant2, $tenant3] as $tenant) {
+            Subscription::factory()->create([
+                'tenant_id' => $tenant->id,
+                'plan_id' => $plan->id,
+            ]);
+        }
+
+        // Søk på "cozy-cabin"
+        $response = $this->actingAs($admin)->get(route('admin.tenants', ['search' => 'cozy-cabin']));
+
+        $response->assertStatus(200);
+        $response->assertSee('Cozy Cabin');
+        $response->assertDontSee('Beautiful Salon');
+        $response->assertDontSee('Spa Retreat');
+    }
+
+    /**
+     * Test at søk fungerer med partial match
+     */
+    public function test_search_works_with_partial_match(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'tenant_id' => null]);
+        $plan = Plan::factory()->create();
+
+        // Opprett flere tenants
+        $tenant1 = Tenant::factory()->create([
+            'name' => 'Beautiful Salon',
+            'slug' => 'beautiful-salon',
+        ]);
+        $tenant2 = Tenant::factory()->create([
+            'name' => 'Cozy Cabin',
+            'slug' => 'cozy-cabin',
+        ]);
+
+        foreach ([$tenant1, $tenant2] as $tenant) {
+            Subscription::factory()->create([
+                'tenant_id' => $tenant->id,
+                'plan_id' => $plan->id,
+            ]);
+        }
+
+        // Søk på "beau" (partial match for "Beautiful")
+        $response = $this->actingAs($admin)->get(route('admin.tenants', ['search' => 'beau']));
+
+        $response->assertStatus(200);
+        $response->assertSee('Beautiful Salon');
+        $response->assertDontSee('Cozy Cabin');
+    }
+
+    /**
+     * Test at søk er case-insensitive
+     */
+    public function test_search_is_case_insensitive(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'tenant_id' => null]);
+        $plan = Plan::factory()->create();
+
+        $tenant = Tenant::factory()->create([
+            'name' => 'Beautiful Salon',
+            'slug' => 'beautiful-salon',
+        ]);
+
+        Subscription::factory()->create([
+            'tenant_id' => $tenant->id,
+            'plan_id' => $plan->id,
+        ]);
+
+        // Søk med lowercase
+        $response = $this->actingAs($admin)->get(route('admin.tenants', ['search' => 'beautiful']));
+
+        $response->assertStatus(200);
+        $response->assertSee('Beautiful Salon');
+
+        // Søk med uppercase
+        $response = $this->actingAs($admin)->get(route('admin.tenants', ['search' => 'BEAUTIFUL']));
+
+        $response->assertStatus(200);
+        $response->assertSee('Beautiful Salon');
+    }
+
+    /**
+     * Test at tom søk returnerer alle tenants
+     */
+    public function test_empty_search_returns_all_tenants(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'tenant_id' => null]);
+        $plan = Plan::factory()->create();
+
+        $tenant1 = Tenant::factory()->create(['name' => 'Tenant 1']);
+        $tenant2 = Tenant::factory()->create(['name' => 'Tenant 2']);
+
+        foreach ([$tenant1, $tenant2] as $tenant) {
+            Subscription::factory()->create([
+                'tenant_id' => $tenant->id,
+                'plan_id' => $plan->id,
+            ]);
+        }
+
+        $response = $this->actingAs($admin)->get(route('admin.tenants', ['search' => '']));
+
+        $response->assertStatus(200);
+        $response->assertSee('Tenant 1');
+        $response->assertSee('Tenant 2');
+    }
+
+    /**
+     * Test at søk som ikke matcher noe viser empty state
+     */
+    public function test_search_with_no_matches_shows_empty_state(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'tenant_id' => null]);
+        $plan = Plan::factory()->create();
+
+        $tenant = Tenant::factory()->create([
+            'name' => 'Beautiful Salon',
+            'slug' => 'beautiful-salon',
+        ]);
+
+        Subscription::factory()->create([
+            'tenant_id' => $tenant->id,
+            'plan_id' => $plan->id,
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin.tenants', ['search' => 'nonexistent']));
+
+        $response->assertStatus(200);
+        $response->assertSee('No Tenants Found');
+    }
 }
 
 // Test suite som verifiserer at admin kan se liste over alle tenants

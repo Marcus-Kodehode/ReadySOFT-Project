@@ -15,6 +15,41 @@
                 </h1>
             </div>
 
+            <!-- Search Bar -->
+            <div class="mb-6">
+                <form method="GET" action="{{ route('admin.tenants') }}" class="flex gap-4">
+                    <div class="flex-1">
+                        <label for="search" class="sr-only">Search tenants</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                            <input 
+                                type="text" 
+                                name="search" 
+                                id="search"
+                                value="{{ request('search') }}"
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Search by name or slug...">
+                        </div>
+                    </div>
+                    <button 
+                        type="submit"
+                        class="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium">
+                        Search
+                    </button>
+                    @if(request('search'))
+                        <a 
+                            href="{{ route('admin.tenants') }}"
+                            class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium">
+                            Clear
+                        </a>
+                    @endif
+                </form>
+            </div>
+
             <!-- Tenants Table -->
             <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
@@ -155,7 +190,7 @@
                 <!-- Pagination -->
                 @if($tenants->hasPages())
                     <div class="px-6 py-4 border-t border-gray-200">
-                        {{ $tenants->links() }}
+                        {{ $tenants->appends(request()->query())->links() }}
                     </div>
                 @endif
             </div>

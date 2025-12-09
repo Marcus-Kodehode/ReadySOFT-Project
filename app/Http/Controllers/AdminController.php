@@ -33,14 +33,17 @@ class AdminController extends Controller
     /**
      * Hent alle tenants med søk og filter
      * 
-     * Støtter søk på navn og filtrering på aktiv status
+     * Støtter søk på navn og slug, samt filtrering på aktiv status
      * Returnerer paginerte resultater (20 per side)
      */
     public function tenants(Request $request)
     {
         $tenants = Tenant::query()
             ->when($request->search, function ($query) use ($request) {
-                $query->where('name', 'like', "%{$request->search}%");
+                $query->where(function ($q) use ($request) {
+                    $q->where('name', 'like', "%{$request->search}%")
+                      ->orWhere('slug', 'like', "%{$request->search}%");
+                });
             })
             ->when($request->filter === 'active', function ($query) {
                 $query->where('active', true);
