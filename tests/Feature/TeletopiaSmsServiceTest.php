@@ -88,6 +88,50 @@ class TeletopiaSmsServiceTest extends TestCase
         $this->assertFalse($result['success']);
         $this->assertEquals('API key is not configured', $result['message']);
     }
+
+    public function test_returns_error_when_http_request_fails(): void
+    {
+        $tenant = Tenant::factory()->create();
+        
+        SmsSettings::create([
+            'tenant_id' => $tenant->id,
+            'api_key' => 'test-api-key',
+            'enabled' => true,
+        ]);
+
+        // Mock HTTP request to return error response
+        Http::fake([
+            'https://api.teletopia.no/sms/send' => Http::response(['error' => 'Invalid API key'], 401)
+        ]);
+
+        $service = new TeletopiaSmsService();
+        $result = $service->sendSms($tenant->id, '+4712345678', 'Test message');
+
+        $this->assertFalse($result['success']);
+        $this->assertEquals('Failed to send SMS', $result['message']);
+    }
+
+    public function test_returns_error_message_when_exception_occurs(): void
+    {
+        $tenant = Tenant::factory()->create();
+        
+        SmsSettings::create([
+            'tenant_id' => $tenant->id,
+            'api_key' => 'test-api-key',
+            'enabled' => true,
+        ]);
+
+        // Mock HTTP to throw an exception
+        Http::fake(function () {
+            throw new \Exception('Network connection failed');
+        });
+
+        $service = new TeletopiaSmsService();
+        $result = $service->sendSms($tenant->id, '+4712345678', 'Test message');
+
+        $this->assertFalse($result['success']);
+        $this->assertEquals('Network connection failed', $result['message']);
+    }
 }
 
-// Test suite for TeletopiaSmsService - verifiserer at API-nøkkel hentes og dekrypteres korrekt
+// Test suite for TeletopiaSmsService - verifiserer at API-nøkkel hentes og dekrypteres korrekt samt error handling
