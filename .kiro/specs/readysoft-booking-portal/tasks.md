@@ -1314,7 +1314,7 @@ Lag migration for SMS settings tabell.
 
 **Akseptansekriterier:**
 - [x] Kolonner: id, tenant_id (FK, unique), api_key (text), enabled (boolean), timestamps
-- [ ] Foreign key til tenants.id
+- [x] Foreign key til tenants.id
 - [x] `php artisan migrate` kjører uten feil. LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
 ---
@@ -1332,8 +1332,8 @@ Lag Eloquent model for SMS settings.
 - `app/Models/SmsSettings.php`
 
 **Akseptansekriterier:**
-- [ ] Relationship: belongsTo(tenant)
-- [ ] Casts: api_key → encrypted, enabled → boolean
+- [x] Relationship: belongsTo(tenant)
+- [x] Casts: api_key → encrypted, enabled → boolean
 - [ ] Fillable: api_key, enabled
 - [ ] Fil-header og footer i `app/Models/SmsSettings.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
