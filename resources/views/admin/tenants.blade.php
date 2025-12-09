@@ -60,15 +60,64 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($tenant->active)
-                                            <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
+                                        <!-- Status Toggle Switch -->
+                                        <div x-data="{ 
+                                            active: {{ $tenant->active ? 'true' : 'false' }},
+                                            toggling: false,
+                                            async toggle() {
+                                                if (this.toggling) return;
+                                                this.toggling = true;
+                                                
+                                                try {
+                                                    const response = await fetch('{{ route('admin.tenants.toggle', $tenant->id) }}', {
+                                                        method: 'POST',
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                            'Accept': 'application/json'
+                                                        }
+                                                    });
+                                                    
+                                                    if (response.ok) {
+                                                        this.active = !this.active;
+                                                    } else {
+                                                        alert('Failed to update tenant status');
+                                                    }
+                                                } catch (error) {
+                                                    alert('Error updating tenant status');
+                                                } finally {
+                                                    this.toggling = false;
+                                                }
+                                            }
+                                        }" class="flex items-center gap-3">
+                                            <!-- Toggle Switch -->
+                                            <button 
+                                                @click="toggle()"
+                                                :disabled="toggling"
+                                                type="button"
+                                                :class="active ? 'bg-green-600' : 'bg-gray-200'"
+                                                class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                role="switch"
+                                                :aria-checked="active.toString()">
+                                                <span class="sr-only">Toggle tenant status</span>
+                                                <span 
+                                                    :class="active ? 'translate-x-5' : 'translate-x-0'"
+                                                    class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out">
+                                                </span>
+                                            </button>
+                                            
+                                            <!-- Status Badge -->
+                                            <span 
+                                                x-show="active"
+                                                class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
                                                 Active
                                             </span>
-                                        @else
-                                            <span class="px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full">
+                                            <span 
+                                                x-show="!active"
+                                                class="px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full">
                                                 Inactive
                                             </span>
-                                        @endif
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-600">

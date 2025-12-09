@@ -528,10 +528,113 @@ Implementere et komplett admin dashboard system som gir system-administratorer f
 - ✅ Brukervennlighet: Selvforklarende UI, tydelige stat cards og tabell
 - ✅ Kodekvalitet: Laravel beste praksis, norske kommentarer, konsistente navnekonvensjoner
 
+### Task 10.3: Status Toggle Implementation
+
+**Hva ble gjort:**
+
+Implementerte inline status toggle switch med Alpine.js for å aktivere/deaktivere tenants direkte fra tabellen.
+
+**Implementasjonsdetaljer:**
+
+1. **Toggle Switch Component** (Alpine.js)
+   - Interaktiv switch button som viser aktiv/inaktiv status visuelt
+   - Grønn bakgrunn når aktiv (`bg-green-600`)
+   - Grå bakgrunn når inaktiv (`bg-gray-200`)
+   - Animert toggle med smooth transition (`transition-colors duration-200`)
+   - Disabled state under toggling for å forhindre multiple requests
+
+2. **AJAX Request**
+   - Asynkron POST request til `/admin/tenants/{id}/toggle`
+   - Inkluderer CSRF token for sikkerhet
+   - Error handling med alert ved feil
+   - Optimistisk UI update (endrer status umiddelbart)
+
+3. **Visual Feedback**
+   - Toggle switch endrer farge umiddelbart
+   - Status badge oppdateres automatisk (Active/Inactive)
+   - Loading state med disabled cursor under toggling
+   - Focus states for keyboard navigation
+
+**Kode struktur:**
+
+```blade
+<div x-data="{ 
+    active: {{ $tenant->active ? 'true' : 'false' }},
+    toggling: false,
+    async toggle() {
+        // AJAX request til toggle endpoint
+        // Oppdater UI ved suksess
+    }
+}">
+    <!-- Toggle Switch -->
+    <button @click="toggle()" :class="active ? 'bg-green-600' : 'bg-gray-200'">
+        <span :class="active ? 'translate-x-5' : 'translate-x-0'"></span>
+    </button>
+    
+    <!-- Status Badge -->
+    <span x-show="active">Active</span>
+    <span x-show="!active">Inactive</span>
+</div>
+```
+
+**Testing:**
+
+Opprettet `tests/Feature/AdminTenantToggleTest.php` med 6 omfattende tester:
+
+1. **test_admin_can_activate_inactive_tenant**
+   - Verifiserer at admin kan aktivere en inaktiv tenant
+   - Sjekker at database oppdateres korrekt
+
+2. **test_admin_can_deactivate_active_tenant**
+   - Verifiserer at admin kan deaktivere en aktiv tenant
+   - Sjekker at database oppdateres korrekt
+
+3. **test_toggle_returns_correct_success_message_for_activation**
+   - Verifiserer at riktig success melding vises ved aktivering
+   - Format: "Tenant 'Name' has been activated successfully."
+
+4. **test_toggle_returns_correct_success_message_for_deactivation**
+   - Verifiserer at riktig success melding vises ved deaktivering
+   - Format: "Tenant 'Name' has been deactivated successfully."
+
+5. **test_toggle_fails_with_404_for_nonexistent_tenant**
+   - Verifiserer at toggle feiler med 404 for ikke-eksisterende tenant
+   - Error handling testing
+
+6. **test_toggle_can_be_called_multiple_times**
+   - Verifiserer at toggle er idempotent
+   - Tester at status kan toggles flere ganger (true → false → true → false)
+
+**Test resultater:** ✅ Alle 6 tester passerer (12 assertions)
+
+**Tekniske valg:**
+
+1. **Alpine.js**: Valgt for enkel state management og reaktivitet
+2. **Fetch API**: Moderne JavaScript for AJAX requests
+3. **Optimistisk UI**: Oppdaterer UI umiddelbart for bedre UX
+4. **Error handling**: Graceful degradation med alert ved feil
+5. **Accessibility**: ARIA attributes og keyboard navigation support
+6. **Loading state**: Disabled state under toggling for å forhindre race conditions
+
+**Validering:**
+
+- ✅ Toggle switch vises inline i Status kolonnen
+- ✅ Switch endrer farge basert på status (grønn/grå)
+- ✅ Status badge oppdateres automatisk
+- ✅ AJAX request sender til korrekt endpoint
+- ✅ CSRF token inkluderes for sikkerhet
+- ✅ Error handling fungerer korrekt
+- ✅ Loading state forhindrer multiple requests
+- ✅ Accessibility (ARIA, keyboard navigation)
+- ✅ Alle tester passerer
+
+**Status:** ✅ Fullført
+
+---
+
 ### Gjenstående arbeid (Task 10.3)
 
 Følgende akseptansekriterier er ikke implementert ennå:
-- [ ] Status toggle (inline switch med Alpine.js)
 - [ ] Søk på name eller slug
 - [ ] Filter: Active / Inactive / All
 - [ ] Sortering på alle kolonner
@@ -542,13 +645,20 @@ Disse vil bli implementert i neste iterasjon av Task 10.3.
 
 **Task 10.1:** ✅ Fullført  
 **Task 10.2:** ✅ Fullført  
-**Task 10.3:** 🟡 Delvis fullført (tabell implementert, søk/filter/sortering gjenstår)
+**Task 10.3:** 🟡 Delvis fullført (tabell og toggle implementert, søk/filter/sortering gjenstår)
 
 **Samlet status for Task 10:** 🟢 På sporet - Hovedfunksjonalitet fullført
 
 Admin dashboard er nå fullt funksjonelt og klar for bruk. System-administratorer kan:
 - Se system-oversikt med stat cards
 - Se liste over alle tenants i en tabell
+- Toggle tenant status inline med Alpine.js switch
 - Navigere til tenant sine bookingsider
 - Få oversikt over status (aktiv/inaktiv) og opprettelsesdato
+
+**Testdekning:** 23 tester totalt (67 assertions)
+- AdminDashboardTest: 4 tester (19 assertions)
+- AdminMiddlewareTest: 5 tester (9 assertions)
+- AdminTenantManagementTest: 8 tester (30 assertions)
+- AdminTenantToggleTest: 6 tester (12 assertions)
 
