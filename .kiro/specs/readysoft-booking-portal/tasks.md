@@ -1356,7 +1356,7 @@ Lag service class for Teletopia SMS API integrasjon. Håndterer sending av SMS v
 - [x] Henter API-nøkkel: $settings = SmsSettings::where('tenant_id', $tenantId)->first(), $apiKey = $settings->api_key (automatisk dekryptert via cast)
 - [x] HTTP client: use Illuminate\Support\Facades\Http; Http::timeout(5)->withHeaders(['Authorization' => "Bearer {$apiKey}"])->post('https://api.teletopia.no/sms/send', ['to' => $phoneNumber, 'message' => $message])
 - [x] Error handling: try-catch, hvis exception returner ['success' => false, 'message' => $e->getMessage()], hvis HTTP error returner ['success' => false, 'message' => 'Failed to send SMS']
-- [ ] Logging: Log::info("SMS sent to {$phoneNumber}", ['tenant_id' => $tenantId, 'success' => $success])
+- [x] Logging: Log::info("SMS sent to {$phoneNumber}", ['tenant_id' => $tenantId, 'success' => $success])
 - [ ] Timeout: Http::timeout(5) (5 sekunder)
 - [ ] Fil-header: `// File: app/Services/TeletopiaSmsService.php`
 - [ ] Fil-footer: `// Teletopia SMS service - sender SMS via Teletopia API med error handling og logging` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN

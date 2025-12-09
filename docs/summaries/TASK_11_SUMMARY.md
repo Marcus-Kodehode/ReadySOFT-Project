@@ -258,18 +258,22 @@ return [
 ];
 ```
 
-#### 5. Logging
-Servicen logger alle SMS-forsøk:
+#### 5. Logging (✅ Fullført)
 
-**Suksess:**
+Servicen logger alle SMS-forsøk med strukturert logging for debugging og monitoring.
+
+**INFO Level - Suksess:**
 ```php
 Log::info("SMS sent to {$phoneNumber}", [
     'tenant_id' => $tenantId,
     'success' => true
 ]);
 ```
+- Logges når SMS sendes vellykket
+- Brukes for normal drift-monitoring
+- Inkluderer telefonnummer og tenant_id
 
-**HTTP feil:**
+**WARNING Level - HTTP feil:**
 ```php
 Log::warning("Failed to send SMS to {$phoneNumber}", [
     'tenant_id' => $tenantId,
@@ -277,8 +281,11 @@ Log::warning("Failed to send SMS to {$phoneNumber}", [
     'status' => $response->status()
 ]);
 ```
+- Logges når API returnerer feilkode (4xx, 5xx)
+- Inkluderer HTTP status code for debugging
+- Kan indikere midlertidige problemer
 
-**Exception:**
+**ERROR Level - Exception:**
 ```php
 Log::error("Exception while sending SMS to {$phoneNumber}", [
     'tenant_id' => $tenantId,
@@ -286,6 +293,25 @@ Log::error("Exception while sending SMS to {$phoneNumber}", [
     'error' => $e->getMessage()
 ]);
 ```
+- Logges når exception kastes (network errors, timeouts)
+- Inkluderer exception message
+- Krever oppmerksomhet fra utviklere
+
+**Log File Location:**
+- `storage/logs/laravel.log`
+
+**Sample Log Entries:**
+```
+[2025-12-09 16:41:30] testing.INFO: SMS sent to +4712345678 {"tenant_id":1,"success":true}
+[2025-12-09 16:41:30] testing.WARNING: Failed to send SMS to +4712345678 {"tenant_id":1,"success":false,"status":401}
+[2025-12-09 16:41:30] testing.ERROR: Exception while sending SMS to +4712345678 {"tenant_id":1,"success":false,"error":"Network connection failed"}
+```
+
+**Benefits:**
+- **Debugging**: Easy to trace SMS sending issues by tenant
+- **Monitoring**: Can track SMS success rates and failures
+- **Audit Trail**: Complete history of all SMS attempts
+- **Troubleshooting**: Detailed error messages for failed attempts
 
 ### Tekniske valg
 
@@ -349,6 +375,16 @@ Servicen ble testet med `tests/Feature/TeletopiaSmsServiceTest.php`:
 - Verifiserer at servicen returnerer feil når API-nøkkel er tom
 - Sjekker at feilmeldingen er korrekt: "API key is not configured"
 
+✅ **test_returns_error_when_http_request_fails**
+- Verifiserer at servicen håndterer HTTP feil korrekt
+- Mocker API til å returnere 401 Unauthorized
+- Sjekker at feilmeldingen er korrekt: "Failed to send SMS"
+
+✅ **test_returns_error_message_when_exception_occurs**
+- Verifiserer at servicen håndterer exceptions korrekt
+- Mocker HTTP til å kaste exception
+- Sjekker at exception message returneres til bruker
+
 **Test Resultater:**
 ```
 PASS  Tests\Feature\TeletopiaSmsServiceTest
@@ -356,8 +392,10 @@ PASS  Tests\Feature\TeletopiaSmsServiceTest
 ✓ returns error when settings not found
 ✓ returns error when sms not enabled
 ✓ returns error when api key is empty
+✓ returns error when http request fails
+✓ returns error message when exception occurs
 
-Tests:    4 passed (8 assertions)
+Tests:    6 passed (12 assertions)
 ```
 
 ### API Key Retrieval Implementation (✅ Fullført)
