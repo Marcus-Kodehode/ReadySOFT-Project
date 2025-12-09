@@ -8,6 +8,7 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SmsController;
 use Illuminate\Support\Facades\Route;
 
 // API Routes
@@ -41,12 +42,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/dashboard/bookings/{id}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
 });
 
-// Placeholder routes for Quick Actions (to be implemented in later phases)
+// SMS Settings Routes (Phase 11)
 Route::middleware(['auth', 'verified'])->group(function () {
-    // SMS Settings route (Phase 8)
-    Route::get('/dashboard/sms', function () {
-        return redirect()->route('dashboard')->with('info', 'SMS settings coming soon!');
-    })->name('dashboard.sms');
+    Route::get('/dashboard/sms', [SmsController::class, 'index'])->name('dashboard.sms');
 });
 
 // Admin Routes (Phase 10)

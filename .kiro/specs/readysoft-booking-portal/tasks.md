@@ -1358,8 +1358,8 @@ Lag service class for Teletopia SMS API integrasjon. Håndterer sending av SMS v
 - [x] Error handling: try-catch, hvis exception returner ['success' => false, 'message' => $e->getMessage()], hvis HTTP error returner ['success' => false, 'message' => 'Failed to send SMS']
 - [x] Logging: Log::info("SMS sent to {$phoneNumber}", ['tenant_id' => $tenantId, 'success' => $success])
 - [x] Timeout: Http::timeout(5) (5 sekunder)
-- [ ] Fil-header: `// File: app/Services/TeletopiaSmsService.php`
-- [ ] Fil-footer: `// Teletopia SMS service - sender SMS via Teletopia API med error handling og logging` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
+- [x] Fil-header: `// File: app/Services/TeletopiaSmsService.php`
+- [x] Fil-footer: `// Teletopia SMS service - sender SMS via Teletopia API med error handling og logging` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_11_SUMMARY.md FILEN
 
 **API Endpoint:**
 ```
@@ -1383,7 +1383,7 @@ Lag controller for SMS settings og test-funksjon.
 - `app/Http/Controllers/SmsController.php`
 
 **Akseptansekriterier:**
-- [ ] Metode: index() - vis SMS settings side
+- [x] Metode: index() - vis SMS settings side
 - [ ] Metode: update() - lagre API-nøkkel
 - [ ] Metode: test() - send test SMS
 - [ ] Validering: api_key (required), phone_number (required for test)
