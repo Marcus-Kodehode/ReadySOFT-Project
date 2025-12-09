@@ -327,6 +327,59 @@ Log::error("Exception while sending SMS to {$phoneNumber}", [
 // Teletopia SMS service - sender SMS via Teletopia API med error handling og logging
 ```
 
+### Testing
+
+Servicen ble testet med `tests/Feature/TeletopiaSmsServiceTest.php`:
+
+✅ **test_api_key_is_retrieved_and_decrypted_automatically**
+- Verifiserer at API-nøkkel hentes fra SmsSettings
+- Bekrefter at nøkkelen dekrypteres automatisk via encrypted cast
+- Sjekker at HTTP request sendes med korrekt Authorization header
+- Bruker Http::fake() for å mocke Teletopia API
+
+✅ **test_returns_error_when_settings_not_found**
+- Verifiserer at servicen returnerer feil når SMS settings ikke finnes
+- Sjekker at feilmeldingen er korrekt: "SMS settings not found for this tenant"
+
+✅ **test_returns_error_when_sms_not_enabled**
+- Verifiserer at servicen returnerer feil når SMS er disabled
+- Sjekker at feilmeldingen er korrekt: "SMS functionality is not enabled"
+
+✅ **test_returns_error_when_api_key_is_empty**
+- Verifiserer at servicen returnerer feil når API-nøkkel er tom
+- Sjekker at feilmeldingen er korrekt: "API key is not configured"
+
+**Test Resultater:**
+```
+PASS  Tests\Feature\TeletopiaSmsServiceTest
+✓ api key is retrieved and decrypted automatically
+✓ returns error when settings not found
+✓ returns error when sms not enabled
+✓ returns error when api key is empty
+
+Tests:    4 passed (8 assertions)
+```
+
+### API Key Retrieval Implementation (✅ Fullført)
+
+**Kode:**
+```php
+// Hent API-nøkkel (automatisk dekryptert via cast)
+$apiKey = $settings->api_key;
+```
+
+**Hvordan det fungerer:**
+1. `SmsSettings::where('tenant_id', $tenantId)->first()` henter settings fra database
+2. Laravel sin `encrypted` cast dekrypterer automatisk `api_key` kolonnen
+3. `$settings->api_key` returnerer dekryptert verdi
+4. Ingen manuell dekryptering nødvendig
+
+**Sikkerhet:**
+- API-nøkkel lagres kryptert i database (TEXT kolonne)
+- Dekrypteres kun når den hentes via Eloquent model
+- Aldri eksponert i klartekst i database
+- Følger Laravel beste praksis for sensitive data
+
 ### Neste steg
 
 Task 11.4 vil opprette `SmsController` som:
@@ -339,4 +392,4 @@ Task 11.4 vil opprette `SmsController` som:
 
 **Status:** ✅ Fullført
 
-TeletopiaSmsService er nå fullstendig implementert med robust error handling, logging og validering. Servicen er klar til å brukes av SmsController for å sende SMS-meldinger.
+TeletopiaSmsService er nå fullstendig implementert med robust error handling, logging og validering. API-nøkkel hentes og dekrypteres automatisk via Laravel sin encrypted cast. Servicen er klar til å brukes av SmsController for å sende SMS-meldinger.
