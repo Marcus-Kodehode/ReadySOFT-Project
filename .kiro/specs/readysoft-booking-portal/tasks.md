@@ -1503,7 +1503,7 @@ Lag hovednavigasjon for innloggede tenant-brukere.
 
 **Akseptansekriterier:**
 - [x] Logo og app navn. LOGO ADDED IN PUBLIC/IMAGES/ICONS/readysoft2.png APP NAME = Schedulo
-- [ ] Nav links: Dashboard, Resources, Bookings, SMS Settings
+- [x] Nav links: Dashboard, Resources, Bookings, SMS Settings
 - [ ] User dropdown: Profile, Settings, Logout
 - [ ] Aktiv link highlightet
 - [ ] Hamburger menu på mobil (Alpine.js)
