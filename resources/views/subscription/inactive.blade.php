@@ -30,8 +30,8 @@
                             <p class="text-sm font-medium text-blue-800">Need Help?</p>
                             <p class="mt-1 text-sm text-blue-700">
                                 Contact our support team at 
-                                <a href="mailto:support@readysoft.no" class="font-medium underline hover:text-blue-800">
-                                    support@readysoft.no
+                                <a href="mailto:support@schedulo.com" class="font-medium underline hover:text-blue-800">
+                                    support@schedulo.com
                                 </a>
                             </p>
                         </div>

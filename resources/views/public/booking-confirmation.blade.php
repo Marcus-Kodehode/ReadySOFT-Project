@@ -5,10 +5,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Confirmed - ReadySoft</title>
+    <title>Booking Confirmed - Schedulo</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50">
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center gap-3">
+                    <img src="{{ asset('images/icons/readysoft2.png') }}" alt="Schedulo Logo" class="h-10 w-auto">
+                    <span class="text-xl font-bold text-blue-600">Schedulo</span>
+                </a>
+                <a href="/" class="text-sm text-gray-600 hover:text-blue-600 transition-colors">
+                    ← Back to Home
+                </a>
+            </div>
+        </div>
+    </nav>
+    
     <div class="min-h-screen flex items-center justify-center px-4 py-12">
         <div class="max-w-md w-full">
             <!-- Success Icon -->

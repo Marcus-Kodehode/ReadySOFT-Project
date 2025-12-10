@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'ReadySoft') }} - Book Your Next Experience</title>
+    <title>{{ config('app.name', 'Schedulo') }} - Book Your Next Experience</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -22,8 +22,9 @@
     <nav class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <span class="text-2xl font-bold text-blue-600">ReadySoft</span>
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('images/icons/readysoft2.png') }}" alt="Schedulo Logo" class="h-10 w-auto">
+                    <span class="text-2xl font-bold text-blue-600">Schedulo</span>
                 </div>
                 
                 @if (Route::has('login'))
@@ -202,7 +203,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="text-gray-300 text-sm">
-                    © {{ date('Y') }} ReadySoft. All rights reserved.
+                    © {{ date('Y') }} Schedulo. All rights reserved.
                 </div>
                 <div class="flex gap-6">
                     <a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">About</a>

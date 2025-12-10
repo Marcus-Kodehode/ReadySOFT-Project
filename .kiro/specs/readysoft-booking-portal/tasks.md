@@ -1502,7 +1502,7 @@ Lag hovednavigasjon for innloggede tenant-brukere.
 - `resources/views/layouts/navigation.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Logo og app navn
+- [x] Logo og app navn. LOGO ADDED IN PUBLIC/IMAGES/ICONS/readysoft2.png APP NAME = Schedulo
 - [ ] Nav links: Dashboard, Resources, Bookings, SMS Settings
 - [ ] User dropdown: Profile, Settings, Logout
 - [ ] Aktiv link highlightet
