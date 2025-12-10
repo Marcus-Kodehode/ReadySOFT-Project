@@ -1581,10 +1581,10 @@ Organisér alle routes i web.php med kommentarer og middleware.
 - `routes/web.php`
 
 **Akseptansekriterier:**
-- [ ] Gruppering: Public, Auth, Tenant (subscription middleware), Admin (admin middleware)
-- [ ] Kommentarer for hver seksjon
-- [ ] Resource routes for ResourceController, BookingController
-- [ ] Named routes for alle viktige ruter
+- [x] Gruppering: Public, Auth, Tenant (subscription middleware), Admin (admin middleware)
+- [x] Kommentarer for hver seksjon
+- [x] Resource routes for ResourceController, BookingController
+- [x] Named routes for alle viktige ruter
 - [ ] Rate limiting på public booking route
 
 **Struktur:**

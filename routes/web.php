@@ -1,5 +1,7 @@
 <?php
 
+// File: routes/web.php
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Api\SlugController;
 use App\Http\Controllers\SubscriptionController;
@@ -12,7 +14,18 @@ use App\Http\Controllers\SmsController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 
-// API Routes
+/*
+|--------------------------------------------------------------------------
+| PUBLIC ROUTES
+|--------------------------------------------------------------------------
+| Routes accessible to everyone without authentication
+| Includes: Landing page, tenant booking pages, API endpoints
+*/
+
+// Landing Page
+Route::get('/', [LandingController::class, 'index'])->name('landing');
+
+// Public API Routes
 Route::get('/api/check-slug', [SlugController::class, 'check'])->name('api.check-slug');
 Route::get('/api/available-slots', [PublicBookingController::class, 'availableSlots'])
     ->middleware('throttle:60,1')
@@ -23,54 +36,109 @@ Route::get('/components-demo', function () {
     return view('components-demo');
 })->name('components.demo');
 
-Route::get('/', [LandingController::class, 'index'])->name('landing');
-
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified', 'subscription'])
-    ->name('dashboard');
-
-// Subscription Routes
-Route::get('/subscription/inactive', [SubscriptionController::class, 'inactive'])
-    ->middleware('auth')
-    ->name('subscription.inactive');
-
-// Resource Management Routes (Phase 6)
-Route::middleware(['auth', 'verified', 'subscription'])->group(function () {
-    Route::resource('resources', ResourceController::class);
-});
-
-// Booking Management Routes (Phase 9)
-Route::middleware(['auth', 'verified', 'subscription'])->group(function () {
-    Route::get('/dashboard/bookings', [BookingController::class, 'index'])->name('bookings.index');
-    Route::get('/dashboard/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
-    Route::patch('/dashboard/bookings/{id}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
-});
-
-// SMS Settings Routes (Phase 11)
-Route::middleware(['auth', 'verified', 'subscription'])->group(function () {
-    Route::get('/dashboard/sms', [SmsController::class, 'index'])->name('dashboard.sms');
-    Route::post('/dashboard/sms', [SmsController::class, 'update'])->name('dashboard.sms.update');
-    Route::post('/dashboard/sms/test', [SmsController::class, 'test'])->name('dashboard.sms.test');
-});
-
-// Admin Routes (Phase 10)
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::get('/admin/tenants', [AdminController::class, 'tenants'])->name('admin.tenants');
-    Route::post('/admin/tenants/{id}/toggle', [AdminController::class, 'toggleTenantStatus'])->name('admin.tenants.toggle');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATION ROUTES
+|--------------------------------------------------------------------------
+| Routes for login, registration, password reset, etc.
+| Provided by Laravel Breeze
+*/
 
 require __DIR__.'/auth.php';
 
-// Public Booking Page (Phase 8) - MUST BE LAST to avoid catching other routes
-Route::get('/booking/confirmation/{id}', [PublicBookingController::class, 'confirmation'])->name('booking.confirmation');
-Route::get('/{slug}', [PublicBookingController::class, 'show'])->name('booking.show');
+/*
+|--------------------------------------------------------------------------
+| TENANT ROUTES (Subscription Middleware)
+|--------------------------------------------------------------------------
+| Routes for authenticated tenant admins with active subscriptions
+| Middleware: auth, verified, subscription
+*/
+
+Route::middleware(['auth', 'verified', 'subscription'])->group(function () {
+    
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Resource Management (Phase 6)
+    Route::resource('resources', ResourceController::class);
+    
+    // Booking Management (Phase 9)
+    Route::prefix('dashboard/bookings')->name('bookings.')->group(function () {
+        Route::get('/', [BookingController::class, 'index'])->name('index');
+        Route::get('/{id}', [BookingController::class, 'show'])->name('show');
+        Route::patch('/{id}/status', [BookingController::class, 'updateStatus'])->name('updateStatus');
+    });
+    
+    // SMS Settings (Phase 11)
+    Route::prefix('dashboard/sms')->name('dashboard.sms')->group(function () {
+        Route::get('/', [SmsController::class, 'index']);
+        Route::post('/', [SmsController::class, 'update'])->name('.update');
+        Route::post('/test', [SmsController::class, 'test'])->name('.test');
+    });
+    
+    // Profile Management
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| SUBSCRIPTION MANAGEMENT ROUTES
+|--------------------------------------------------------------------------
+| Routes for handling inactive subscriptions
+| Middleware: auth (no subscription check)
+*/
+
+Route::middleware('auth')->group(function () {
+    Route::get('/subscription/inactive', [SubscriptionController::class, 'inactive'])
+        ->name('subscription.inactive');
+});
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN ROUTES (Admin Middleware)
+|--------------------------------------------------------------------------
+| Routes for system administrators only
+| Middleware: auth, admin
+*/
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    
+    // Admin Dashboard
+    Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+    
+    // Tenant Management
+    Route::prefix('tenants')->name('tenants')->group(function () {
+        Route::get('/', [AdminController::class, 'tenants']);
+        Route::post('/{id}/toggle', [AdminController::class, 'toggleTenantStatus'])->name('.toggle');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC BOOKING ROUTES
+|--------------------------------------------------------------------------
+| Routes for public booking pages (no authentication required)
+| MUST BE LAST to avoid catching other routes with {slug} parameter
+*/
+
+Route::get('/booking/confirmation/{id}', [PublicBookingController::class, 'confirmation'])
+    ->name('booking.confirmation');
+
+Route::get('/{slug}', [PublicBookingController::class, 'show'])
+    ->name('booking.show');
+
 Route::post('/{slug}/bookings', [PublicBookingController::class, 'store'])
     ->middleware('throttle:10,60')
     ->name('booking.store');
+
+// Routes are organized into clear groups:
+// 1. PUBLIC ROUTES - No authentication required
+// 2. AUTHENTICATION ROUTES - Laravel Breeze auth routes
+// 3. TENANT ROUTES - Require auth + verified + subscription middleware
+// 4. SUBSCRIPTION MANAGEMENT - Require auth only (for inactive subscription page)
+// 5. ADMIN ROUTES - Require auth + admin middleware
+// 6. PUBLIC BOOKING ROUTES - No auth, placed last to avoid slug conflicts
