@@ -1505,8 +1505,8 @@ Lag hovednavigasjon for innloggede tenant-brukere.
 - [x] Logo og app navn. LOGO ADDED IN PUBLIC/IMAGES/ICONS/readysoft2.png APP NAME = Schedulo
 - [x] Nav links: Dashboard, Resources, Bookings, SMS Settings
 - [x] User dropdown: Profile, Settings, Logout
-- [ ] Aktiv link highlightet
-- [ ] Hamburger menu på mobil (Alpine.js)
+- [x] Aktiv link highlightet
+- [x] Hamburger menu på mobil (Alpine.js)
 - [ ] Følger design guide (design.md) i `resources/views/layouts/navigation.blade.php`
 - [ ] Fil-header og footer i `resources/views/layouts/navigation.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_13_SUMMARY.md FILEN
 
