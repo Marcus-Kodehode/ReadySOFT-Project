@@ -451,3 +451,170 @@ Alert component er fullstendig implementert med alle fire type-varianter (succes
 - Task 13.3 (fortsettelse): Implementere Modal component
 - Task 13.4: Følge design guide fullstendig for alle komponenter
 - Task 13.5: Legge til fil-header og footer på alle komponenter
+
+
+---
+
+### Task 13.3: Blade Components - Modal Component ✅ FULLFØRT
+
+#### Implementerte funksjoner:
+1. **Modal Component med Alpine.js**
+   - Reusable Blade component for modal dialogs
+   - Følger design guide fra `design.md`
+   - Powered by Alpine.js for state management
+
+2. **Modal Features**
+   - **Title prop**: Valgfri tittel som vises øverst i modal
+   - **Trigger slot**: Valgfri slot for element som åpner modal (button, link, etc.)
+   - **Footer slot**: Valgfri slot for action buttons (Cancel, Confirm, etc.)
+   - **Max width variants**: sm, md (default), lg, xl, 2xl
+   - **Backdrop**: Semi-transparent black overlay (bg-black bg-opacity-50)
+   - **Click outside to close**: Klikk på backdrop lukker modal
+   - **Escape key to close**: ESC-tast lukker modal
+   - **Smooth transitions**: Alpine.js transitions for fade-in/fade-out
+   - **x-cloak**: Forhindrer flash of unstyled content
+   - **Custom attributes**: Støtter alle HTML-attributter
+
+#### Teknisk implementering:
+```blade
+{{-- Basic modal with trigger --}}
+<x-modal title="My Modal">
+    <x-slot:trigger>
+        <x-button>Open Modal</x-button>
+    </x-slot:trigger>
+    <p>Modal content here</p>
+</x-modal>
+
+{{-- Modal with footer actions --}}
+<x-modal title="Confirm Action">
+    <x-slot:trigger>
+        <x-button variant="danger">Delete</x-button>
+    </x-slot:trigger>
+    <p>Are you sure?</p>
+    <x-slot:footer>
+        <x-button variant="secondary" @click="open = false">Cancel</x-button>
+        <x-button variant="danger">Delete</x-button>
+    </x-slot:footer>
+</x-modal>
+
+{{-- Modal without title --}}
+<x-modal>
+    <x-slot:trigger>
+        <x-button>Open</x-button>
+    </x-slot:trigger>
+    <p>Content without title</p>
+</x-modal>
+
+{{-- Different sizes --}}
+<x-modal title="Small" maxWidth="sm">...</x-modal>
+<x-modal title="Large" maxWidth="lg">...</x-modal>
+<x-modal title="2XL" maxWidth="2xl">...</x-modal>
+```
+
+#### Component Props:
+- `title` (string, optional) - Modal tittel som vises øverst
+- `maxWidth` (string, default: 'md') - Max bredde: sm, md, lg, xl, 2xl
+
+#### Component Slots:
+- `trigger` (optional) - Element som åpner modal (button, link, etc.)
+- `slot` (default) - Modal innhold
+- `footer` (optional) - Action buttons (Cancel, Confirm, etc.)
+
+#### Alpine.js State Management:
+```javascript
+x-data="{ open: false }"  // State for modal visibility
+@click="open = true"       // Open modal (trigger)
+@click="open = false"      // Close modal (backdrop, cancel button)
+@keydown.escape.window="open = false"  // Close on ESC key
+x-show="open"              // Show/hide based on state
+x-cloak                    // Prevent flash of unstyled content
+```
+
+#### Transitions:
+**Backdrop fade**:
+- Enter: `ease-out duration-300` (opacity 0 → 100)
+- Leave: `ease-in duration-200` (opacity 100 → 0)
+
+**Modal slide & scale**:
+- Enter: `ease-out duration-300` (opacity 0, translate-y-4, scale-95 → opacity 100, translate-y-0, scale-100)
+- Leave: `ease-in duration-200` (opacity 100, translate-y-0, scale-100 → opacity 0, translate-y-4, scale-95)
+
+#### Max Width Classes:
+- `sm`: max-w-sm (384px)
+- `md`: max-w-md (448px) - default
+- `lg`: max-w-lg (512px)
+- `xl`: max-w-xl (576px)
+- `2xl`: max-w-2xl (672px)
+
+#### Design-valg:
+- **Centered layout**: Modal sentrert vertikalt og horisontalt
+- **White background**: `bg-white` for modal content
+- **Rounded corners**: `rounded-lg` for myk styling
+- **Shadow**: `shadow-xl` for depth
+- **Padding**: `p-6` for konsistent spacing
+- **Z-index**: `z-50` for overlay, `z-10` for modal content
+- **Responsive**: `p-4` padding på mobil for touch-vennlighet
+- **Title styling**: `text-lg font-semibold text-gray-900 mb-4`
+- **Content styling**: `text-gray-600 mb-6`
+- **Footer layout**: `flex justify-end gap-3` for action buttons
+
+#### Use cases:
+1. **Delete confirmation**: Modal med advarsel og Delete/Cancel buttons
+2. **Form modals**: Create/Edit forms i modal med Save/Cancel buttons
+3. **Info modals**: Informasjon om features med "Got it!" button
+4. **Image viewer**: Large modal (xl/2xl) for image preview
+5. **Quick actions**: Small modal (sm) for simple confirmations
+6. **Multi-step forms**: Modal med footer for Next/Previous navigation
+
+#### Filer opprettet:
+- `resources/views/components/modal.blade.php` - Modal component med Alpine.js
+- `tests/Feature/ModalComponentTest.php` - Comprehensive test suite (14 tests)
+
+#### Filer endret:
+- `resources/views/components-demo.blade.php` - Lagt til Modal component demo med eksempler
+
+## Testing:
+✅ Modal renders med title prop
+✅ Modal renders uten title
+✅ Alpine.js data attribute (x-data, open: false)
+✅ Backdrop med click handler (@click="open = false")
+✅ Escape key handler (@keydown.escape.window)
+✅ Støtter alle max width variants (sm, md, lg, xl, 2xl)
+✅ Defaults til md width
+✅ Trigger slot rendering
+✅ Footer slot rendering
+✅ Proper z-index (z-50 for overlay, z-10 for content)
+✅ Transition classes (x-transition:enter, x-transition:leave)
+✅ x-cloak attribute
+✅ Custom attributes (id, class) fungerer
+✅ Proper styling classes (bg-white, rounded-lg, shadow-xl, p-6)
+
+**Test Results**: 14/14 tests passed (34 assertions)
+
+#### Demo page:
+Oppdaterte `components-demo.blade.php` med omfattende Modal component eksempler:
+- Basic modal med title
+- Modal med footer actions (Delete confirmation)
+- Different sizes (sm, md, lg, xl, 2xl)
+- Modal uten title
+- Real-world examples:
+  - Delete resource confirmation
+  - Create new resource form modal
+  - Info/help modal
+- Usage examples med kode-snippets
+- Programmatic control example (uten trigger slot)
+
+## Sammendrag:
+Modal component er fullstendig implementert med Alpine.js for state management. Komponenten følger design guide nøyaktig med korrekte farger, spacing, transitions og responsive design. Modal støtter valgfri title, trigger slot, footer slot, og fem max width varianter. Backdrop og ESC-key lukking er implementert for god brukeropplevelse. Komponenten er fleksibel og kan brukes for alle typer modal dialogs i applikasjonen.
+
+## Alle Blade Components fullført:
+✅ Button component (variant, size props)
+✅ Card component (header/footer slots, padding control)
+✅ Badge component (color, size props)
+✅ Alert component (type variants, dismissible)
+✅ Modal component (Alpine.js, title prop, slots)
+
+## Neste steg:
+- Task 13.4: Følge design guide fullstendig for alle komponenter
+- Task 13.5: Legge til fil-header og footer på alle komponenter
+- Task 14: Routes og Policies

@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Component Demo - Button, Card, Badge & Alert</title>
+    <title>Component Demo - Button, Card, Badge, Alert & Modal</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 p-8">
     <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Component Demo - Button, Card, Badge & Alert</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Component Demo - Button, Card, Badge, Alert & Modal</h1>
         
         <!-- Button Component Section -->
         <div class="mb-16">
@@ -390,6 +390,237 @@
             </div>
         </div>
 
+        <!-- Modal Component Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-gray-200">Modal Component</h2>
+
+            <!-- Basic Modal Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Basic Modal</h3>
+                <x-modal title="Basic Modal">
+                    <x-slot:trigger>
+                        <x-button>Open Basic Modal</x-button>
+                    </x-slot:trigger>
+                    <p>This is a basic modal with a title and content.</p>
+                </x-modal>
+            </div>
+
+            <!-- Modal with Footer Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Modal with Footer Actions</h3>
+                <x-modal title="Confirm Action">
+                    <x-slot:trigger>
+                        <x-button variant="danger">Delete Item</x-button>
+                    </x-slot:trigger>
+                    <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+                    <x-slot:footer>
+                        <x-button variant="secondary" @click="open = false">Cancel</x-button>
+                        <x-button variant="danger">Delete</x-button>
+                    </x-slot:footer>
+                </x-modal>
+            </div>
+
+            <!-- Different Sizes Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Different Sizes</h3>
+                <div class="flex flex-wrap gap-4">
+                    <x-modal title="Small Modal" maxWidth="sm">
+                        <x-slot:trigger>
+                            <x-button size="sm">Small Modal</x-button>
+                        </x-slot:trigger>
+                        <p>This is a small modal (max-w-sm).</p>
+                    </x-modal>
+
+                    <x-modal title="Medium Modal" maxWidth="md">
+                        <x-slot:trigger>
+                            <x-button size="sm">Medium Modal (Default)</x-button>
+                        </x-slot:trigger>
+                        <p>This is a medium modal (max-w-md). This is the default size.</p>
+                    </x-modal>
+
+                    <x-modal title="Large Modal" maxWidth="lg">
+                        <x-slot:trigger>
+                            <x-button size="sm">Large Modal</x-button>
+                        </x-slot:trigger>
+                        <p>This is a large modal (max-w-lg) with more space for content.</p>
+                    </x-modal>
+
+                    <x-modal title="Extra Large Modal" maxWidth="xl">
+                        <x-slot:trigger>
+                            <x-button size="sm">XL Modal</x-button>
+                        </x-slot:trigger>
+                        <p>This is an extra large modal (max-w-xl) for content that needs even more space.</p>
+                    </x-modal>
+
+                    <x-modal title="2XL Modal" maxWidth="2xl">
+                        <x-slot:trigger>
+                            <x-button size="sm">2XL Modal</x-button>
+                        </x-slot:trigger>
+                        <p>This is a 2XL modal (max-w-2xl) for maximum content space.</p>
+                    </x-modal>
+                </div>
+            </div>
+
+            <!-- Modal without Title Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Modal without Title</h3>
+                <x-modal>
+                    <x-slot:trigger>
+                        <x-button variant="secondary">Open Modal (No Title)</x-button>
+                    </x-slot:trigger>
+                    <p>This modal doesn't have a title. The content starts immediately.</p>
+                    <x-slot:footer>
+                        <x-button @click="open = false">Close</x-button>
+                    </x-slot:footer>
+                </x-modal>
+            </div>
+
+            <!-- Real-world Examples Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Real-world Examples</h3>
+                <div class="space-y-4">
+                    <!-- Delete Confirmation -->
+                    <x-card>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Resource: Cabin #3</h4>
+                                <p class="text-sm text-gray-600">Active • 5 bookings</p>
+                            </div>
+                            <x-modal title="Delete Resource">
+                                <x-slot:trigger>
+                                    <x-button variant="danger" size="sm">Delete</x-button>
+                                </x-slot:trigger>
+                                <p class="mb-2">Are you sure you want to delete this resource?</p>
+                                <p class="text-sm text-gray-600">All bookings for this resource will also be deleted. This action cannot be undone.</p>
+                                <x-slot:footer>
+                                    <x-button variant="secondary" @click="open = false">Cancel</x-button>
+                                    <x-button variant="danger">Delete Resource</x-button>
+                                </x-slot:footer>
+                            </x-modal>
+                        </div>
+                    </x-card>
+
+                    <!-- Form Modal -->
+                    <x-card>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Quick Actions</h4>
+                                <p class="text-sm text-gray-600">Create a new resource</p>
+                            </div>
+                            <x-modal title="Create New Resource" maxWidth="lg">
+                                <x-slot:trigger>
+                                    <x-button>New Resource</x-button>
+                                </x-slot:trigger>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block mb-1 text-sm font-medium text-gray-700">Resource Name</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Cabin #1">
+                                    </div>
+                                    <div>
+                                        <label class="block mb-1 text-sm font-medium text-gray-700">Type</label>
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                            <option>Cabin</option>
+                                            <option>Chair</option>
+                                            <option>Room</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block mb-1 text-sm font-medium text-gray-700">Capacity</label>
+                                        <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" value="1" min="1">
+                                    </div>
+                                </div>
+                                <x-slot:footer>
+                                    <x-button variant="secondary" @click="open = false">Cancel</x-button>
+                                    <x-button>Create Resource</x-button>
+                                </x-slot:footer>
+                            </x-modal>
+                        </div>
+                    </x-card>
+
+                    <!-- Info Modal -->
+                    <x-card>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Need Help?</h4>
+                                <p class="text-sm text-gray-600">Learn more about features</p>
+                            </div>
+                            <x-modal title="About This Feature" maxWidth="lg">
+                                <x-slot:trigger>
+                                    <x-button variant="secondary" size="sm">Learn More</x-button>
+                                </x-slot:trigger>
+                                <div class="space-y-3">
+                                    <p>This feature allows you to manage your booking resources efficiently.</p>
+                                    <p class="font-semibold text-gray-900">Key Features:</p>
+                                    <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                        <li>Create and manage multiple resources</li>
+                                        <li>Set custom availability for each resource</li>
+                                        <li>Track bookings in real-time</li>
+                                        <li>Receive SMS notifications</li>
+                                    </ul>
+                                </div>
+                                <x-slot:footer>
+                                    <x-button @click="open = false">Got it!</x-button>
+                                </x-slot:footer>
+                            </x-modal>
+                        </div>
+                    </x-card>
+                </div>
+            </div>
+
+            <!-- Usage Examples Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Usage Examples</h3>
+                <x-card>
+                    <pre class="text-sm text-gray-700 overflow-x-auto"><code>&lt;!-- Basic modal with trigger --&gt;
+&lt;x-modal title="My Modal"&gt;
+    &lt;x-slot:trigger&gt;
+        &lt;x-button&gt;Open Modal&lt;/x-button&gt;
+    &lt;/x-slot:trigger&gt;
+    &lt;p&gt;Modal content here&lt;/p&gt;
+&lt;/x-modal&gt;
+
+&lt;!-- Modal with footer actions --&gt;
+&lt;x-modal title="Confirm Action"&gt;
+    &lt;x-slot:trigger&gt;
+        &lt;x-button&gt;Delete&lt;/x-button&gt;
+    &lt;/x-slot:trigger&gt;
+    &lt;p&gt;Are you sure?&lt;/p&gt;
+    &lt;x-slot:footer&gt;
+        &lt;x-button variant="secondary" @click="open = false"&gt;Cancel&lt;/x-button&gt;
+        &lt;x-button variant="danger"&gt;Delete&lt;/x-button&gt;
+    &lt;/x-slot:footer&gt;
+&lt;/x-modal&gt;
+
+&lt;!-- Modal without title --&gt;
+&lt;x-modal&gt;
+    &lt;x-slot:trigger&gt;
+        &lt;x-button&gt;Open&lt;/x-button&gt;
+    &lt;/x-slot:trigger&gt;
+    &lt;p&gt;Content without title&lt;/p&gt;
+&lt;/x-modal&gt;
+
+&lt;!-- Different sizes --&gt;
+&lt;x-modal title="Small" maxWidth="sm"&gt;...&lt;/x-modal&gt;
+&lt;x-modal title="Medium" maxWidth="md"&gt;...&lt;/x-modal&gt;
+&lt;x-modal title="Large" maxWidth="lg"&gt;...&lt;/x-modal&gt;
+&lt;x-modal title="XL" maxWidth="xl"&gt;...&lt;/x-modal&gt;
+&lt;x-modal title="2XL" maxWidth="2xl"&gt;...&lt;/x-modal&gt;
+
+&lt;!-- Programmatic control (without trigger slot) --&gt;
+&lt;div x-data="{ showModal: false }"&gt;
+    &lt;button @click="showModal = true"&gt;Open&lt;/button&gt;
+    
+    &lt;x-modal title="My Modal" x-show="showModal"&gt;
+        &lt;p&gt;Content&lt;/p&gt;
+        &lt;x-slot:footer&gt;
+            &lt;x-button @click="showModal = false"&gt;Close&lt;/x-button&gt;
+        &lt;/x-slot:footer&gt;
+    &lt;/x-modal&gt;
+&lt;/div&gt;</code></pre>
+                </x-card>
+            </div>
+        </div>
+
         <!-- Alert Component Section -->
         <div class="mb-16">
             <h2 class="text-3xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-gray-200">Alert Component</h2>
@@ -537,4 +768,4 @@
 </body>
 </html>
 
-{{-- Demo page for button, card, badge, and alert components - shows all variants and usage examples --}}
+{{-- Demo page for button, card, badge, alert, and modal components - shows all variants and usage examples --}}
