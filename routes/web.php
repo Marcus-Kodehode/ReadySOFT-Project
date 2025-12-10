@@ -9,6 +9,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SmsController;
+use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 
 // API Routes
@@ -17,9 +18,7 @@ Route::get('/api/available-slots', [PublicBookingController::class, 'availableSl
     ->middleware('throttle:60,1')
     ->name('api.available-slots');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LandingController::class, 'index'])->name('landing');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'subscription'])
