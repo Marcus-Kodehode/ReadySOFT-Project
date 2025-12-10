@@ -1629,7 +1629,7 @@ Lag policies for å sikre at brukere kun kan aksessere sine egne ressurser.
 **Akseptansekriterier:**
 - [x] ResourcePolicy: view, update, delete sjekker at resource.tenant_id === user.tenant_id
 - [x] BookingPolicy: view, update sjekker at booking.resource.tenant_id === user.tenant_id
-- [ ] Registrert i AuthServiceProvider
+- [x] Registrert i AuthServiceProvider
 - [ ] Fil-header og footer i `app/Policies/ResourcePolicy.php` `app/Policies/BookingPolicy.php` LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 14 I EN TASK_14_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
