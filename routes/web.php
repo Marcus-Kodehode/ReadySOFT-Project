@@ -18,6 +18,11 @@ Route::get('/api/available-slots', [PublicBookingController::class, 'availableSl
     ->middleware('throttle:60,1')
     ->name('api.available-slots');
 
+// Demo route (development only)
+Route::get('/components-demo', function () {
+    return view('components-demo');
+})->name('components.demo');
+
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])

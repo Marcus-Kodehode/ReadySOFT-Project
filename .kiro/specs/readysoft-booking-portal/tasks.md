@@ -1550,7 +1550,7 @@ Lag Blade components for ofte brukte UI-elementer.
 - `resources/views/components/modal.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Button: Props for variant (primary, secondary, danger), size
+- [x] Button: Props for variant (primary, secondary, danger), size
 - [ ] Card: Slot for content, optional header/footer
 - [ ] Badge: Props for color (success, warning, error, info)
 - [ ] Alert: Props for type (success, error, warning, info)
