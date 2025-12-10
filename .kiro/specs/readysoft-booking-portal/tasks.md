@@ -1585,7 +1585,7 @@ Organisér alle routes i web.php med kommentarer og middleware.
 - [x] Kommentarer for hver seksjon
 - [x] Resource routes for ResourceController, BookingController
 - [x] Named routes for alle viktige ruter
-- [ ] Rate limiting på public booking route
+- [x] Rate limiting på public booking route
 
 **Struktur:**
 ```php
@@ -1627,10 +1627,10 @@ Lag policies for å sikre at brukere kun kan aksessere sine egne ressurser.
 - `app/Policies/BookingPolicy.php`
 
 **Akseptansekriterier:**
-- [ ] ResourcePolicy: view, update, delete sjekker at resource.tenant_id === user.tenant_id
+- [x] ResourcePolicy: view, update, delete sjekker at resource.tenant_id === user.tenant_id
 - [ ] BookingPolicy: view, update sjekker at booking.resource.tenant_id === user.tenant_id
 - [ ] Registrert i AuthServiceProvider
-- [ ] Fil-header og footer i `app/Policies/ResourcePolicy.php` `app/Policies/BookingPolicy.php`
+- [ ] Fil-header og footer i `app/Policies/ResourcePolicy.php` `app/Policies/BookingPolicy.php` LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 14 I EN TASK_14_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
 

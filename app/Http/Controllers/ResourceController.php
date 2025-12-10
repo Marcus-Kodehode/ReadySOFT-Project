@@ -103,10 +103,10 @@ class ResourceController extends Controller
     public function edit($id)
     {
         // Hent ressurs med eager loading av availabilities
-        // Global scope sikrer at kun tenant sine ressurser kan hentes
-        $resource = Resource::where('tenant_id', Auth::user()->tenant_id)
-            ->with('availabilities')
-            ->findOrFail($id);
+        $resource = Resource::with('availabilities')->findOrFail($id);
+        
+        // Autoriser at brukeren kan se denne ressursen (sjekker tenant_id)
+        $this->authorize('view', $resource);
 
         return view('resources.edit', compact('resource'));
     }
@@ -120,9 +120,11 @@ class ResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Hent ressurs (sikrer tenant-isolasjon)
-        $resource = Resource::where('tenant_id', Auth::user()->tenant_id)
-            ->findOrFail($id);
+        // Hent ressurs
+        $resource = Resource::findOrFail($id);
+        
+        // Autoriser at brukeren kan oppdatere denne ressursen (sjekker tenant_id)
+        $this->authorize('update', $resource);
 
         // Valider input
         $validated = $request->validate([
@@ -176,9 +178,11 @@ class ResourceController extends Controller
      */
     public function destroy($id)
     {
-        // Hent ressurs (sikrer tenant-isolasjon)
-        $resource = Resource::where('tenant_id', Auth::user()->tenant_id)
-            ->findOrFail($id);
+        // Hent ressurs
+        $resource = Resource::findOrFail($id);
+        
+        // Autoriser at brukeren kan slette denne ressursen (sjekker tenant_id)
+        $this->authorize('delete', $resource);
 
         try {
             // Slett ressurs (cascade vil slette tilhørende availabilities og bookings)
