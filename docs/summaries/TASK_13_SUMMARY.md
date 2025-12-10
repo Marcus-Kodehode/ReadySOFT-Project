@@ -614,7 +614,77 @@ Modal component er fullstendig implementert med Alpine.js for state management. 
 ✅ Alert component (type variants, dismissible)
 ✅ Modal component (Alpine.js, title prop, slots)
 
+
+---
+
+### Task 13.5: Fil-header og Footer på Komponenter ✅ FULLFØRT
+
+#### Implementerte funksjoner:
+Alle Blade komponenter har nå standardiserte fil-headers og footers for bedre dokumentasjon og vedlikehold.
+
+#### Komponenter med headers/footers:
+
+1. **Button Component** (`resources/views/components/button.blade.php`)
+   - Header: `{{-- File: resources/views/components/button.blade.php --}}`
+   - Footer: `{{-- Reusable button component with variant and size props --}}`
+   - Beskrivelse: Forklarer at komponenten er gjenbrukbar med variant og size props
+
+2. **Card Component** (`resources/views/components/card.blade.php`)
+   - Header: `{{-- File: resources/views/components/card.blade.php --}}`
+   - Footer: `{{-- Reusable card component with optional header and footer slots --}}`
+   - Beskrivelse: Forklarer at komponenten har valgfrie header og footer slots
+
+3. **Badge Component** (`resources/views/components/badge.blade.php`)
+   - Header: `{{-- File: resources/views/components/badge.blade.php --}}`
+   - Footer: `{{-- Badge component with color variants (success, warning, error, info) --}}`
+   - Beskrivelse: Lister opp alle tilgjengelige color variants
+
+4. **Alert Component** (`resources/views/components/alert.blade.php`)
+   - Header: `{{-- File: resources/views/components/alert.blade.php --}}`
+   - Footer: `{{-- Alert component with type variants (success, error, warning, info) and optional dismissible functionality --}}`
+   - Beskrivelse: Forklarer type variants og dismissible-funksjonalitet
+
+5. **Modal Component** (`resources/views/components/modal.blade.php`)
+   - Header: `{{-- File: resources/views/components/modal.blade.php --}}`
+   - Footer: `{{-- Alpine.js powered modal component with title prop and customizable content --}}`
+   - Beskrivelse: Forklarer at komponenten bruker Alpine.js og har title prop
+
+#### Format og Konvensjoner:
+
+**Header Format**:
+```blade
+{{-- File: resources/views/components/[component-name].blade.php --}}
+```
+- Viser full filsti fra workspace root
+- Gjør det enkelt å finne filen i prosjektet
+- Konsistent format på tvers av alle komponenter
+
+**Footer Format**:
+```blade
+{{-- [Kort beskrivelse av komponentens funksjonalitet og hovedfeatures] --}}
+```
+- Kort, men informativ beskrivelse
+- Lister opp hovedfeatures (props, slots, variants)
+- Hjelper utviklere å raskt forstå komponentens formål
+
+#### Fordeler med Headers/Footers:
+
+1. **Dokumentasjon**: Hver fil er selvdokumenterende
+2. **Navigasjon**: Enklere å finne riktig fil i store prosjekter
+3. **Onboarding**: Nye utviklere forstår raskt hva hver komponent gjør
+4. **Vedlikehold**: Tydelig oversikt over komponentens ansvar
+5. **Konsistens**: Alle komponenter følger samme dokumentasjonsstandard
+
+#### Filer endret:
+- `resources/views/components/button.blade.php` - Lagt til header og footer
+- `resources/views/components/card.blade.php` - Lagt til header og footer
+- `resources/views/components/badge.blade.php` - Lagt til header og footer
+- `resources/views/components/alert.blade.php` - Lagt til header og footer
+- `resources/views/components/modal.blade.php` - Lagt til header og footer
+
+## Sammendrag:
+Alle fem Blade komponenter (Button, Card, Badge, Alert, Modal) har nå standardiserte fil-headers og footers. Headers viser full filsti, mens footers gir en kort beskrivelse av komponentens funksjonalitet og hovedfeatures. Dette forbedrer dokumentasjonen og gjør det enklere for utviklere å navigere og forstå komponentbiblioteket.
+
 ## Neste steg:
-- Task 13.4: Følge design guide fullstendig for alle komponenter
-- Task 13.5: Legge til fil-header og footer på alle komponenter
 - Task 14: Routes og Policies
+- Fortsette med implementering av applikasjonens funksjonalitet
