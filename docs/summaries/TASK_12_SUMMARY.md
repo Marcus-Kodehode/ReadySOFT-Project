@@ -67,16 +67,121 @@ Sorteringen ble verifisert 10. desember 2025 med følgende resultater:
 ### Sammendrag av Task 12.1
 Task 12.1 implementerte backend-logikken for landingssiden ved å opprette `LandingController` med en `index()` metode. Controlleren henter alle aktive tenants fra databasen, sorterer dem med nyeste først, og cacher resultatet i 5 minutter for optimal ytelse. Implementasjonen følger Laravel beste praksis med tydelige kommentarer, korrekt fil-header og footer, og effektiv database-spørring. Caching-strategien sikrer at landingssiden laster raskt selv med mange tenants i systemet. Controlleren er klar til å integreres med landingsside-viewet i Task 12.2.
 
+## Task 12.2: Opprett landingsside view - Tenant Grid
+
+### Hva ble gjort
+Implementert tenant grid på landingssiden som viser alle aktive tenants i et responsivt grid-layout. Grid-en viser tenant-informasjon i cards med navn, business type, beskrivelse og "Book Now" knapp.
+
+### Implementerte komponenter
+
+#### Tenant Grid Container
+- Grid layout: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`
+- Responsivt design:
+  - Mobil (< 768px): 1 kolonne
+  - Tablet (768px - 1024px): 2 kolonner
+  - Desktop (> 1024px): 3 kolonner
+- Gap mellom cards: 1.5rem (24px)
+
+#### Tenant Cards
+Hver tenant card inneholder:
+1. **Card container**: `bg-white rounded-lg shadow-sm border border-gray-200 p-6`
+   - Hvit bakgrunn med subtil skygge
+   - Avrundede hjørner
+   - Grå border
+   - Padding: 1.5rem (24px)
+   - Hover-effekt: `hover:shadow-md transition-shadow`
+
+2. **Header seksjon**: Flex layout med tenant navn og business type badge
+   - Tenant navn: `text-lg font-semibold text-gray-900`
+   - Business type badge: `px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium`
+
+3. **Beskrivelse**: Vises hvis tenant har beskrivelse
+   - Styling: `text-gray-600 text-sm mt-2 mb-4`
+   - Begrenset til 100 tegn med `Str::limit($tenant->description, 100)`
+
+4. **Book Now knapp**: Full-bredde link til tenant booking page
+   - Styling: `mt-4 block w-full text-center bg-blue-600 text-white py-2 rounded-lg`
+   - Hover-effekt: `hover:bg-blue-700 transition-colors`
+   - Link: `/{{ $tenant->slug }}`
+
+#### Empty State
+Implementert empty state for når ingen tenants finnes:
+- Melding: "No Services Available Yet"
+- Beskrivelse: "Be the first to offer your services on our platform!"
+- Call-to-action: "Register Your Business" knapp som linker til registrering
+
+### Tekniske detaljer
+
+#### Blade Template Struktur
+```blade
+@if($tenants->isNotEmpty())
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Available Services</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($tenants as $tenant)
+                <!-- Tenant card -->
+            @endforeach
+        </div>
+    </div>
+@else
+    <!-- Empty state -->
+@endif
+```
+
+#### Responsivt Design
+- Container: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
+- Tailwind breakpoints:
+  - `md:` (768px): 2 kolonner
+  - `lg:` (1024px): 3 kolonner
+- Touch-vennlig på mobil med store klikkbare områder
+
+### Testing
+Opprettet omfattende test suite i `tests/Feature/LandingPageTenantGridTest.php`:
+
+1. **test_tenant_grid_displays_with_correct_structure**
+   - Verifiserer at grid container finnes
+   - Sjekker at tenant cards vises med korrekt data
+   - Bekrefter at "Book Now" knapper og links finnes
+
+2. **test_only_active_tenants_are_displayed**
+   - Verifiserer at kun aktive tenants vises
+   - Bekrefter at inaktive tenants ikke vises
+
+3. **test_empty_state_displays_when_no_tenants_exist**
+   - Verifiserer at empty state vises når ingen tenants finnes
+   - Sjekker at riktig melding og CTA vises
+
+4. **test_tenant_cards_have_correct_styling**
+   - Verifiserer at cards har korrekt Tailwind styling
+   - Bekrefter hover-effekter og transitions
+
+Alle tester kjører og passerer ✅
+
+### Akseptansekriterier - Status
+✅ Tenant grid: `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">` (FULLFØRT)
+✅ @foreach loop over tenants (FULLFØRT)
+✅ Card styling: `bg-white rounded-lg shadow-sm border border-gray-200 p-6` (FULLFØRT)
+✅ Responsivt grid: 1/2/3 kolonner basert på skjermstørrelse (FULLFØRT)
+✅ Tenant navn, business type badge, beskrivelse (FULLFØRT)
+✅ "Book Now" knapp med link til tenant booking page (FULLFØRT)
+✅ Empty state når ingen tenants finnes (FULLFØRT)
+
+### Sammendrag av Tenant Grid
+Tenant grid er fullstendig implementert med responsivt design som fungerer perfekt på alle skjermstørrelser. Grid-en viser tenant-informasjon i attraktive cards med hover-effekter og tydelige call-to-action knapper. Implementasjonen følger design guide med korrekt Tailwind styling og inkluderer empty state for bedre brukeropplevelse. Omfattende test suite sikrer at alle aspekter av grid-en fungerer som forventet.
+
 ### Neste steg
-- Task 12.2: Opprett landingsside view (welcome.blade.php)
 - Task 12.3: Legg til søk og filter funksjonalitet
 
 ### Testing
 For å teste implementasjonen:
 ```bash
-# Besøk root URL
+# Kjør feature tests
+php artisan test --filter=LandingPageTenantGridTest
+
+# Besøk landingsside i browser
 php artisan serve
 # Gå til http://localhost:8000
 ```
 
-Controlleren vil hente alle aktive tenants og sende dem til welcome view.
+Tenant grid vil vise alle aktive tenants i et responsivt grid-layout.

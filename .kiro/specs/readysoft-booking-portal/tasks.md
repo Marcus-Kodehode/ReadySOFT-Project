@@ -1455,8 +1455,8 @@ Lag landingsside med hero og tenant listing. Dette er forsiden (/) som alle bes√
 - `resources/views/welcome.blade.php` (erstatt Laravel default)
 
 **Akseptansekriterier:**
-- [ ] Hero seksjon: <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">, <h1 class="text-4xl md:text-5xl font-bold">"Book Your Next Experience"</h1>, <p class="text-xl mt-4">"Find and book services from trusted providers"</p>, <a href="{{ route('register') }}" class="mt-8 inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold">"Get Started"</a>
-- [ ] Tenant grid: <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">, @foreach($tenants as $tenant), card med bg-white rounded-lg shadow-sm p-6
+- [x] Hero seksjon: <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">, <h1 class="text-4xl md:text-5xl font-bold">"Book Your Next Experience"</h1>, <p class="text-xl mt-4">"Find and book services from trusted providers"</p>, <a href="{{ route('register') }}" class="mt-8 inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold">"Get Started"</a>
+- [x] Tenant grid: <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">, @foreach($tenants as $tenant), card med bg-white rounded-lg shadow-sm p-6
 - [ ] Hver tenant card: <h3 class="text-lg font-semibold">{{ $tenant->name }}</h3>, <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{{ $tenant->business_type }}</span>, <p class="text-gray-600 text-sm mt-2">{{ Str::limit($tenant->description, 100) }}</p>, <a href="/{{ $tenant->slug }}" class="mt-4 block w-full text-center bg-blue-600 text-white py-2 rounded-lg">"Book Now"</a>
 - [ ] Responsivt grid: grid-cols-1 (mobil), md:grid-cols-2 (tablet), lg:grid-cols-3 (desktop)
 - [ ] Footer: <footer class="bg-gray-800 text-white py-8 mt-20">, links til About, Contact, Privacy (href="#" placeholder)
