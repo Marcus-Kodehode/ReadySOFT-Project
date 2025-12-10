@@ -6,26 +6,17 @@
 ])
 
 @php
-    // Color variant classes
+    // Color variant classes - following design guide specifications
     $colorClasses = [
-        'success' => 'bg-green-100 text-green-800',
-        'warning' => 'bg-yellow-100 text-yellow-800',
-        'error' => 'bg-red-100 text-red-800',
-        'info' => 'bg-blue-100 text-blue-800',
+        'success' => 'px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full',
+        'warning' => 'px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full',
+        'error' => 'px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full',
+        'info' => 'px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-full',
+        'gray' => 'px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full',
     ];
 
-    // Size classes
-    $sizeClasses = [
-        'sm' => 'px-2 py-0.5 text-xs',
-        'md' => 'px-2 py-1 text-xs',
-        'lg' => 'px-3 py-1.5 text-sm',
-    ];
-
-    // Base classes
-    $baseClasses = 'inline-flex items-center font-medium rounded-full';
-
-    // Merge all classes
-    $classes = $baseClasses . ' ' . ($colorClasses[$color] ?? $colorClasses['info']) . ' ' . ($sizeClasses[$size] ?? $sizeClasses['md']);
+    // Get classes for current color
+    $classes = $colorClasses[$color] ?? $colorClasses['info'];
 @endphp
 
 <span {{ $attributes->merge(['class' => $classes]) }}>

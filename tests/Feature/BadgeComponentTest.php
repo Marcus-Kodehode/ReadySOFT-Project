@@ -44,38 +44,20 @@ test('it renders badge with info color', function () {
         ->toContain('text-blue-800');
 });
 
-test('it renders badge with small size', function () {
-    $view = Blade::render('<x-badge size="sm">Small</x-badge>');
+test('it renders badge with design guide spacing', function () {
+    $view = Blade::render('<x-badge>Badge</x-badge>');
     
-    expect($view)->toContain('Small')
-        ->toContain('px-2')
-        ->toContain('py-0.5');
-});
-
-test('it renders badge with medium size', function () {
-    $view = Blade::render('<x-badge size="md">Medium</x-badge>');
-    
-    expect($view)->toContain('Medium')
+    expect($view)->toContain('Badge')
         ->toContain('px-2')
         ->toContain('py-1');
 });
 
-test('it renders badge with large size', function () {
-    $view = Blade::render('<x-badge size="lg">Large</x-badge>');
+test('it renders badge with gray color', function () {
+    $view = Blade::render('<x-badge color="gray">Inactive</x-badge>');
     
-    expect($view)->toContain('Large')
-        ->toContain('px-3')
-        ->toContain('py-1.5');
-});
-
-test('it renders badge with combined color and size', function () {
-    $view = Blade::render('<x-badge color="success" size="lg">Success Large</x-badge>');
-    
-    expect($view)->toContain('Success Large')
-        ->toContain('bg-green-100')
-        ->toContain('text-green-800')
-        ->toContain('px-3')
-        ->toContain('py-1.5');
+    expect($view)->toContain('Inactive')
+        ->toContain('bg-gray-100')
+        ->toContain('text-gray-800');
 });
 
 test('it renders badge with custom attributes', function () {
@@ -86,13 +68,12 @@ test('it renders badge with custom attributes', function () {
         ->toContain('cursor-pointer');
 });
 
-test('it includes base classes', function () {
+test('it includes design guide classes', function () {
     $view = Blade::render('<x-badge>Test</x-badge>');
     
-    expect($view)->toContain('inline-flex')
-        ->toContain('items-center')
-        ->toContain('font-medium')
-        ->toContain('rounded-full');
+    expect($view)->toContain('font-medium')
+        ->toContain('rounded-full')
+        ->toContain('text-xs');
 });
 
 test('it falls back to info color for invalid color', function () {
@@ -101,14 +82,6 @@ test('it falls back to info color for invalid color', function () {
     expect($view)->toContain('Fallback')
         ->toContain('bg-blue-100')
         ->toContain('text-blue-800');
-});
-
-test('it falls back to medium size for invalid size', function () {
-    $view = Blade::render('<x-badge size="invalid">Fallback</x-badge>');
-    
-    expect($view)->toContain('Fallback')
-        ->toContain('px-2')
-        ->toContain('py-1');
 });
 
 // Test suite for badge component - verifies color and size props work correctly

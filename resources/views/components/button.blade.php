@@ -7,25 +7,15 @@
 ])
 
 @php
-    // Variant classes
+    // Variant classes - following design guide specifications
     $variantClasses = [
-        'primary' => 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 border-transparent',
-        'secondary' => 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 focus:ring-blue-500',
-        'danger' => 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 border-transparent',
+        'primary' => 'px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium',
+        'secondary' => 'px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium',
+        'danger' => 'px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors font-medium',
     ];
 
-    // Size classes
-    $sizeClasses = [
-        'sm' => 'px-3 py-1.5 text-sm',
-        'md' => 'px-4 py-2 text-base',
-        'lg' => 'px-6 py-3 text-lg',
-    ];
-
-    // Base classes
-    $baseClasses = 'inline-flex items-center border rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-25 transition-colors';
-
-    // Merge all classes
-    $classes = $baseClasses . ' ' . ($variantClasses[$variant] ?? $variantClasses['primary']) . ' ' . ($sizeClasses[$size] ?? $sizeClasses['md']);
+    // Get classes for current variant
+    $classes = $variantClasses[$variant] ?? $variantClasses['primary'];
 @endphp
 
 <button {{ $attributes->merge(['type' => $type, 'class' => $classes]) }}>
