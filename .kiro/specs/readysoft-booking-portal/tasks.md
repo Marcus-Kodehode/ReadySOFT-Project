@@ -1481,7 +1481,7 @@ Implementer søk og filter på landingsside med Alpine.js.
 **Akseptansekriterier:**
 - [x] Søkefelt: Filter på tenant name (live search)
 - [x] Filter chips: Business types (klikk for å filtrere)
-- [ ] Alpine.js for client-side filtering
+- [x] Alpine.js for client-side filtering
 - [ ] Smooth transitions ved filtering
 - [ ] "No results" melding hvis ingen match LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_12_SUMMARY.md FILEN
 
@@ -1630,7 +1630,7 @@ Lag policies for å sikre at brukere kun kan aksessere sine egne ressurser.
 - [ ] ResourcePolicy: view, update, delete sjekker at resource.tenant_id === user.tenant_id
 - [ ] BookingPolicy: view, update sjekker at booking.resource.tenant_id === user.tenant_id
 - [ ] Registrert i AuthServiceProvider
-- [ ] Fil-header og footer
+- [ ] Fil-header og footer i `app/Policies/ResourcePolicy.php` `app/Policies/BookingPolicy.php`
 
 ---
 
@@ -1657,7 +1657,7 @@ Implementer global toast notification system med Alpine.js.
 - [ ] Auto-dismiss etter 4 sekunder
 - [ ] Kan lukkes manuelt
 - [ ] Smooth slide-in/out animasjon
-- [ ] Følger design guide
+- [ ] Følger design guide (design.md)
 
 **Bruk:**
 ```blade
@@ -1686,7 +1686,7 @@ Legg til loading states på alle forms og knapper.
 - [ ] Submit knapper viser "Loading..." tekst og spinner ved submit
 - [ ] Knapper disables ved submit
 - [ ] Alpine.js x-data for loading state
-- [ ] Følger design guide
+- [ ] Følger design guide (design.md)
 
 ---
 

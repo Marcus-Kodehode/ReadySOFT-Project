@@ -155,9 +155,12 @@ class LandingPageTenantGridTest extends TestCase
         // Act: Besøk landingsside
         $response = $this->get('/');
 
-        // Assert: Sjekk at Alpine.js data finnes med både search og selectedType
+        // Assert: Sjekk at Alpine.js data finnes med search, selectedType og filteredCount
         $response->assertStatus(200);
-        $response->assertSee('x-data="{ search: \'\', selectedType: \'\' }"', false);
+        $response->assertSee('x-data="{ ', false);
+        $response->assertSee('search: \'\'', false);
+        $response->assertSee('selectedType: \'\'', false);
+        $response->assertSee('get filteredCount()', false);
     }
 
     /**
@@ -197,7 +200,8 @@ class LandingPageTenantGridTest extends TestCase
         // Assert: Sjekk at "no results" melding finnes
         $response->assertStatus(200);
         $response->assertSee('No services found');
-        $response->assertSee('Try adjusting your search terms');
+        $response->assertSee('Try adjusting your search or filter');
+        $response->assertSee('Clear filters');
     }
 
     /**

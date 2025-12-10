@@ -3,12 +3,18 @@
 ## Tasks Completed
 1. **Søkefelt: Filter på tenant name (live search)**
 2. **Filter chips: Business types (klikk for å filtrere)**
+3. **Alpine.js for client-side filtering** ✅ NEW
+4. **Smooth transitions ved filtering** ✅ NEW
+5. **"No results" melding hvis ingen match** ✅ IMPROVED
 
 ## Implementation Details
 
 ### What Was Implemented
 1. Added a live search functionality to the landing page that allows users to filter tenants by name in real-time using Alpine.js.
 2. Added business type filter chips that allow users to filter tenants by clicking on business type categories.
+3. **Enhanced Alpine.js filtering with computed property** - Added `filteredCount` getter for accurate result tracking.
+4. **Improved smooth transitions** - Added detailed enter/leave transitions with scale and opacity effects.
+5. **Enhanced "No results" message** - Added "Clear filters" button and improved transition animations.
 
 ### Changes Made
 
@@ -41,8 +47,14 @@
 **Combined Filtering:**
 - Updated `x-show` directive on tenant cards to filter by both search and business type:
   - `x-show="(search === '' || '{{ strtolower($tenant->name) }}'.includes(search.toLowerCase())) && (selectedType === '' || selectedType === '{{ $tenant->business_type }}')"` 
-  - Uses `x-transition` for smooth show/hide animations
-- Added "No results" message that displays when filters yield no matches
+  - Uses detailed `x-transition` directives for smooth animations:
+    - Enter: `transition ease-out duration-200` with scale-95 to scale-100 and opacity 0 to 100
+    - Leave: `transition ease-in duration-150` with scale-100 to scale-95 and opacity 100 to 0
+- Added computed `filteredCount` property to accurately track visible results
+- Enhanced "No results" message with:
+  - Smooth slide-up transition (`translate-y-4` to `translate-y-0`)
+  - "Clear filters" button that resets both search and selectedType
+  - Improved messaging: "Try adjusting your search or filter"
 - Added `x-cloak` style to prevent flash of unstyled content
 
 #### 2. Updated `tests/Feature/LandingPageTenantGridTest.php`
@@ -62,6 +74,19 @@
 
 ### Technical Implementation
 
+**Alpine.js Data Structure:**
+```javascript
+x-data="{ 
+    search: '', 
+    selectedType: '',
+    get filteredCount() {
+        let count = 0;
+        // Counts matching tenants based on current filters
+        return count;
+    }
+}"
+```
+
 **Combined Filter Logic:**
 ```javascript
 x-show="(search === '' || '{{ strtolower($tenant->name) }}'.includes(search.toLowerCase())) && (selectedType === '' || selectedType === '{{ $tenant->business_type }}')"
@@ -73,6 +98,30 @@ This logic:
 - Filters by exact business type match
 - Both filters work together (AND logic)
 - Filters in real-time as user types or clicks chips
+
+**Smooth Transitions:**
+```html
+<!-- Tenant cards -->
+x-transition:enter="transition ease-out duration-200"
+x-transition:enter-start="opacity-0 transform scale-95"
+x-transition:enter-end="opacity-100 transform scale-100"
+x-transition:leave="transition ease-in duration-150"
+x-transition:leave-start="opacity-100 transform scale-100"
+x-transition:leave-end="opacity-0 transform scale-95"
+
+<!-- No results message -->
+x-transition:enter="transition ease-out duration-200"
+x-transition:enter-start="opacity-0 transform translate-y-4"
+x-transition:enter-end="opacity-100 transform translate-y-0"
+```
+
+**No Results Logic:**
+```html
+<div x-show="filteredCount === 0">
+    <!-- Message and clear button -->
+    <button @click="search = ''; selectedType = ''">Clear filters</button>
+</div>
+```
 
 **Business Type Extraction:**
 ```php
@@ -142,5 +191,7 @@ All 13 tests pass successfully:
 3. ✅ Combined filtering (search + type)
 4. ✅ Dynamic chip generation from unique business types
 5. ✅ Visual feedback for active filters
-6. ✅ Smooth transitions and animations
-7. ✅ Comprehensive test coverage (13 tests)
+6. ✅ **Smooth transitions and animations** (Enhanced with detailed enter/leave transitions)
+7. ✅ **Alpine.js computed property** (filteredCount for accurate result tracking)
+8. ✅ **Enhanced "No results" message** (With clear filters button and smooth transitions)
+9. ✅ Comprehensive test coverage (13 tests, all passing)

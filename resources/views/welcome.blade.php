@@ -61,7 +61,21 @@
 
     <!-- Tenants Grid Section -->
     @if($tenants->isNotEmpty())
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" x-data="{ search: '', selectedType: '' }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" 
+             x-data="{ 
+                 search: '', 
+                 selectedType: '',
+                 get filteredCount() {
+                     let count = 0;
+                     @foreach($tenants as $tenant)
+                         if ((this.search === '' || '{{ strtolower($tenant->name) }}'.includes(this.search.toLowerCase())) && 
+                             (this.selectedType === '' || this.selectedType === '{{ $tenant->business_type }}')) {
+                             count++;
+                         }
+                     @endforeach
+                     return count;
+                 }
+             }">
             <div class="mb-8">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Available Services</h2>
                 
@@ -116,12 +130,18 @@
                 </div>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Tenant Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" x-show="filteredCount > 0">
                 @foreach($tenants as $tenant)
                     <div 
                         class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
                         x-show="(search === '' || '{{ strtolower($tenant->name) }}'.includes(search.toLowerCase())) && (selectedType === '' || selectedType === '{{ $tenant->business_type }}')"
-                        x-transition
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
                     >
                         <div class="flex items-start justify-between mb-3">
                             <h3 class="text-lg font-semibold text-gray-900">{{ $tenant->name }}</h3>
@@ -145,7 +165,10 @@
             
             <!-- No Results Message -->
             <div 
-                x-show="search !== '' && !Array.from(document.querySelectorAll('[x-show]')).some(el => el.style.display !== 'none' && el !== $el)"
+                x-show="filteredCount === 0"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 transform translate-y-4"
+                x-transition:enter-end="opacity-100 transform translate-y-0"
                 x-cloak
                 class="text-center py-12"
             >
@@ -153,7 +176,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
                 <h3 class="mt-4 text-lg font-medium text-gray-900">No services found</h3>
-                <p class="mt-2 text-gray-600">Try adjusting your search terms</p>
+                <p class="mt-2 text-gray-600">Try adjusting your search or filter</p>
+                <button 
+                    @click="search = ''; selectedType = ''"
+                    class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                >
+                    Clear filters
+                </button>
             </div>
         </div>
     @else
