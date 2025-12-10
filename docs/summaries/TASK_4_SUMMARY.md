@@ -424,5 +424,5 @@ Følger design guide farger:
 - Stat cards, buttons og alerts skal følge samme guide
 - Konsistent design på tvers av hele applikasjonen
 
-**Tid brukt:** ~240 minutter 
+**Tid brukt:** ~4 timer 
 **Sist oppdatert:** 2. desember 2025

@@ -216,5 +216,5 @@ public function test_tenant_can_view_own_resources()
 
 ---
 
-**Tid brukt:** ~120 minutter
+**Tid brukt:** ~2 timer
 **Sist oppdatert:** 2. desember 2025

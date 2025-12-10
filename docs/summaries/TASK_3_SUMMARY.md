@@ -789,5 +789,5 @@ Med denne implementeringen har vi nå:
 
 ---
 
-**Tid brukt:** ~300 minutter 
+**Tid brukt:** ~4.5 timer
 **Sist oppdatert:** 2. desember 2025
