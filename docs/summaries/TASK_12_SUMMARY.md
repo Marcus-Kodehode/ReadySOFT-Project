@@ -173,15 +173,219 @@ Tenant grid er fullstendig implementert med responsivt design som fungerer perfe
 ### Neste steg
 - Task 12.3: Legg til søk og filter funksjonalitet
 
+## Task 12.3: Søk og Filter Funksjonalitet
+
+### Hva ble gjort
+Implementert komplett søk og filter funksjonalitet på landingssiden ved hjelp av Alpine.js. Brukere kan nå søke etter tenants ved navn og filtrere basert på business type. Systemet viser en "No results" melding når ingen tenants matcher søke- eller filterkriteriene.
+
+### Implementerte komponenter
+
+#### 1. Søkefelt
+- Input felt med søkeikon
+- Label: "Search by name"
+- Placeholder: "Search for services..."
+- Alpine.js binding: `x-model="search"`
+- Live søk: Filtrerer tenants i sanntid mens bruker skriver
+- Case-insensitive søk: Konverterer til lowercase for sammenligning
+
+#### 2. Business Type Filter Chips
+- Dynamisk genererte filter chips basert på unike business types
+- "All" chip for å vise alle tenants
+- Hver business type får sin egen chip
+- Aktiv chip: `bg-blue-600 text-white`
+- Inaktiv chip: `bg-white text-gray-700 border border-gray-300`
+- Hover-effekt: `hover:bg-gray-50`
+- Alpine.js binding: `@click="selectedType = '{{ $type }}'"`
+
+#### 3. Alpine.js State Management
+```javascript
+x-data="{ 
+    search: '', 
+    selectedType: '',
+    get filteredCount() {
+        // Teller antall synlige tenants basert på filter
+        let count = 0;
+        @foreach($tenants as $tenant)
+            if ((this.search === '' || '{{ strtolower($tenant->name) }}'.includes(this.search.toLowerCase())) && 
+                (this.selectedType === '' || this.selectedType === '{{ $tenant->business_type }}')) {
+                count++;
+            }
+        @endforeach
+        return count;
+    }
+}"
+```
+
+**State variabler:**
+- `search`: Holder søketekst
+- `selectedType`: Holder valgt business type
+- `filteredCount`: Computed property som teller synlige tenants
+
+#### 4. Tenant Card Filtering
+Hver tenant card har dynamisk visning basert på filter:
+```blade
+x-show="(search === '' || '{{ strtolower($tenant->name) }}'.includes(search.toLowerCase())) && 
+        (selectedType === '' || selectedType === '{{ $tenant->business_type }}')"
+```
+
+**Transitions:**
+- Enter: `transition ease-out duration-200`
+- Enter start: `opacity-0 transform scale-95`
+- Enter end: `opacity-100 transform scale-100`
+- Leave: `transition ease-in duration-150`
+- Leave start: `opacity-100 transform scale-100`
+- Leave end: `opacity-0 transform scale-95`
+
+#### 5. "No Results" Melding
+Implementert komplett "No results" melding som vises når `filteredCount === 0`:
+
+**Komponenter:**
+1. **Søkeikon**: SVG ikon (12x12, grå)
+2. **Heading**: "No services found" (text-lg font-medium text-gray-900)
+3. **Beskrivelse**: "Try adjusting your search or filter" (text-gray-600)
+4. **Clear filters knapp**: 
+   - Tekst: "Clear filters"
+   - Styling: `px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700`
+   - Funksjonalitet: `@click="search = ''; selectedType = ''"`
+   - Nullstiller både søk og filter
+
+**Visning:**
+- Vises kun når `filteredCount === 0`
+- Skjult med `x-cloak` til Alpine.js er lastet
+- Smooth transitions:
+  - Enter: `transition ease-out duration-200`
+  - Enter start: `opacity-0 transform translate-y-4`
+  - Enter end: `opacity-100 transform translate-y-0`
+
+**Layout:**
+- Sentrert: `text-center py-12`
+- Vertikal spacing mellom elementer
+- Responsivt design
+
+### Tekniske detaljer
+
+#### Alpine.js Implementering
+- Ingen ekstra JavaScript-filer nødvendig
+- All logikk i Blade template
+- Reaktiv state management
+- Computed properties for effektiv filtrering
+
+#### Filtrering Logikk
+1. **Søk**: 
+   - Konverterer tenant navn til lowercase
+   - Sjekker om søketekst er inkludert i navnet
+   - Case-insensitive matching
+
+2. **Business Type Filter**:
+   - Eksakt matching på business type
+   - Viser alle hvis ingen type er valgt
+
+3. **Kombinert Filter**:
+   - Begge kriterier må være oppfylt (AND-logikk)
+   - Dynamisk oppdatering ved endringer
+
+#### Unike Business Types
+```php
+@php
+    $businessTypes = $tenants->pluck('business_type')->unique()->sort()->values();
+@endphp
+```
+- Ekstraherer alle business types
+- Fjerner duplikater med `unique()`
+- Sorterer alfabetisk med `sort()`
+- Re-indekserer med `values()`
+
+### Testing
+Opprettet omfattende tester i `tests/Feature/LandingPageTenantGridTest.php`:
+
+1. **test_search_field_is_displayed**
+   - Verifiserer at søkefelt vises
+   - Sjekker label, placeholder og Alpine.js binding
+
+2. **test_alpine_search_data_is_configured**
+   - Verifiserer Alpine.js data struktur
+   - Bekrefter search, selectedType og filteredCount
+
+3. **test_tenant_cards_have_filter_attributes**
+   - Verifiserer x-show attributter på cards
+   - Bekrefter transitions
+
+4. **test_no_results_message_exists** ✅
+   - Verifiserer at "No services found" melding finnes
+   - Bekrefter "Try adjusting your search or filter" tekst
+   - Sjekker at "Clear filters" knapp finnes
+
+5. **test_business_type_filter_chips_are_displayed**
+   - Verifiserer at filter chips vises
+   - Bekrefter "All" chip og business type chips
+
+6. **test_filter_chips_have_alpine_bindings**
+   - Verifiserer Alpine.js bindings på chips
+   - Bekrefter @click og :class attributter
+
+7. **test_tenant_cards_filter_by_search_and_type**
+   - Verifiserer kombinert filtrering
+   - Bekrefter at både søk og type filter fungerer sammen
+
+8. **test_unique_business_types_are_extracted**
+   - Verifiserer at kun unike business types vises
+   - Bekrefter ingen duplikater i filter chips
+
+9. **test_filter_chips_have_correct_styling**
+   - Verifiserer chip styling
+   - Bekrefter transitions og focus states
+
+Alle tester kjører og passerer ✅
+
+### Akseptansekriterier - Status
+✅ Søkefelt med Alpine.js binding (FULLFØRT)
+✅ Business type filter chips (FULLFØRT)
+✅ Dynamisk filtrering av tenant cards (FULLFØRT)
+✅ "No results" melding når ingen match (FULLFØRT)
+✅ "Clear filters" knapp som nullstiller søk og filter (FULLFØRT)
+✅ Smooth transitions på cards og meldinger (FULLFØRT)
+✅ Unike business types ekstraheres korrekt (FULLFØRT)
+✅ Kombinert søk og filter funksjonalitet (FULLFØRT)
+
+### Brukeropplevelse
+
+#### Søk Flow
+1. Bruker skriver i søkefeltet
+2. Tenant cards filtreres i sanntid
+3. Kun matching tenants vises
+4. Smooth fade-in/out transitions
+5. Hvis ingen match: "No results" melding vises
+
+#### Filter Flow
+1. Bruker klikker på business type chip
+2. Chip endrer farge til blå (aktiv)
+3. Kun tenants av valgt type vises
+4. Kan kombineres med søk
+5. "All" chip viser alle tenants igjen
+
+#### Clear Filters Flow
+1. Bruker ser "No results" melding
+2. Klikker "Clear filters" knapp
+3. Både søk og filter nullstilles
+4. Alle tenants vises igjen
+5. Smooth transition tilbake til full liste
+
+### Sammendrag av Søk og Filter
+Søk og filter funksjonalitet er fullstendig implementert med Alpine.js for reaktiv state management. Brukere kan søke etter tenants ved navn og filtrere basert på business type, med live oppdatering av resultater. "No results" meldingen gir tydelig feedback når ingen tenants matcher kriteriene, og "Clear filters" knappen gjør det enkelt å nullstille søket. Implementasjonen følger design guide med smooth transitions og responsivt design. Omfattende test suite sikrer at all funksjonalitet fungerer som forventet.
+
 ### Testing
 For å teste implementasjonen:
 ```bash
-# Kjør feature tests
+# Kjør alle landing page tester
 php artisan test --filter=LandingPageTenantGridTest
+
+# Kjør spesifikk test for "no results" melding
+php artisan test --filter=LandingPageTenantGridTest::test_no_results_message_exists
 
 # Besøk landingsside i browser
 php artisan serve
 # Gå til http://localhost:8000
+# Test søk og filter funksjonalitet
 ```
 
-Tenant grid vil vise alle aktive tenants i et responsivt grid-layout.
+Søk og filter funksjonalitet vil fungere i sanntid med smooth transitions og tydelig feedback.

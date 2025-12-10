@@ -1482,8 +1482,8 @@ Implementer søk og filter på landingsside med Alpine.js.
 - [x] Søkefelt: Filter på tenant name (live search)
 - [x] Filter chips: Business types (klikk for å filtrere)
 - [x] Alpine.js for client-side filtering
-- [ ] Smooth transitions ved filtering
-- [ ] "No results" melding hvis ingen match LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_12_SUMMARY.md FILEN
+- [x] Smooth transitions ved filtering
+- [x] "No results" melding hvis ingen match. LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_12_SUMMARY.md FILEN
 
 ---
 
