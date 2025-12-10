@@ -1552,7 +1552,7 @@ Lag Blade components for ofte brukte UI-elementer.
 **Akseptansekriterier:**
 - [x] Button: Props for variant (primary, secondary, danger), size
 - [x] Card: Slot for content, optional header/footer
-- [ ] Badge: Props for color (success, warning, error, info)
+- [x] Badge: Props for color (success, warning, error, info)
 - [ ] Alert: Props for type (success, error, warning, info)
 - [ ] Modal: Alpine.js powered, props for title
 - [ ] Følger design guide (design.md) i `resources/views/components/button.blade.php` `resources/views/components/card.blade.php` `resources/views/components/badge.blade.php` `resources/views/components/alert.blade.php` `resources/views/components/modal.blade.php`

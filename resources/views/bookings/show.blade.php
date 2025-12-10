@@ -54,17 +54,11 @@
                     </div>
                     <div>
                         @if($booking->status === 'confirmed')
-                            <span class="px-3 py-1.5 text-sm font-medium text-green-800 bg-green-100 rounded-full">
-                                Confirmed
-                            </span>
+                            <x-badge color="success" size="lg">Confirmed</x-badge>
                         @elseif($booking->status === 'pending')
-                            <span class="px-3 py-1.5 text-sm font-medium text-yellow-800 bg-yellow-100 rounded-full">
-                                Pending
-                            </span>
+                            <x-badge color="warning" size="lg">Pending</x-badge>
                         @elseif($booking->status === 'cancelled')
-                            <span class="px-3 py-1.5 text-sm font-medium text-red-800 bg-red-100 rounded-full">
-                                Cancelled
-                            </span>
+                            <x-badge color="error" size="lg">Cancelled</x-badge>
                         @endif
                     </div>
                 </div>

@@ -124,17 +124,11 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($booking->status === 'confirmed')
-                                            <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
-                                                Confirmed
-                                            </span>
+                                            <x-badge color="success">Confirmed</x-badge>
                                         @elseif($booking->status === 'pending')
-                                            <span class="px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full">
-                                                Pending
-                                            </span>
+                                            <x-badge color="warning">Pending</x-badge>
                                         @elseif($booking->status === 'cancelled')
-                                            <span class="px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
-                                                Cancelled
-                                            </span>
+                                            <x-badge color="error">Cancelled</x-badge>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -175,17 +169,11 @@
                                     <p class="text-sm text-gray-600 mt-1">{{ $booking->resource->name }}</p>
                                 </div>
                                 @if($booking->status === 'confirmed')
-                                    <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
-                                        Confirmed
-                                    </span>
+                                    <x-badge color="success">Confirmed</x-badge>
                                 @elseif($booking->status === 'pending')
-                                    <span class="px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full">
-                                        Pending
-                                    </span>
+                                    <x-badge color="warning">Pending</x-badge>
                                 @elseif($booking->status === 'cancelled')
-                                    <span class="px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
-                                        Cancelled
-                                    </span>
+                                    <x-badge color="error">Cancelled</x-badge>
                                 @endif
                             </div>
                             

@@ -298,16 +298,16 @@
                                             </button>
                                             
                                             <!-- Status Badge -->
-                                            <span 
+                                            <x-badge 
                                                 x-show="active"
-                                                class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
+                                                color="success">
                                                 Active
-                                            </span>
-                                            <span 
+                                            </x-badge>
+                                            <x-badge 
                                                 x-show="!active"
-                                                class="px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full">
+                                                color="info">
                                                 Inactive
-                                            </span>
+                                            </x-badge>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">

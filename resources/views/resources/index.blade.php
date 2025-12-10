@@ -116,13 +116,9 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($resource->active)
-                                            <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
-                                                Active
-                                            </span>
+                                            <x-badge color="success">Active</x-badge>
                                         @else
-                                            <span class="px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full">
-                                                Inactive
-                                            </span>
+                                            <x-badge color="info">Inactive</x-badge>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -161,13 +157,9 @@
                                     <p class="text-sm text-gray-600 mt-1">{{ $resource->type }}</p>
                                 </div>
                                 @if($resource->active)
-                                    <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
-                                        Active
-                                    </span>
+                                    <x-badge color="success">Active</x-badge>
                                 @else
-                                    <span class="px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full">
-                                        Inactive
-                                    </span>
+                                    <x-badge color="info">Inactive</x-badge>
                                 @endif
                             </div>
                             

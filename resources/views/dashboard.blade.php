@@ -69,13 +69,9 @@
                             <p class="text-sm font-medium text-gray-600">Subscription Status</p>
                             <div class="mt-2">
                                 @if($subscriptionStatus)
-                                    <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
-                                        Active
-                                    </span>
+                                    <x-badge color="success">Active</x-badge>
                                 @else
-                                    <span class="px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full">
-                                        Inactive
-                                    </span>
+                                    <x-badge color="error">Inactive</x-badge>
                                 @endif
                             </div>
                         </div>

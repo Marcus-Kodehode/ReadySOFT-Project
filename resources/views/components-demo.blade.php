@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Component Demo - Button & Card</title>
+    <title>Component Demo - Button, Card & Badge</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 p-8">
     <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Component Demo - Button & Card</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Component Demo - Button, Card & Badge</h1>
         
         <!-- Button Component Section -->
         <div class="mb-16">
@@ -275,8 +275,122 @@
                 </x-card>
             </div>
         </div>
+
+        <!-- Badge Component Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-gray-200">Badge Component</h2>
+
+            <!-- Color Variants Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Color Variants</h3>
+                <div class="flex flex-wrap gap-4">
+                    <x-badge color="success">Success</x-badge>
+                    <x-badge color="warning">Warning</x-badge>
+                    <x-badge color="error">Error</x-badge>
+                    <x-badge color="info">Info (Default)</x-badge>
+                </div>
+            </div>
+
+            <!-- Sizes Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Sizes</h3>
+                <div class="flex flex-wrap items-center gap-4">
+                    <x-badge size="sm">Small</x-badge>
+                    <x-badge size="md">Medium (Default)</x-badge>
+                    <x-badge size="lg">Large</x-badge>
+                </div>
+            </div>
+
+            <!-- Color + Size Combinations Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Color + Size Combinations</h3>
+                <div class="space-y-4">
+                    <div class="flex flex-wrap items-center gap-4">
+                        <x-badge color="success" size="sm">Success Small</x-badge>
+                        <x-badge color="success" size="md">Success Medium</x-badge>
+                        <x-badge color="success" size="lg">Success Large</x-badge>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <x-badge color="warning" size="sm">Warning Small</x-badge>
+                        <x-badge color="warning" size="md">Warning Medium</x-badge>
+                        <x-badge color="warning" size="lg">Warning Large</x-badge>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <x-badge color="error" size="sm">Error Small</x-badge>
+                        <x-badge color="error" size="md">Error Medium</x-badge>
+                        <x-badge color="error" size="lg">Error Large</x-badge>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <x-badge color="info" size="sm">Info Small</x-badge>
+                        <x-badge color="info" size="md">Info Medium</x-badge>
+                        <x-badge color="info" size="lg">Info Large</x-badge>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-world Examples Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Real-world Examples</h3>
+                <x-card>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700">Subscription Status</span>
+                            <x-badge color="success">Active</x-badge>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700">Payment Status</span>
+                            <x-badge color="warning">Pending</x-badge>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700">Server Status</span>
+                            <x-badge color="error">Down</x-badge>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700">Notification</span>
+                            <x-badge color="info">3 New</x-badge>
+                        </div>
+                    </div>
+                </x-card>
+            </div>
+
+            <!-- Custom Attributes Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Custom Attributes</h3>
+                <div class="flex flex-wrap gap-4">
+                    <x-badge id="custom-badge" class="cursor-pointer hover:opacity-80">Clickable Badge</x-badge>
+                    <x-badge color="success" title="This is a tooltip">Hover for Tooltip</x-badge>
+                </div>
+            </div>
+
+            <!-- Usage Examples Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Usage Examples</h3>
+                <x-card>
+                    <pre class="text-sm text-gray-700 overflow-x-auto"><code>&lt;!-- Info badge (default) --&gt;
+&lt;x-badge&gt;Info&lt;/x-badge&gt;
+
+&lt;!-- Success badge --&gt;
+&lt;x-badge color="success"&gt;Active&lt;/x-badge&gt;
+
+&lt;!-- Warning badge --&gt;
+&lt;x-badge color="warning"&gt;Pending&lt;/x-badge&gt;
+
+&lt;!-- Error badge --&gt;
+&lt;x-badge color="error"&gt;Failed&lt;/x-badge&gt;
+
+&lt;!-- Small badge --&gt;
+&lt;x-badge size="sm"&gt;Small&lt;/x-badge&gt;
+
+&lt;!-- Large success badge --&gt;
+&lt;x-badge color="success" size="lg"&gt;Completed&lt;/x-badge&gt;
+
+&lt;!-- With custom attributes --&gt;
+&lt;x-badge id="my-badge" class="cursor-pointer"&gt;Clickable&lt;/x-badge&gt;</code></pre>
+                </x-card>
+            </div>
+        </div>
     </div>
 </body>
 </html>
 
-{{-- Demo page for button and card components - shows all variants and usage examples --}}
+{{-- Demo page for button, card, and badge components - shows all variants and usage examples --}}
