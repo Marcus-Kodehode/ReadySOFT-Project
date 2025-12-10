@@ -96,16 +96,16 @@
     @endif
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <footer class="bg-gray-800 text-white py-8 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="text-gray-600 text-sm">
+                <div class="text-gray-300 text-sm">
                     © {{ date('Y') }} ReadySoft. All rights reserved.
                 </div>
                 <div class="flex gap-6">
-                    <a href="#" class="text-gray-600 hover:text-blue-600 text-sm">About</a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600 text-sm">Contact</a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600 text-sm">Privacy</a>
+                    <a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">About</a>
+                    <a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">Contact</a>
+                    <a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">Privacy</a>
                 </div>
             </div>
         </div>
