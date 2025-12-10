@@ -172,3 +172,127 @@ Oppdaterte `resources/views/layouts/app.blade.php` til å dynamisk velge riktig 
 
 ## Neste steg:
 - Task 13.3: Opprett Blade components for gjenbrukbare elementer
+
+
+---
+
+### Task 13.3: Blade Components - Card Component ✅ FULLFØRT
+
+#### Implementerte funksjoner:
+1. **Basic Card Component**
+   - Reusable Blade component for konsistent card-styling
+   - Følger design guide fra `design.md`
+   - Fleksibel med slots for header, content og footer
+
+2. **Card Features**
+   - **Default styling**: `bg-white border border-gray-200 rounded-lg shadow-sm`
+   - **Optional padding**: Kan deaktiveres med `:padding="false"` for custom layouts
+   - **Header slot**: Valgfri header med border-bottom separator
+   - **Footer slot**: Valgfri footer med border-top separator
+   - **Main content slot**: Default slot for hovedinnhold
+   - **Custom attributes**: Støtter alle HTML-attributter (id, class, data-*, etc.)
+
+#### Teknisk implementering:
+```blade
+{{-- Basic usage --}}
+<x-card>
+    <p>Card content here</p>
+</x-card>
+
+{{-- With header --}}
+<x-card>
+    <x-slot name="header">
+        <h3>Card Title</h3>
+    </x-slot>
+    <p>Card content</p>
+</x-card>
+
+{{-- With footer --}}
+<x-card>
+    <p>Card content</p>
+    <x-slot name="footer">
+        <x-button>Action</x-button>
+    </x-slot>
+</x-card>
+
+{{-- Complete card with header and footer --}}
+<x-card>
+    <x-slot name="header">
+        <h3>Title</h3>
+    </x-slot>
+    <p>Content</p>
+    <x-slot name="footer">
+        <div class="flex justify-end gap-3">
+            <x-button variant="secondary">Cancel</x-button>
+            <x-button variant="primary">Save</x-button>
+        </div>
+    </x-slot>
+</x-card>
+
+{{-- Without padding for custom layouts --}}
+<x-card :padding="false">
+    <div class="p-4 bg-blue-50">Custom section</div>
+    <div class="p-6">Main content</div>
+</x-card>
+```
+
+#### Component Props:
+- `padding` (boolean, default: true) - Kontrollerer om card har default padding (p-6)
+
+#### Component Slots:
+- `header` (optional) - Header-seksjon med border-bottom
+- `slot` (default) - Hovedinnhold
+- `footer` (optional) - Footer-seksjon med border-top
+
+#### Design-valg:
+- **Konsistent styling**: Følger design guide med hvit bakgrunn, subtil border og shadow
+- **Fleksibel struktur**: Header og footer er valgfrie, kan brukes uavhengig
+- **Separator borders**: Header og footer har tydelige borders for visuell separasjon
+- **Padding control**: Kan deaktiveres for full kontroll over layout
+- **Attribute merging**: Custom classes og attributter merges med default styling
+
+#### Use cases:
+1. **Stat cards**: Dashboard statistikk med ikoner og tall
+2. **Form cards**: Skjemaer med header (tittel) og footer (action buttons)
+3. **Content cards**: Generelt innhold med valgfri header/footer
+4. **List items**: Tenant cards, resource cards, booking cards
+5. **Custom layouts**: Med `:padding="false"` for full kontroll
+
+#### Filer opprettet:
+- `resources/views/components/card.blade.php` - Card component med header/footer slots
+- `tests/Feature/CardComponentTest.php` - Comprehensive test suite (10 tests)
+
+#### Filer endret:
+- `resources/views/components-demo.blade.php` - Lagt til Card component demo med eksempler
+
+## Testing:
+✅ Basic card rendering med content
+✅ Default padding (p-6) fungerer
+✅ Padding kan deaktiveres med `:padding="false"`
+✅ Header slot med border-bottom separator
+✅ Footer slot med border-top separator
+✅ Både header og footer samtidig
+✅ Custom classes merges med default classes
+✅ Custom attributes (id, data-*) fungerer
+✅ Stat card layout fungerer
+✅ Card uten header/footer fungerer
+
+**Test Results**: 10/10 tests passed (29 assertions)
+
+#### Demo page:
+Oppdaterte `components-demo.blade.php` med omfattende Card component eksempler:
+- Basic card
+- Card med header
+- Card med footer
+- Card med både header og footer
+- Card uten padding (custom layout)
+- Stat card grid (3 kolonner)
+- Usage examples med kode-snippets
+
+## Sammendrag:
+Card component er fullstendig implementert og testet. Komponenten er fleksibel, følger design guide, og kan brukes i alle deler av applikasjonen hvor card-layout er nødvendig. Komponenten støtter valgfrie header og footer slots, custom padding control, og full attribute merging for maksimal fleksibilitet.
+
+## Neste steg:
+- Task 13.3 (fortsettelse): Implementere Badge component
+- Task 13.3 (fortsettelse): Implementere Alert component
+- Task 13.3 (fortsettelse): Implementere Modal component
