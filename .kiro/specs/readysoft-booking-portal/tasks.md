@@ -1508,7 +1508,7 @@ Lag hovednavigasjon for innloggede tenant-brukere.
 - [x] Aktiv link highlightet
 - [x] Hamburger menu på mobil (Alpine.js)
 - [x] Følger design guide (design.md) i `resources/views/layouts/navigation.blade.php`
-- [ ] Fil-header og footer i `resources/views/layouts/navigation.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_13_SUMMARY.md FILEN
+- [x] Fil-header og footer i `resources/views/layouts/navigation.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_13_SUMMARY.md FILEN
 
 ---
 
@@ -1525,11 +1525,11 @@ Lag separat navigasjon for admin-brukere.
 - `resources/views/layouts/admin-navigation.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Logo og "Admin Panel"
-- [ ] Nav links: Dashboard, Tenants
-- [ ] User dropdown: Logout
-- [ ] Følger design guide (design.md) i `resources/views/layouts/admin-navigation.blade.php`
-- [ ] Fil-header og footer i `resources/views/layouts/admin-navigation.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_13_SUMMARY.md FILEN
+- [x] Logo og "Admin Panel"
+- [x] Nav links: Dashboard, Tenants
+- [x] User dropdown: Logout
+- [x] Følger design guide (design.md) i `resources/views/layouts/admin-navigation.blade.php`
+- [x] Fil-header og footer i `resources/views/layouts/admin-navigation.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_13_SUMMARY.md FILEN
 
 ---
 

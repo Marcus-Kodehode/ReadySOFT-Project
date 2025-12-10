@@ -88,3 +88,87 @@ Implementerte hovednavigasjon for tenant-brukere med full responsiv støtte, ink
 ## Neste steg:
 - Task 13.2: Opprett admin navigation
 - Task 13.3: Opprett Blade components for gjenbrukbare elementer
+
+
+---
+
+### Task 13.2: Admin Navigation ✅ FULLFØRT
+
+#### Implementerte funksjoner:
+1. **Logo og "Admin Panel" tekst**
+   - Logo fra `public/images/icons/readysoft2.png`
+   - "Admin Panel" tekst ved siden av logo for å tydelig skille admin-grensesnittet fra tenant-grensesnittet
+   - Lenker til admin dashboard
+
+2. **Navigasjonslenker**
+   - Dashboard - lenker til admin dashboard (`admin.dashboard`)
+   - Tenants - lenker til tenant-oversikt (`admin.tenants`)
+   - Aktiv link highlighting med samme stil som tenant-navigasjon
+
+3. **User dropdown (forenklet)**
+   - Kun Logout-funksjon
+   - Ingen Profile eller Settings for admin-brukere
+   - Enklere dropdown enn tenant-navigasjon
+
+4. **Responsiv hamburger-meny**
+   - Alpine.js for state management
+   - Samme responsive oppførsel som tenant-navigasjon
+   - Fungerer på mobil og desktop
+
+#### Teknisk implementering:
+```blade
+<!-- Logo med Admin Panel tekst -->
+<div class="shrink-0 flex items-center">
+    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
+        <img src="{{ asset('images/icons/readysoft2.png') }}" alt="Schedulo Logo" class="h-9 w-auto">
+        <span class="text-xl font-bold text-gray-800">Admin Panel</span>
+    </a>
+</div>
+
+<!-- Forenklet dropdown kun med Logout -->
+<x-slot name="content">
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <x-dropdown-link :href="route('logout')"
+                onclick="event.preventDefault();
+                            this.closest('form').submit();">
+            {{ __('Log Out') }}
+        </x-dropdown-link>
+    </form>
+</x-slot>
+```
+
+#### Integrasjon med app layout:
+Oppdaterte `resources/views/layouts/app.blade.php` til å dynamisk velge riktig navigasjon basert på brukerrolle:
+
+```blade
+@if(Auth::check() && Auth::user()->role === 'admin')
+    @include('layouts.admin-navigation')
+@else
+    @include('layouts.navigation')
+@endif
+```
+
+#### Design-valg:
+- **Forenklet grensesnitt**: Admin-navigasjon har færre lenker enn tenant-navigasjon
+- **Tydelig skille**: "Admin Panel" tekst gjør det klart at brukeren er i admin-modus
+- **Konsistent styling**: Følger samme design-guide som tenant-navigasjon
+- **Samme responsive oppførsel**: Hamburger-meny på mobil, full navbar på desktop
+
+#### Filer opprettet:
+- `resources/views/layouts/admin-navigation.blade.php` - Admin navigasjon med logo, lenker og dropdown
+
+#### Filer endret:
+- `resources/views/layouts/app.blade.php` - Lagt til conditional logic for å velge riktig navigasjon
+
+## Testing:
+✅ Admin-navigasjon vises kun for brukere med role='admin'
+✅ Logo og "Admin Panel" tekst vises korrekt
+✅ Dashboard og Tenants lenker fungerer
+✅ Logout-funksjon fungerer
+✅ Hamburger-meny fungerer på mobil
+✅ Responsive design fungerer korrekt
+✅ Tenant-brukere ser fortsatt tenant-navigasjon
+
+## Neste steg:
+- Task 13.3: Opprett Blade components for gjenbrukbare elementer
