@@ -142,7 +142,7 @@ class LandingPageTenantGridTest extends TestCase
     }
 
     /**
-     * Test at Alpine.js data er konfigurert for søk
+     * Test at Alpine.js data er konfigurert for søk og filter
      */
     public function test_alpine_search_data_is_configured(): void
     {
@@ -155,9 +155,9 @@ class LandingPageTenantGridTest extends TestCase
         // Act: Besøk landingsside
         $response = $this->get('/');
 
-        // Assert: Sjekk at Alpine.js data finnes
+        // Assert: Sjekk at Alpine.js data finnes med både search og selectedType
         $response->assertStatus(200);
-        $response->assertSee('x-data="{ search: \'\' }"', false);
+        $response->assertSee('x-data="{ search: \'\', selectedType: \'\' }"', false);
     }
 
     /**
@@ -198,5 +198,140 @@ class LandingPageTenantGridTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('No services found');
         $response->assertSee('Try adjusting your search terms');
+    }
+
+    /**
+     * Test at business type filter chips vises
+     */
+    public function test_business_type_filter_chips_are_displayed(): void
+    {
+        // Arrange: Opprett tenants med forskjellige business types
+        Tenant::factory()->create([
+            'name' => 'Cabin Business',
+            'business_type' => 'Cabin Rental',
+            'active' => true,
+        ]);
+
+        Tenant::factory()->create([
+            'name' => 'Salon Business',
+            'business_type' => 'Hair Salon',
+            'active' => true,
+        ]);
+
+        // Act: Besøk landingsside
+        $response = $this->get('/');
+
+        // Assert: Sjekk at filter label finnes
+        $response->assertStatus(200);
+        $response->assertSee('Filter by type');
+
+        // Sjekk at "All" chip finnes
+        $response->assertSee('All');
+
+        // Sjekk at business type chips finnes
+        $response->assertSee('Cabin Rental');
+        $response->assertSee('Hair Salon');
+    }
+
+    /**
+     * Test at filter chips har korrekt Alpine.js binding
+     */
+    public function test_filter_chips_have_alpine_bindings(): void
+    {
+        // Arrange: Opprett test-tenant
+        Tenant::factory()->create([
+            'name' => 'Test Business',
+            'business_type' => 'Cabin Rental',
+            'active' => true,
+        ]);
+
+        // Act: Besøk landingsside
+        $response = $this->get('/');
+
+        // Assert: Sjekk at Alpine.js bindings finnes
+        $response->assertStatus(200);
+        $response->assertSee('@click="selectedType = \'\'"', false);
+        $response->assertSee('@click="selectedType = \'Cabin Rental\'"', false);
+        $response->assertSee(':class="selectedType === \'\' ? \'bg-blue-600 text-white\' : \'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50\'"', false);
+    }
+
+    /**
+     * Test at tenant cards filtreres basert på både søk og business type
+     */
+    public function test_tenant_cards_filter_by_search_and_type(): void
+    {
+        // Arrange: Opprett tenants
+        $tenant = Tenant::factory()->create([
+            'name' => 'Test Cabin',
+            'business_type' => 'Cabin Rental',
+            'active' => true,
+        ]);
+
+        // Act: Besøk landingsside
+        $response = $this->get('/');
+
+        // Assert: Sjekk at x-show attributt inkluderer både search og selectedType
+        $response->assertStatus(200);
+        $response->assertSee('x-show="(search === \'\' || \'test cabin\'.includes(search.toLowerCase())) && (selectedType === \'\' || selectedType === \'Cabin Rental\')"', false);
+    }
+
+    /**
+     * Test at unike business types ekstraheres korrekt
+     */
+    public function test_unique_business_types_are_extracted(): void
+    {
+        // Arrange: Opprett flere tenants med samme og forskjellige business types
+        Tenant::factory()->create([
+            'name' => 'Cabin 1',
+            'business_type' => 'Cabin Rental',
+            'active' => true,
+        ]);
+
+        Tenant::factory()->create([
+            'name' => 'Cabin 2',
+            'business_type' => 'Cabin Rental',
+            'active' => true,
+        ]);
+
+        Tenant::factory()->create([
+            'name' => 'Salon',
+            'business_type' => 'Hair Salon',
+            'active' => true,
+        ]);
+
+        // Act: Besøk landingsside
+        $response = $this->get('/');
+
+        // Assert: Sjekk at kun unike business types vises (ikke duplikater)
+        $response->assertStatus(200);
+        
+        // Telle antall ganger "Cabin Rental" vises som chip (skal være 1 gang i filter + 2 ganger i cards)
+        $content = $response->getContent();
+        
+        // Sjekk at begge business types finnes
+        $this->assertStringContainsString('Cabin Rental', $content);
+        $this->assertStringContainsString('Hair Salon', $content);
+    }
+
+    /**
+     * Test at filter chips har korrekt styling
+     */
+    public function test_filter_chips_have_correct_styling(): void
+    {
+        // Arrange: Opprett test-tenant
+        Tenant::factory()->create([
+            'name' => 'Test Business',
+            'business_type' => 'Cabin Rental',
+            'active' => true,
+        ]);
+
+        // Act: Besøk landingsside
+        $response = $this->get('/');
+
+        // Assert: Sjekk at chip styling finnes
+        $response->assertStatus(200);
+        $response->assertSee('px-4 py-2 rounded-full text-sm font-medium', false);
+        $response->assertSee('transition-colors', false);
+        $response->assertSee('focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2', false);
     }
 }

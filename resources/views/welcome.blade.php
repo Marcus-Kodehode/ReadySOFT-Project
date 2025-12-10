@@ -61,12 +61,12 @@
 
     <!-- Tenants Grid Section -->
     @if($tenants->isNotEmpty())
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" x-data="{ search: '' }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" x-data="{ search: '', selectedType: '' }">
             <div class="mb-8">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Available Services</h2>
                 
                 <!-- Search Input -->
-                <div class="max-w-md">
+                <div class="max-w-md mb-6">
                     <label for="tenant-search" class="block text-sm font-medium text-gray-700 mb-2">
                         Search by name
                     </label>
@@ -83,13 +83,44 @@
                         </svg>
                     </div>
                 </div>
+
+                <!-- Business Type Filter Chips -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Filter by type
+                    </label>
+                    <div class="flex flex-wrap gap-2">
+                        <!-- All chip -->
+                        <button 
+                            @click="selectedType = ''"
+                            :class="selectedType === '' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'"
+                            class="px-4 py-2 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        >
+                            All
+                        </button>
+                        
+                        @php
+                            $businessTypes = $tenants->pluck('business_type')->unique()->sort()->values();
+                        @endphp
+                        
+                        @foreach($businessTypes as $type)
+                            <button 
+                                @click="selectedType = '{{ $type }}'"
+                                :class="selectedType === '{{ $type }}' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'"
+                                class="px-4 py-2 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            >
+                                {{ $type }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($tenants as $tenant)
                     <div 
                         class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
-                        x-show="search === '' || '{{ strtolower($tenant->name) }}'.includes(search.toLowerCase())"
+                        x-show="(search === '' || '{{ strtolower($tenant->name) }}'.includes(search.toLowerCase())) && (selectedType === '' || selectedType === '{{ $tenant->business_type }}')"
                         x-transition
                     >
                         <div class="flex items-start justify-between mb-3">
