@@ -1435,7 +1435,7 @@ Lag controller for landingsside.
 
 **Akseptansekriterier:**
 - [x] Metode: index() - henter alle aktive tenants
-- [ ] Caching: Cache tenant list i 5 minutter
+- [x] Caching: Cache tenant list i 5 minutter
 - [ ] Sortering: Nyeste først
 - [ ] Fil-header og footer i `app/Http/Controllers/LandingController.php`. LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_12_SUMMARY.md FILEN
 

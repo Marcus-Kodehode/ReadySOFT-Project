@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Tenant;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class AdminController extends Controller
 {
@@ -79,6 +80,7 @@ class AdminController extends Controller
      * Toggle aktiv status for en tenant
      * 
      * Finner tenant og bytter active status (true -> false eller false -> true)
+     * Tømmer cache for tenant list siden status er endret
      * Returnerer tilbake til forrige side med flash message
      */
     public function toggleTenantStatus($id)
@@ -86,6 +88,9 @@ class AdminController extends Controller
         $tenant = Tenant::findOrFail($id);
         
         $tenant->update(['active' => !$tenant->active]);
+        
+        // Tøm cache for tenant list siden tenant status er endret
+        Cache::forget('landing.tenants');
         
         $status = $tenant->active ? 'activated' : 'deactivated';
         

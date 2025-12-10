@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -104,6 +105,9 @@ class RegisteredUserController extends Controller
                 'active_from' => now(),
             ]);
         });
+
+        // Tøm cache for tenant list siden ny tenant er opprettet
+        Cache::forget('landing.tenants');
 
         event(new Registered($user));
 
