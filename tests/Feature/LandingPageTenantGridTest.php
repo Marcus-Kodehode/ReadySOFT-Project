@@ -118,4 +118,85 @@ class LandingPageTenantGridTest extends TestCase
         $response->assertSee('bg-white rounded-lg shadow-sm border border-gray-200 p-6', false);
         $response->assertSee('hover:shadow-md transition-shadow', false);
     }
+
+    /**
+     * Test at søkefelt vises på landingsside
+     */
+    public function test_search_field_is_displayed(): void
+    {
+        // Arrange: Opprett test-tenant
+        Tenant::factory()->create([
+            'name' => 'Test Business',
+            'active' => true,
+        ]);
+
+        // Act: Besøk landingsside
+        $response = $this->get('/');
+
+        // Assert: Sjekk at søkefelt finnes
+        $response->assertStatus(200);
+        $response->assertSee('Search by name');
+        $response->assertSee('Search for services...', false);
+        $response->assertSee('id="tenant-search"', false);
+        $response->assertSee('x-model="search"', false);
+    }
+
+    /**
+     * Test at Alpine.js data er konfigurert for søk
+     */
+    public function test_alpine_search_data_is_configured(): void
+    {
+        // Arrange: Opprett test-tenant
+        Tenant::factory()->create([
+            'name' => 'Test Business',
+            'active' => true,
+        ]);
+
+        // Act: Besøk landingsside
+        $response = $this->get('/');
+
+        // Assert: Sjekk at Alpine.js data finnes
+        $response->assertStatus(200);
+        $response->assertSee('x-data="{ search: \'\' }"', false);
+    }
+
+    /**
+     * Test at tenant cards har x-show attributt for filtrering
+     */
+    public function test_tenant_cards_have_filter_attributes(): void
+    {
+        // Arrange: Opprett test-tenant
+        $tenant = Tenant::factory()->create([
+            'name' => 'Test Business',
+            'active' => true,
+        ]);
+
+        // Act: Besøk landingsside
+        $response = $this->get('/');
+
+        // Assert: Sjekk at x-show attributt finnes
+        $response->assertStatus(200);
+        $response->assertSee('x-show=', false);
+        $response->assertSee('x-transition', false);
+    }
+
+    /**
+     * Test at "no results" melding finnes i HTML
+     */
+    public function test_no_results_message_exists(): void
+    {
+        // Arrange: Opprett test-tenant
+        Tenant::factory()->create([
+            'name' => 'Test Business',
+            'active' => true,
+        ]);
+
+        // Act: Besøk landingsside
+        $response = $this->get('/');
+
+        // Assert: Sjekk at "no results" melding finnes
+        $response->assertStatus(200);
+        $response->assertSee('No services found');
+        $response->assertSee('Try adjusting your search terms');
+    }
 }

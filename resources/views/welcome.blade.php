@@ -12,6 +12,10 @@
     
     <!-- Styles / Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->
@@ -57,12 +61,37 @@
 
     <!-- Tenants Grid Section -->
     @if($tenants->isNotEmpty())
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8">Available Services</h2>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" x-data="{ search: '' }">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Available Services</h2>
+                
+                <!-- Search Input -->
+                <div class="max-w-md">
+                    <label for="tenant-search" class="block text-sm font-medium text-gray-700 mb-2">
+                        Search by name
+                    </label>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="tenant-search"
+                            x-model="search"
+                            placeholder="Search for services..."
+                            class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
+                        <svg class="absolute left-3 top-2.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($tenants as $tenant)
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                    <div 
+                        class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+                        x-show="search === '' || '{{ strtolower($tenant->name) }}'.includes(search.toLowerCase())"
+                        x-transition
+                    >
                         <div class="flex items-start justify-between mb-3">
                             <h3 class="text-lg font-semibold text-gray-900">{{ $tenant->name }}</h3>
                             <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
@@ -81,6 +110,19 @@
                         </a>
                     </div>
                 @endforeach
+            </div>
+            
+            <!-- No Results Message -->
+            <div 
+                x-show="search !== '' && !Array.from(document.querySelectorAll('[x-show]')).some(el => el.style.display !== 'none' && el !== $el)"
+                x-cloak
+                class="text-center py-12"
+            >
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <h3 class="mt-4 text-lg font-medium text-gray-900">No services found</h3>
+                <p class="mt-2 text-gray-600">Try adjusting your search terms</p>
             </div>
         </div>
     @else

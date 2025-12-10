@@ -1460,9 +1460,9 @@ Lag landingsside med hero og tenant listing. Dette er forsiden (/) som alle bes�
 - [x] Hver tenant card: <h3 class="text-lg font-semibold">{{ $tenant->name }}</h3>, <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{{ $tenant->business_type }}</span>, <p class="text-gray-600 text-sm mt-2">{{ Str::limit($tenant->description, 100) }}</p>, <a href="/{{ $tenant->slug }}" class="mt-4 block w-full text-center bg-blue-600 text-white py-2 rounded-lg">"Book Now"</a>
 - [x] Responsivt grid: grid-cols-1 (mobil), md:grid-cols-2 (tablet), lg:grid-cols-3 (desktop)
 - [x] Footer: <footer class="bg-gray-800 text-white py-8 mt-20">, links til About, Contact, Privacy (href="#" placeholder)
-- [ ] Tailwind: max-w-7xl mx-auto px-4 for container
-- [ ] Fil-header: `{{-- File: resources/views/welcome.blade.php --}}`
-- [ ] Fil-footer: `{{-- Landing page - viser hero og liste over alle aktive tenants --}}` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_12_SUMMARY.md FILEN
+- [x] Tailwind: max-w-7xl mx-auto px-4 for container
+- [x] Fil-header: `{{-- File: resources/views/welcome.blade.php --}}`
+- [x] Fil-footer: `{{-- Landing page - viser hero og liste over alle aktive tenants --}}` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_12_SUMMARY.md FILEN
 
 ---
 
@@ -1479,7 +1479,7 @@ Implementer søk og filter på landingsside med Alpine.js.
 - `resources/views/welcome.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Søkefelt: Filter på tenant name (live search)
+- [x] Søkefelt: Filter på tenant name (live search)
 - [ ] Filter chips: Business types (klikk for å filtrere)
 - [ ] Alpine.js for client-side filtering
 - [ ] Smooth transitions ved filtering
@@ -1507,8 +1507,8 @@ Lag hovednavigasjon for innloggede tenant-brukere.
 - [ ] User dropdown: Profile, Settings, Logout
 - [ ] Aktiv link highlightet
 - [ ] Hamburger menu på mobil (Alpine.js)
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Følger design guide (design.md) i `resources/views/layouts/navigation.blade.php`
+- [ ] Fil-header og footer i `resources/views/layouts/navigation.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_13_SUMMARY.md FILEN
 
 ---
 
@@ -1528,8 +1528,8 @@ Lag separat navigasjon for admin-brukere.
 - [ ] Logo og "Admin Panel"
 - [ ] Nav links: Dashboard, Tenants
 - [ ] User dropdown: Logout
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Følger design guide (design.md) i `resources/views/layouts/admin-navigation.blade.php`
+- [ ] Fil-header og footer i `resources/views/layouts/admin-navigation.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_13_SUMMARY.md FILEN
 
 ---
 
@@ -1555,8 +1555,8 @@ Lag Blade components for ofte brukte UI-elementer.
 - [ ] Badge: Props for color (success, warning, error, info)
 - [ ] Alert: Props for type (success, error, warning, info)
 - [ ] Modal: Alpine.js powered, props for title
-- [ ] Følger design guide
-- [ ] Fil-header og footer
+- [ ] Følger design guide (design.md) i `resources/views/components/button.blade.php` `resources/views/components/card.blade.php` `resources/views/components/badge.blade.php` `resources/views/components/alert.blade.php` `resources/views/components/modal.blade.php`
+- [ ] Fil-header og footer i `resources/views/components/button.blade.php` `resources/views/components/card.blade.php` `resources/views/components/badge.blade.php` `resources/views/components/alert.blade.php` `resources/views/components/modal.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_13_SUMMARY.md FILEN
 
 **Bruk:**
 ```blade
