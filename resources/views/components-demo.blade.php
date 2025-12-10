@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Component Demo - Button, Card & Badge</title>
+    <title>Component Demo - Button, Card, Badge & Alert</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 p-8">
     <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Component Demo - Button, Card & Badge</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Component Demo - Button, Card, Badge & Alert</h1>
         
         <!-- Button Component Section -->
         <div class="mb-16">
@@ -389,8 +389,152 @@
                 </x-card>
             </div>
         </div>
+
+        <!-- Alert Component Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-gray-200">Alert Component</h2>
+
+            <!-- Type Variants Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Type Variants</h3>
+                <div class="space-y-4">
+                    <x-alert type="success" title="Success!">
+                        Your changes have been saved successfully.
+                    </x-alert>
+                    <x-alert type="error" title="Error">
+                        There was a problem processing your request.
+                    </x-alert>
+                    <x-alert type="warning" title="Warning">
+                        Your subscription will expire in 3 days.
+                    </x-alert>
+                    <x-alert type="info" title="Information">
+                        This is an informational message for you.
+                    </x-alert>
+                </div>
+            </div>
+
+            <!-- Without Title Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Without Title</h3>
+                <div class="space-y-4">
+                    <x-alert type="success">
+                        Operation completed successfully.
+                    </x-alert>
+                    <x-alert type="error">
+                        An error occurred while processing your request.
+                    </x-alert>
+                    <x-alert type="warning">
+                        Please review your settings before continuing.
+                    </x-alert>
+                    <x-alert type="info">
+                        You have 3 new notifications.
+                    </x-alert>
+                </div>
+            </div>
+
+            <!-- Dismissible Alerts Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Dismissible Alerts</h3>
+                <div class="space-y-4">
+                    <x-alert type="success" title="Success!" :dismissible="true">
+                        This alert can be dismissed by clicking the X button.
+                    </x-alert>
+                    <x-alert type="info" :dismissible="true">
+                        This is a dismissible info alert without a title.
+                    </x-alert>
+                </div>
+            </div>
+
+            <!-- Real-world Examples Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Real-world Examples</h3>
+                <div class="space-y-4">
+                    <x-alert type="success" title="Booking Confirmed!">
+                        Your booking for <strong>Cabin #3</strong> on <strong>December 15, 2025</strong> has been confirmed. You will receive a confirmation email shortly.
+                    </x-alert>
+                    
+                    <x-alert type="error" title="Payment Failed">
+                        We couldn't process your payment. Please check your card details and try again.
+                    </x-alert>
+                    
+                    <x-alert type="warning" title="Subscription Expiring Soon">
+                        Your subscription will expire on <strong>December 20, 2025</strong>. Renew now to avoid service interruption.
+                    </x-alert>
+                    
+                    <x-alert type="info" title="New Feature Available">
+                        We've added SMS notifications! Configure your settings in the dashboard to get started.
+                    </x-alert>
+                </div>
+            </div>
+
+            <!-- With Custom Content Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">With Custom Content</h3>
+                <x-alert type="info" title="Getting Started">
+                    <p class="mb-2">Welcome to ReadySoft! Here's how to get started:</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Create your first resource</li>
+                        <li>Set up your availability</li>
+                        <li>Share your booking page</li>
+                    </ul>
+                </x-alert>
+            </div>
+
+            <!-- Custom Attributes Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Custom Attributes</h3>
+                <x-alert type="success" id="custom-alert" class="shadow-lg">
+                    This alert has custom ID and additional shadow class.
+                </x-alert>
+            </div>
+
+            <!-- Usage Examples Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Usage Examples</h3>
+                <x-card>
+                    <pre class="text-sm text-gray-700 overflow-x-auto"><code>&lt;!-- Info alert (default) --&gt;
+&lt;x-alert&gt;
+    This is an info message.
+&lt;/x-alert&gt;
+
+&lt;!-- Success alert with title --&gt;
+&lt;x-alert type="success" title="Success!"&gt;
+    Your changes have been saved.
+&lt;/x-alert&gt;
+
+&lt;!-- Error alert --&gt;
+&lt;x-alert type="error" title="Error"&gt;
+    Something went wrong.
+&lt;/x-alert&gt;
+
+&lt;!-- Warning alert --&gt;
+&lt;x-alert type="warning" title="Warning"&gt;
+    Please review your settings.
+&lt;/x-alert&gt;
+
+&lt;!-- Dismissible alert --&gt;
+&lt;x-alert type="info" :dismissible="true"&gt;
+    This alert can be closed.
+&lt;/x-alert&gt;
+
+&lt;!-- Alert with custom content --&gt;
+&lt;x-alert type="success" title="Welcome!"&gt;
+    &lt;p&gt;Welcome to our platform!&lt;/p&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Step 1&lt;/li&gt;
+        &lt;li&gt;Step 2&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/x-alert&gt;
+
+&lt;!-- With custom attributes --&gt;
+&lt;x-alert type="error" id="my-alert" class="mb-4"&gt;
+    Custom alert with ID and margin.
+&lt;/x-alert&gt;</code></pre>
+                </x-card>
+            </div>
+        </div>
     </div>
 </body>
 </html>
 
-{{-- Demo page for button, card, and badge components - shows all variants and usage examples --}}
+{{-- Demo page for button, card, badge, and alert components - shows all variants and usage examples --}}
