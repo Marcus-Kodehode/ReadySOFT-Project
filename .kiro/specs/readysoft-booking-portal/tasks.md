@@ -1507,7 +1507,7 @@ Lag hovednavigasjon for innloggede tenant-brukere.
 - [x] User dropdown: Profile, Settings, Logout
 - [x] Aktiv link highlightet
 - [x] Hamburger menu på mobil (Alpine.js)
-- [ ] Følger design guide (design.md) i `resources/views/layouts/navigation.blade.php`
+- [x] Følger design guide (design.md) i `resources/views/layouts/navigation.blade.php`
 - [ ] Fil-header og footer i `resources/views/layouts/navigation.blade.php` LAG EN KORT, MEN FORKLARENDE AVSNITT OM HVA VI HAR GJORT I DENNE TASKEN (ALLE SUBTASK UNDER DENNE TASKEN OGSÅ) I FILEN TASK_13_SUMMARY.md FILEN
 
 ---
