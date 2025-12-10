@@ -22,10 +22,10 @@
     <nav class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-3">
-                    <img src="{{ asset('images/icons/readysoft2.png') }}" alt="Schedulo Logo" class="h-10 w-auto">
-                    <span class="text-2xl font-bold text-blue-600">Schedulo</span>
-                </div>
+                <a href="/" class="flex items-center gap-2">
+                    <img src="{{ asset('images/icons/readysoft2.png') }}" alt="Schedulo Logo" class="h-8 w-auto">
+                    <span class="text-xl sm:text-2xl font-bold text-blue-600">Schedulo</span>
+                </a>
                 
                 @if (Route::has('login'))
                     <div class="flex items-center gap-4">
