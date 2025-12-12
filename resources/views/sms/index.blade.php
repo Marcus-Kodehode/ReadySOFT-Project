@@ -98,11 +98,31 @@
                 loading: false, 
                 message: '', 
                 messageType: '',
-                phoneNumber: ''
+                phoneNumber: '',
+                smsMessage: '',
+                wordCount: 0,
+                charCount: 0,
+                updateCounts() {
+                    this.wordCount = this.smsMessage.trim().split(/\s+/).filter(w => w.length > 0).length;
+                    this.charCount = this.smsMessage.length;
+                }
             }">
                 <div class="p-6">
                     <h3 class="mb-2 text-lg font-semibold text-gray-900">Test SMS</h3>
-                    <p class="mb-6 text-sm text-gray-600">Send a test SMS to verify your configuration is working correctly.</p>
+                    <p class="mb-4 text-sm text-gray-600">Send a test SMS to verify your configuration is working correctly.</p>
+                    
+                    <!-- VIKTIG ADVARSEL -->
+                    <div class="mb-6 p-4 border-l-4 border-yellow-500 rounded bg-yellow-50">
+                        <div class="flex items-start gap-3">
+                            <svg class="flex-shrink-0 w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                            <div>
+                                <p class="text-sm font-semibold text-yellow-800">⚠️ IMPORTANT - LIVE SMS CREDITS</p>
+                                <p class="mt-1 text-sm text-yellow-700">Each test SMS costs 1 credit. Maximum 50 words and 160 characters to ensure only 1 SMS is sent.</p>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Test Result Message -->
                     <div x-show="message" x-transition class="mb-4">
@@ -132,6 +152,16 @@
                     </div>
 
                     <form @submit.prevent="
+                        if (wordCount > 50) {
+                            message = 'Message exceeds 50 words limit. Please shorten your message.';
+                            messageType = 'error';
+                            return;
+                        }
+                        if (charCount > 160) {
+                            message = 'Message exceeds 160 characters limit. Please shorten your message.';
+                            messageType = 'error';
+                            return;
+                        }
                         loading = true;
                         message = '';
                         fetch('{{ route('dashboard.sms.test') }}', {
@@ -140,12 +170,15 @@
                                 'Content-Type': 'application/json',
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             },
-                            body: JSON.stringify({ phone_number: phoneNumber })
+                            body: JSON.stringify({ 
+                                phone_number: phoneNumber,
+                                message: smsMessage
+                            })
                         })
                         .then(response => response.json())
                         .then(data => {
                             loading = false;
-                            message = data.message;
+                            message = data.message + (data.credits_used ? ' (Credits used: ' + data.credits_used + ')' : '');
                             messageType = data.success ? 'success' : 'error';
                         })
                         .catch(error => {
@@ -164,20 +197,58 @@
                                 id="phone_number" 
                                 x-model="phoneNumber"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                placeholder="+47 12345678"
+                                placeholder="90039911 or 4790039911"
                                 required>
                             <p class="mt-1 text-sm text-gray-500">
-                                Include country code (e.g., +47 for Norway)
+                                Norwegian 8-digit number (e.g., 90039911) or with country code (e.g., 4790039911). No + symbol needed.
                             </p>
+                        </div>
+
+                        <!-- SMS Message Field -->
+                        <div class="mb-4">
+                            <label for="sms_message" class="block mb-1 text-sm font-medium text-gray-700">
+                                Test Message
+                            </label>
+                            <textarea 
+                                id="sms_message" 
+                                x-model="smsMessage"
+                                @input="updateCounts()"
+                                rows="4"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Enter your test message here..."
+                                required></textarea>
+                            
+                            <!-- Character and Word Counter -->
+                            <div class="flex justify-between mt-2 text-sm">
+                                <div>
+                                    <span :class="{ 'text-red-600 font-semibold': wordCount > 50, 'text-gray-600': wordCount <= 50 }">
+                                        Words: <span x-text="wordCount"></span>/50
+                                    </span>
+                                    <span class="mx-2">|</span>
+                                    <span :class="{ 'text-red-600 font-semibold': charCount > 160, 'text-gray-600': charCount <= 160 }">
+                                        Characters: <span x-text="charCount"></span>/160
+                                    </span>
+                                </div>
+                                <div>
+                                    <span :class="{ 
+                                        'text-green-600 font-semibold': wordCount <= 50 && charCount <= 160 && charCount > 0,
+                                        'text-red-600 font-semibold': wordCount > 50 || charCount > 160,
+                                        'text-gray-400': charCount === 0
+                                    }">
+                                        <span x-show="wordCount <= 50 && charCount <= 160 && charCount > 0">✓ 1 SMS</span>
+                                        <span x-show="wordCount > 50 || charCount > 160">⚠ Too long!</span>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Send Test SMS Button -->
                         <div class="flex justify-end">
                             <button 
                                 type="submit"
-                                :disabled="loading"
+                                :disabled="loading || wordCount > 50 || charCount > 160 || charCount === 0"
                                 class="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
-                                <span x-show="!loading">Send Test SMS</span>
+                                <span x-show="!loading">Send Test SMS (1 Credit)</span>
                                 <span x-show="loading" class="flex items-center gap-2">
                                     <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -194,4 +265,4 @@
     </div>
 </x-app-layout>
 
-{{-- SMS settings page - konfigurer API-nøkkel og test SMS-funksjonalitet --}}
+{{-- SMS settings page - konfigurer Teletopia og test SMS med 50-ords grense --}}

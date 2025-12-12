@@ -77,7 +77,8 @@ class SmsController extends Controller
      * Send a test SMS to verify configuration.
      * 
      * Sender en test-SMS til angitt telefonnummer for å verifisere
-     * at API-nøkkelen er korrekt konfigurert og at SMS-sending fungerer.
+     * at Teletopia-konfigurasjonen fungerer korrekt.
+     * VIKTIG: Bruker 1 SMS credit per test!
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -87,19 +88,52 @@ class SmsController extends Controller
         $user = Auth::user();
         $tenantId = $user->tenant_id;
 
-        // Valider input
+        // Valider input med strenge regler
         $validated = $request->validate([
-            'phone_number' => 'required|string|regex:/^[+]?[0-9]{8,15}$/',
+            'phone_number' => [
+                'required',
+                'string',
+                'regex:/^[+]?[0-9\s\-\(\)]{8,20}$/'
+            ],
+            'message' => [
+                'required',
+                'string',
+                'max:160', // Standard SMS lengde
+                function ($attribute, $value, $fail) {
+                    $wordCount = str_word_count($value);
+                    if ($wordCount > 50) {
+                        $fail("Message must not exceed 50 words (current: {$wordCount} words)");
+                    }
+                }
+            ]
         ]);
 
         // Hent SMS settings for tenant
         $smsSettings = SmsSettings::where('tenant_id', $tenantId)->first();
 
-        // Sjekk om settings eksisterer
-        if (!$smsSettings || empty($smsSettings->api_key)) {
+        // Sjekk om settings eksisterer og er enabled
+        if (!$smsSettings) {
             return response()->json([
                 'success' => false,
-                'message' => 'Please configure your API key first'
+                'message' => 'SMS settings not found. Please configure SMS first.'
+            ], 400);
+        }
+
+        if (!$smsSettings->enabled) {
+            return response()->json([
+                'success' => false,
+                'message' => 'SMS functionality is not enabled. Please enable it in settings.'
+            ], 400);
+        }
+
+        // Sjekk at Teletopia credentials er konfigurert
+        $username = config('services.teletopia.username', env('TELETOPIA_USERNAME'));
+        $password = config('services.teletopia.password', env('TELETOPIA_PASSWORD'));
+
+        if (empty($username) || empty($password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Teletopia credentials not configured in .env file'
             ], 400);
         }
 
@@ -108,13 +142,14 @@ class SmsController extends Controller
         $result = $smsService->sendSms(
             $tenantId,
             $validated['phone_number'],
-            'This is a test SMS from ReadySoft. Your SMS configuration is working correctly!'
+            $validated['message']
         );
 
-        // Returner resultat som JSON
+        // Returner resultat med credits info
         return response()->json([
             'success' => $result['success'],
-            'message' => $result['message']
+            'message' => $result['message'],
+            'credits_used' => $result['credits_used'] ?? 0
         ], $result['success'] ? 200 : 400);
     }
 }

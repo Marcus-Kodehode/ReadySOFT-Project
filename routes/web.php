@@ -72,8 +72,11 @@ Route::middleware(['auth', 'verified', 'subscription'])->group(function () {
     // SMS Settings (Phase 11)
     Route::prefix('dashboard/sms')->name('dashboard.sms')->group(function () {
         Route::get('/', [SmsController::class, 'index']);
-        Route::post('/', [SmsController::class, 'update'])->name('.update');
-        Route::post('/test', [SmsController::class, 'test'])->name('.test');
+        Route::put('/', [SmsController::class, 'update'])->name('.update');
+        // Rate limit: Max 5 test SMS per hour per user (beskytter mot misbruk)
+        Route::post('/test', [SmsController::class, 'test'])
+            ->middleware('throttle:5,60')
+            ->name('.test');
     });
     
     // Profile Management

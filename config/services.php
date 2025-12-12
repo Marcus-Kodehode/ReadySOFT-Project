@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'teletopia' => [
+        'username' => env('TELETOPIA_USERNAME'),
+        'password' => env('TELETOPIA_PASSWORD'),
+        'api_url' => env('TELETOPIA_API_URL', 'https://api1.teletopiasms.no/gateway/v3/json'),
+        'api_url_backup' => env('TELETOPIA_API_URL_BACKUP', 'https://api2.teletopiasms.no/gateway/v3/json'),
+    ],
+
 ];
