@@ -197,10 +197,10 @@
                                 id="phone_number" 
                                 x-model="phoneNumber"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                placeholder="90039911 or 4790039911"
+                                placeholder="90084821 or 4790084821"
                                 required>
                             <p class="mt-1 text-sm text-gray-500">
-                                Norwegian 8-digit number (e.g., 90039911) or with country code (e.g., 4790039911). No + symbol needed.
+                                Norwegian 8-digit number (e.g., 90084821) or with country code (e.g., 4790084821). No + symbol needed.
                             </p>
                         </div>
 
