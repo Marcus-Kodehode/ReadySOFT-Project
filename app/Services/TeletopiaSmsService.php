@@ -212,7 +212,7 @@ class TeletopiaSmsService
 
     /**
      * Normaliser telefonnummer til Teletopia format (UTEN +)
-     * Teletopia krever format: 4790039911 (ikke +4790039911)
+     * Teletopia krever format: 4712345678 (ikke +4712345678)
      */
     private function normalizePhoneNumber(string $phoneNumber): ?string
     {

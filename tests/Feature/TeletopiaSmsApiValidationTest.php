@@ -39,7 +39,7 @@ class TeletopiaSmsApiValidationTest extends TestCase
                     [
                         'accepted' => 1,
                         'messageId' => 'test_msg_12345',
-                        'recipient' => '4790039911',
+                        'recipient' => '4712345678',
                         'statusCode' => 1000,
                         'statusDescription' => 'accepted'
                     ]
@@ -50,7 +50,7 @@ class TeletopiaSmsApiValidationTest extends TestCase
         $smsService = new TeletopiaSmsService();
         $result = $smsService->sendSms(
             $tenant->id,
-            '90039911',
+            '12345678',
             'Test message for validation'
         );
 
@@ -84,15 +84,15 @@ class TeletopiaSmsApiValidationTest extends TestCase
 
             // 4. Auth struktur
             $checks['Auth Username'] = [
-                'expected' => 'y3330c5nuv2',
+                'expected' => 'your_username',
                 'actual' => $body['auth']['username'] ?? 'MISSING',
-                'pass' => isset($body['auth']['username']) && $body['auth']['username'] === 'y3330c5nuv2'
+                'pass' => isset($body['auth']['username']) && $body['auth']['username'] === 'your_username'
             ];
 
             $checks['Auth Password'] = [
-                'expected' => 'LlTM060VKuq30iaJQcpl9JLK',
+                'expected' => 'your_password',
                 'actual' => isset($body['auth']['password']) ? '***' . substr($body['auth']['password'], -4) : 'MISSING',
-                'pass' => isset($body['auth']['password']) && $body['auth']['password'] === 'LlTM060VKuq30iaJQcpl9JLK'
+                'pass' => isset($body['auth']['password']) && $body['auth']['password'] === 'your_password'
             ];
 
             // 5. Messages array
@@ -106,9 +106,9 @@ class TeletopiaSmsApiValidationTest extends TestCase
 
             // 6. Recipient (UTEN +)
             $checks['Recipient'] = [
-                'expected' => '4790039911 (no + symbol)',
+                'expected' => '4712345678 (no + symbol)',
                 'actual' => $message['recipient'] ?? 'MISSING',
-                'pass' => isset($message['recipient']) && $message['recipient'] === '4790039911' && !str_starts_with($message['recipient'], '+')
+                'pass' => isset($message['recipient']) && $message['recipient'] === '4712345678' && !str_starts_with($message['recipient'], '+')
             ];
 
             // 7. SenderType

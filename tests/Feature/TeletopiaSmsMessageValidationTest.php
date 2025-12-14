@@ -37,7 +37,7 @@ class TeletopiaSmsMessageValidationTest extends TestCase
                     [
                         'accepted' => 1,
                         'messageId' => 'test_id',
-                        'recipient' => '4790039911',
+                        'recipient' => '4712345678',
                         'statusCode' => 1000,
                         'statusDescription' => 'accepted'
                     ]
@@ -54,7 +54,7 @@ class TeletopiaSmsMessageValidationTest extends TestCase
         $charCount = strlen($validMessage);
         echo "  Ord: $wordCount/50, Tegn: $charCount/160\n";
         
-        $result = $smsService->sendSms($tenant->id, '90039911', $validMessage);
+        $result = $smsService->sendSms($tenant->id, '12345678', $validMessage);
         
         if ($result['success']) {
             echo "  ✅ GODKJENT - Melding sendt\n\n";
@@ -69,7 +69,7 @@ class TeletopiaSmsMessageValidationTest extends TestCase
         $charCount = strlen($tooManyWords);
         echo "  Ord: $wordCount/50, Tegn: $charCount/160\n";
         
-        $result = $smsService->sendSms($tenant->id, '90039911', $tooManyWords);
+        $result = $smsService->sendSms($tenant->id, '12345678', $tooManyWords);
         
         if (!$result['success']) {
             echo "  ✅ KORREKT AVVIST - " . $result['message'] . "\n\n";
@@ -84,7 +84,7 @@ class TeletopiaSmsMessageValidationTest extends TestCase
         $charCount = strlen($tooManyChars);
         echo "  Ord: $wordCount/50, Tegn: $charCount/160\n";
         
-        $result = $smsService->sendSms($tenant->id, '90039911', $tooManyChars);
+        $result = $smsService->sendSms($tenant->id, '12345678', $tooManyChars);
         
         if (!$result['success']) {
             echo "  ✅ KORREKT AVVIST - " . $result['message'] . "\n\n";
@@ -101,7 +101,7 @@ class TeletopiaSmsMessageValidationTest extends TestCase
         $charCount = strlen($exactlyFiftyWords);
         echo "  Ord: $wordCount/50, Tegn: $charCount/160\n";
         
-        $result = $smsService->sendSms($tenant->id, '90039911', $exactlyFiftyWords);
+        $result = $smsService->sendSms($tenant->id, '12345678', $exactlyFiftyWords);
         
         if ($result['success']) {
             echo "  ✅ GODKJENT - Melding sendt\n\n";

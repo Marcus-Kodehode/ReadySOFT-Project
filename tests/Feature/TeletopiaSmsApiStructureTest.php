@@ -37,7 +37,7 @@ class TeletopiaSmsApiStructureTest extends TestCase
                     [
                         'accepted' => 1,
                         'messageId' => 'test_message_id_12345',
-                        'recipient' => '4790039911',
+                        'recipient' => '4712345678',
                         'statusCode' => 1000,
                         'statusDescription' => 'accepted'
                     ]
@@ -49,7 +49,7 @@ class TeletopiaSmsApiStructureTest extends TestCase
         $smsService = new TeletopiaSmsService();
         $result = $smsService->sendSms(
             $tenant->id,
-            '90039911',
+            '12345678',
             'Test message'
         );
 
@@ -173,7 +173,7 @@ class TeletopiaSmsApiStructureTest extends TestCase
                     [
                         'accepted' => 1,
                         'messageId' => 'test_id',
-                        'recipient' => '4790039911',
+                        'recipient' => '4712345678',
                         'statusCode' => 1000,
                         'statusDescription' => 'accepted'
                     ]
@@ -185,11 +185,11 @@ class TeletopiaSmsApiStructureTest extends TestCase
 
         // Test forskjellige input formater
         $testCases = [
-            '90039911' => '4790039911',
-            '+47 900 39 911' => '4790039911',
-            '47-90-03-99-11' => '4790039911',
-            '4790039911' => '4790039911',
-            '+4790039911' => '4790039911',
+            '12345678' => '4712345678',
+            '+47 900 39 911' => '4712345678',
+            '47-90-03-99-11' => '4712345678',
+            '4712345678' => '4712345678',
+            '+4712345678' => '4712345678',
         ];
 
         foreach ($testCases as $input => $expected) {
