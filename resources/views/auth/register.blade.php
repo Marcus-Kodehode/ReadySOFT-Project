@@ -65,21 +65,27 @@
 
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
+            <x-input-label for="name">
+                {{ __('Name') }} <span class="text-red-500">*</span>
+            </x-input-label>
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
         <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
+            <x-input-label for="email">
+                {{ __('Email') }} <span class="text-red-500">*</span>
+            </x-input-label>
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
         <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <x-input-label for="password">
+                {{ __('Password') }} <span class="text-red-500">*</span>
+            </x-input-label>
 
             <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
@@ -91,7 +97,9 @@
 
         <!-- Confirm Password -->
         <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <x-input-label for="password_confirmation">
+                {{ __('Confirm Password') }} <span class="text-red-500">*</span>
+            </x-input-label>
 
             <x-text-input id="password_confirmation" class="block mt-1 w-full"
                             type="password"
@@ -102,7 +110,9 @@
 
         <!-- Business Name -->
         <div class="mt-4">
-            <x-input-label for="business_name" :value="__('Business Name')" />
+            <x-input-label for="business_name">
+                {{ __('Business Name') }} <span class="text-red-500">*</span>
+            </x-input-label>
             <x-text-input 
                 id="business_name" 
                 class="block mt-1 w-full" 
@@ -117,7 +127,9 @@
 
         <!-- Business Type -->
         <div class="mt-4">
-            <x-input-label for="business_type" :value="__('Business Type')" />
+            <x-input-label for="business_type">
+                {{ __('Business Type') }} <span class="text-red-500">*</span>
+            </x-input-label>
             <select id="business_type" name="business_type" class="block mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
                 <option value="">{{ __('Select Business Type') }}</option>
                 <option value="Cabin Rental" {{ old('business_type') == 'Cabin Rental' ? 'selected' : '' }}>Cabin Rental</option>
@@ -131,7 +143,9 @@
 
         <!-- Slug Preview -->
         <div class="mt-4">
-            <x-input-label for="slug" :value="__('Your Booking Page URL')" />
+            <x-input-label for="slug">
+                {{ __('Your Booking Page URL') }} <span class="text-red-500">*</span>
+            </x-input-label>
             <div class="flex items-center mt-1">
                 <span class="inline-flex items-center px-3 py-2 text-sm text-gray-600 bg-gray-50 border border-r-0 border-gray-300 rounded-l-lg">
                     {{ url('/') }}/

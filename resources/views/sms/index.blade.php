@@ -37,7 +37,7 @@
                         <!-- API Key Field -->
                         <div class="mb-6">
                             <label for="api_key" class="block mb-1 text-sm font-medium text-gray-700">
-                                API Key
+                                API Key <span class="text-red-500">*</span>
                             </label>
                             <input 
                                 type="password" 
@@ -198,7 +198,7 @@
                         <!-- Phone Number Field -->
                         <div class="mb-4">
                             <label for="phone_number" class="block mb-1 text-sm font-medium text-gray-700">
-                                Phone Number
+                                Phone Number <span class="text-red-500">*</span>
                             </label>
                             <input 
                                 type="tel" 
@@ -215,7 +215,7 @@
                         <!-- SMS Message Field -->
                         <div class="mb-4">
                             <label for="sms_message" class="block mb-1 text-sm font-medium text-gray-700">
-                                Test Message
+                                Test Message <span class="text-red-500">*</span>
                             </label>
                             <textarea 
                                 id="sms_message" 

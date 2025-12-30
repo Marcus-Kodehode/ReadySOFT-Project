@@ -1703,7 +1703,7 @@ Sørg for at alle forms har inline validering og tydelige feilmeldinger.
 - Alle views med forms
 
 **Akseptansekriterier:**
-- [ ] Alle påkrevde felter markert med *
+- [x] Alle påkrevde felter markert med *
 - [ ] Inline validering ved blur
 - [ ] Feilmeldinger under felt (ikke modal)
 - [ ] Grønn border + checkmark hvis OK
