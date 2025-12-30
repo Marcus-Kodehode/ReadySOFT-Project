@@ -764,8 +764,188 @@
                 </x-card>
             </div>
         </div>
+
+        <!-- Toast Component Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-gray-200">Toast Notification Component</h2>
+
+            <!-- Basic Toast Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Basic Toast</h3>
+                <x-card>
+                    <p class="mb-4 text-gray-700">Click the button below to trigger a toast notification in the top-right corner.</p>
+                    <x-button onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'This is a toast notification!' }))">
+                        Show Toast
+                    </x-button>
+                </x-card>
+            </div>
+
+            <!-- Different Messages Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Different Messages</h3>
+                <x-card>
+                    <div class="flex flex-wrap gap-3">
+                        <x-button onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'Resource created successfully!' }))">
+                            Success Message
+                        </x-button>
+                        <x-button variant="secondary" onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'Settings saved!' }))">
+                            Settings Saved
+                        </x-button>
+                        <x-button variant="danger" onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'Item deleted!' }))">
+                            Delete Notification
+                        </x-button>
+                    </div>
+                </x-card>
+            </div>
+
+            <!-- Auto-dismiss Demo Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Auto-dismiss (4 seconds)</h3>
+                <x-card>
+                    <p class="mb-4 text-gray-700">Toast notifications automatically disappear after 4 seconds.</p>
+                    <x-button onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'This will disappear in 4 seconds...' }))">
+                        Show Auto-dismiss Toast
+                    </x-button>
+                </x-card>
+            </div>
+
+            <!-- Multiple Toasts Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Multiple Toasts</h3>
+                <x-card>
+                    <p class="mb-4 text-gray-700">Triggering multiple toasts will replace the previous one (only one toast shown at a time).</p>
+                    <div class="flex flex-wrap gap-3">
+                        <x-button onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'First notification' }))">
+                            Toast 1
+                        </x-button>
+                        <x-button onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'Second notification' }))">
+                            Toast 2
+                        </x-button>
+                        <x-button onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'Third notification' }))">
+                            Toast 3
+                        </x-button>
+                    </div>
+                </x-card>
+            </div>
+
+            <!-- Real-world Examples Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Real-world Examples</h3>
+                <div class="space-y-4">
+                    <x-card>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Create Resource</h4>
+                                <p class="text-sm text-gray-600">Simulate resource creation</p>
+                            </div>
+                            <x-button onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'Resource created successfully!' }))">
+                                Create
+                            </x-button>
+                        </div>
+                    </x-card>
+
+                    <x-card>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Save Settings</h4>
+                                <p class="text-sm text-gray-600">Simulate settings save</p>
+                            </div>
+                            <x-button variant="secondary" onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'Settings saved successfully!' }))">
+                                Save
+                            </x-button>
+                        </div>
+                    </x-card>
+
+                    <x-card>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Copy Link</h4>
+                                <p class="text-sm text-gray-600">Simulate clipboard copy</p>
+                            </div>
+                            <x-button variant="secondary" onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'Link copied to clipboard!' }))">
+                                Copy
+                            </x-button>
+                        </div>
+                    </x-card>
+                </div>
+            </div>
+
+            <!-- Usage Examples Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Usage Examples</h3>
+                <x-card>
+                    <pre class="text-sm text-gray-700 overflow-x-auto"><code>&lt;!-- From JavaScript --&gt;
+&lt;script&gt;
+window.dispatchEvent(new CustomEvent('notify', {
+    detail: 'Your message here!'
+}));
+&lt;/script&gt;
+
+&lt;!-- From Alpine.js component --&gt;
+&lt;button @click="$dispatch('notify', 'Action completed!')"&gt;
+    Click Me
+&lt;/button&gt;
+
+&lt;!-- From Blade (with session flash) --&gt;
+@if(session('success'))
+&lt;script&gt;
+window.dispatchEvent(new CustomEvent('notify', {
+    detail: '{{ session('success') }}'
+}));
+&lt;/script&gt;
+@endif
+
+&lt;!-- From inline onclick --&gt;
+&lt;button onclick="window.dispatchEvent(new CustomEvent('notify', { detail: 'Saved!' }))"&gt;
+    Save
+&lt;/button&gt;</code></pre>
+                </x-card>
+            </div>
+
+            <!-- Features Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Features</h3>
+                <x-card>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span><strong>Auto-dismiss:</strong> Automatically disappears after 4 seconds</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span><strong>Manual close:</strong> Can be closed by clicking the X button</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span><strong>Smooth animations:</strong> Slide-in from right with fade effect</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span><strong>Global availability:</strong> Works on all pages using app layout</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span><strong>Accessible:</strong> Screen reader friendly with proper ARIA labels</span>
+                        </li>
+                    </ul>
+                </x-card>
+            </div>
+        </div>
     </div>
+
+    <!-- Toast Component (included in layout, but shown here for demo) -->
+    <x-toast />
 </body>
 </html>
 
-{{-- Demo page for button, card, badge, alert, and modal components - shows all variants and usage examples --}}
+{{-- Demo page for button, card, badge, alert, modal, and toast components - shows all variants and usage examples --}}

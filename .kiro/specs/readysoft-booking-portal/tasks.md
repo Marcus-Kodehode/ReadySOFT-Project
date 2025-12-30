@@ -1652,12 +1652,12 @@ Implementer global toast notification system med Alpine.js.
 - `resources/views/layouts/app.blade.php`
 
 **Akseptansekriterier:**
-- [ ] Toast component i layout (topp høyre hjørne)
-- [ ] Alpine.js event listener: @notify.window
-- [ ] Auto-dismiss etter 4 sekunder
-- [ ] Kan lukkes manuelt
-- [ ] Smooth slide-in/out animasjon
-- [ ] Følger design guide (design.md)
+- [x] Toast component i layout (topp høyre hjørne)
+- [x] Alpine.js event listener: @notify.window
+- [x] Auto-dismiss etter 4 sekunder
+- [x] Kan lukkes manuelt
+- [x] Smooth slide-in/out animasjon
+- [x] Følger design guide (design.md) LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 15 I EN TASK_15_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE.
 
 **Bruk:**
 ```blade
@@ -1686,7 +1686,7 @@ Legg til loading states på alle forms og knapper.
 - [ ] Submit knapper viser "Loading..." tekst og spinner ved submit
 - [ ] Knapper disables ved submit
 - [ ] Alpine.js x-data for loading state
-- [ ] Følger design guide (design.md)
+- [ ] Følger design guide (design.md) LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 15 I EN TASK_15_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
 
@@ -1708,7 +1708,7 @@ Sørg for at alle forms har inline validering og tydelige feilmeldinger.
 - [ ] Feilmeldinger under felt (ikke modal)
 - [ ] Grønn border + checkmark hvis OK
 - [ ] Rød border + feilmelding hvis feil
-- [ ] Submit knapp disabled hvis form invalid
+- [ ] Submit knapp disabled hvis form invalid. LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 15 I EN TASK_15_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
 
@@ -1750,7 +1750,7 @@ Manuelt test alle hovedbrukerreiser end-to-end.
 - [ ] Alle brukerreiser fungerer uten feil
 - [ ] Alle edge cases håndteres gracefully
 - [ ] Ingen console errors
-- [ ] Fungerer på mobil og desktop
+- [ ] Fungerer på mobil og desktop LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 15 I EN TASK_15_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
 
@@ -1768,7 +1768,7 @@ Gjennomgå alle controllers og optimaliser queries.
 - [ ] Ingen N+1 query problemer
 - [ ] Select kun nødvendige kolonner hvor relevant
 - [ ] Indexes på alle foreign keys
-- [ ] Test med Laravel Debugbar eller Telescope
+- [ ] Test med Laravel Debugbar eller Telescope. LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 15 I EN TASK_15_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
 
@@ -1814,7 +1814,7 @@ Oppdater README med setup-instruksjoner og feature-oversikt.
 - [ ] Setup instruksjoner (database, .env, migrations, seeding)
 - [ ] Hvordan kjøre prosjektet
 - [ ] Test-brukere (admin og tenant)
-- [ ] Teknologi stack
+- [ ] Teknologi stack LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 16 I EN TASK_16_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
 
@@ -1834,7 +1834,7 @@ Sørg for at .env.example inneholder alle nødvendige environment variabler.
 - [ ] APP_* variabler
 - [ ] DB_* variabler
 - [ ] TELETOPIA_API_URL (hvis brukt)
-- [ ] Kommentarer for viktige variabler
+- [ ] Kommentarer for viktige variabler LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 16 I EN TASK_16_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
 
@@ -1854,7 +1854,7 @@ Gjennomgå all kode for konsistens og kvalitet.
 - [ ] Ingen commented-out kode
 - [ ] Konsistent bruk av Tailwind classes
 - [ ] Alle brukersynlige tekster på engelsk
-- [ ] Alle kommentarer på norsk
+- [ ] Alle kommentarer på norsk LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 16 I EN TASK_16_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
 
