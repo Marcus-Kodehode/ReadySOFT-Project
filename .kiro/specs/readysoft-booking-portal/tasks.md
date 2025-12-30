@@ -1684,9 +1684,9 @@ Legg til loading states på alle forms og knapper.
 
 **Akseptansekriterier:**
 - [x] Submit knapper viser "Loading..." tekst og spinner ved submit
-- [ ] Knapper disables ved submit
-- [ ] Alpine.js x-data for loading state
-- [ ] Følger design guide (design.md) LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 15 I EN TASK_15_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
+- [x] Knapper disables ved submit
+- [x] Alpine.js x-data for loading state
+- [x] Følger design guide (design.md) LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 15 I EN TASK_15_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
 
