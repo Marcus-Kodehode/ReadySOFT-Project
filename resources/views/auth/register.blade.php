@@ -13,6 +13,17 @@
         checkTimeout: null,
         errors: {},
         touched: {},
+        isFormValid() {
+            return this.name.trim().length >= 2 &&
+                   this.email.trim().length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email) &&
+                   this.password.length >= 8 &&
+                   this.passwordConfirmation === this.password &&
+                   this.businessName.trim().length >= 3 &&
+                   this.businessType !== '' &&
+                   this.slug.length >= 2 &&
+                   this.slugAvailable === true &&
+                   Object.keys(this.errors).length === 0;
+        },
         validateName() {
             this.touched.name = true;
             if (!this.name || this.name.trim().length === 0) {
@@ -444,9 +455,13 @@
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ms-4">
+            <button 
+                type="submit"
+                :disabled="!isFormValid()"
+                :class="isFormValid() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'"
+                class="ms-4 inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
                 {{ __('Register') }}
-            </x-primary-button>
+            </button>
         </div>
     </form>
 </x-guest-layout>

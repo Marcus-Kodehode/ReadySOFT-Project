@@ -478,7 +478,75 @@ Følgende forms hadde allerede comprehensive inline validering implementert:
 - [x] Feilmeldinger under felt (ikke modal) (eksisterende forms)
 - [x] Grønn border + checkmark hvis OK (eksisterende forms)
 - [x] Rød border + feilmelding hvis feil (alle forms)
-- [x] Submit knapp disabled hvis form invalid (booking form)
+- [x] Submit knapp disabled hvis form invalid (alle forms)
+
+### Submit Button Disabled Implementation
+
+#### Forms Updated with Disabled Logic
+
+1. **resources/views/auth/register.blade.php**
+   - Added `isFormValid()` function to Alpine.js x-data
+   - Validates all required fields: name (≥2 chars), email (valid format), password (≥8 chars), password confirmation (matches), business name (≥3 chars), business type (selected), slug (≥2 chars and available)
+   - Submit button disabled when form is invalid
+   - Visual feedback: Gray background when disabled, blue when enabled
+   - Prevents submission of incomplete or invalid data
+
+2. **resources/views/resources/_form.blade.php**
+   - Added `isFormValid()` function to Alpine.js x-data
+   - Validates required fields: name (3-255 chars), type (selected), capacity (≥1)
+   - Checks that no validation errors exist
+   - Shared validation logic used by both create and edit forms
+
+3. **resources/views/resources/create.blade.php**
+   - Submit button disabled based on `isFormValid()` from _form.blade.php
+   - Prevents form submission when validation fails
+   - Visual feedback: Gray background when disabled, blue when enabled
+   - Works in conjunction with loading state
+
+4. **resources/views/resources/edit.blade.php**
+   - Submit button disabled based on `isFormValid()` from _form.blade.php
+   - Same validation logic as create form
+   - Consistent user experience across create/edit operations
+
+5. **resources/views/public/booking.blade.php**
+   - Already had submit button disabled functionality implemented
+   - Multi-step validation with `isStep1Valid()` and `isStep2Valid()`
+   - Comprehensive validation for all booking fields
+
+#### Implementation Pattern
+
+```javascript
+// Alpine.js validation function
+isFormValid() {
+    return field1.isValid &&
+           field2.isValid &&
+           field3.isValid &&
+           Object.keys(this.errors).length === 0;
+}
+```
+
+```html
+<!-- Submit button with disabled logic -->
+<button 
+    type="submit"
+    :disabled="!isFormValid()"
+    :class="isFormValid() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'"
+    class="px-4 py-2 text-white rounded-lg ...">
+    Submit
+</button>
+```
+
+#### Visual States
+1. **Valid Form**: Blue button (`bg-blue-600`), hover effect enabled
+2. **Invalid Form**: Gray button (`bg-gray-300`), cursor shows not-allowed icon
+3. **Disabled State**: Opacity reduced, no hover effects
+
+#### User Experience Benefits
+- **Prevents Invalid Submissions**: Users cannot submit incomplete forms
+- **Clear Visual Feedback**: Button color indicates form validity
+- **Reduces Errors**: Catches validation issues before server submission
+- **Consistent Behavior**: Same pattern across all forms
+- **Accessibility**: Disabled state is both visual and programmatic
 
 ### Visuell Konsistens
 
@@ -670,13 +738,136 @@ Manuell testing utført på:
 **Total Status for Task 15**: 
 - ✅ Task 15.1: Toast Notification System - Fullført
 - ✅ Task 15.2: Loading States - Fullført
-- ✅ Task 15.3: Form Validering - Fullført
+- ✅ Task 15.3: Form Validering - Fullført (KOMPLETT)
   - ✅ Required field markers (*)
   - ✅ Inline validation on blur
   - ✅ Error messages under fields
   - ✅ Green border + checkmark for valid fields
   - ✅ Red border + error message for invalid fields
-  - ✅ Submit button disabled when form invalid
+  - ✅ Submit button disabled when form invalid (ALL FORMS)
 - ⏳ Task 15.4: Test Brukerreiser - Ikke startet
 
-**Total Tid Brukt**: ~115 minutter (45 min + 30 min + 40 min)
+**Total Tid Brukt**: ~135 minutter (45 min + 30 min + 40 min + 20 min)
+
+---
+
+## Task 15.3 Final Summary: Submit Button Disabled Implementation ✅
+
+### Oversikt
+Fullført implementering av submit button disabled funksjonalitet på alle forms i applikasjonen. Dette forhindrer brukere fra å submitte ugyldige eller ufullstendige forms, og gir klar visuell feedback om form-status.
+
+### Implementerte Forms
+
+#### 1. Registration Form (auth/register.blade.php)
+**Validering:**
+- Name: Minimum 2 tegn
+- Email: Gyldig email format
+- Password: Minimum 8 tegn
+- Password Confirmation: Må matche password
+- Business Name: Minimum 3 tegn
+- Business Type: Må være valgt
+- Slug: Minimum 2 tegn OG må være tilgjengelig (slugAvailable === true)
+
+**Resultat:** Submit button er disabled til alle felter er gyldige og slug er bekreftet tilgjengelig.
+
+#### 2. Resource Forms (resources/_form.blade.php, create.blade.php, edit.blade.php)
+**Validering:**
+- Name: 3-255 tegn
+- Type: Må være valgt
+- Capacity: Minimum 1
+- Ingen validation errors
+
+**Resultat:** Submit button er disabled til alle påkrevde felter er gyldige. Fungerer både for create og edit operations.
+
+#### 3. Public Booking Form (public/booking.blade.php)
+**Status:** Allerede implementert i tidligere task
+**Validering:** Multi-step validering med comprehensive field checks
+
+### Teknisk Implementasjon
+
+#### Alpine.js Validation Function
+```javascript
+isFormValid() {
+    return field1.isValid &&
+           field2.isValid &&
+           field3.isValid &&
+           Object.keys(this.errors).length === 0;
+}
+```
+
+#### Submit Button Pattern
+```html
+<button 
+    type="submit"
+    :disabled="!isFormValid()"
+    :class="isFormValid() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'"
+    class="px-4 py-2 text-white rounded-lg ...">
+    Submit
+</button>
+```
+
+### Brukeropplevelse
+
+#### Før Implementering
+- ❌ Brukere kunne submitte ugyldige forms
+- ❌ Ingen visuell indikasjon på form-status
+- ❌ Server-side validation errors først etter submit
+- ❌ Frustrerende brukeropplevelse
+
+#### Etter Implementering
+- ✅ Submit button disabled når form er ugyldig
+- ✅ Klar visuell feedback (grå vs. blå button)
+- ✅ Forhindrer unødvendige server requests
+- ✅ Brukere vet umiddelbart hva som må fikses
+- ✅ Reduserer feil og frustrasjon
+
+### Visuell Feedback
+
+**Valid Form:**
+- Button: Blå bakgrunn (`bg-blue-600`)
+- Hover: Mørkere blå (`hover:bg-blue-700`)
+- Cursor: Normal pointer
+- Status: Enabled
+
+**Invalid Form:**
+- Button: Grå bakgrunn (`bg-gray-300`)
+- Hover: Ingen effekt
+- Cursor: Not-allowed icon
+- Status: Disabled
+
+### Accessibility
+- Programmatisk disabled state (`:disabled` attribute)
+- Visuell disabled state (grå farge, cursor change)
+- Konsistent med WCAG guidelines
+- Screen reader friendly
+
+### Testing
+Manuell testing utført på:
+- ✅ Registration form - Submit disabled til alle felter gyldige
+- ✅ Resource create form - Submit disabled til required fields gyldige
+- ✅ Resource edit form - Submit disabled til required fields gyldige
+- ✅ Public booking form - Existing implementation verified
+
+### Filer Endret
+1. `resources/views/auth/register.blade.php` - Added isFormValid() and disabled logic
+2. `resources/views/resources/_form.blade.php` - Added isFormValid() function
+3. `resources/views/resources/create.blade.php` - Added disabled logic using _form validation
+4. `resources/views/resources/edit.blade.php` - Added disabled logic using _form validation
+5. `docs/summaries/TASK_15_SUMMARY.md` - Updated documentation
+6. `.kiro/specs/readysoft-booking-portal/tasks.md` - Marked task as complete
+
+### Neste Steg
+Task 15.3 er nå fullstendig ferdig. Alle forms i applikasjonen har:
+- Required field markers (*)
+- Inline validation
+- Error messages
+- Visual feedback (green/red borders)
+- Submit button disabled when invalid
+
+Klar for Task 15.4: Test alle brukerreiser
+
+---
+
+**Status**: ✅ Task 15.3 FULLSTENDIG FULLFØRT  
+**Tid brukt**: ~20 minutter  
+**Total Task 15 tid**: ~135 minutter

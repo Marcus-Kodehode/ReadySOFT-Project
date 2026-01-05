@@ -1708,7 +1708,7 @@ Sørg for at alle forms har inline validering og tydelige feilmeldinger.
 - [x] Feilmeldinger under felt (ikke modal)
 - [x] Grønn border + checkmark hvis OK
 - [x] Rød border + feilmelding hvis feil
-- [ ] Submit knapp disabled hvis form invalid. LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 15 I EN TASK_15_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
+- [x] Submit knapp disabled hvis form invalid. LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 15 I EN TASK_15_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
 

@@ -40,6 +40,14 @@
         @endforeach
     },
     errors: {},
+    isFormValid() {
+        return this.name.trim().length >= 3 && 
+               this.name.trim().length <= 255 &&
+               this.type !== '' &&
+               this.capacity !== '' && 
+               parseInt(this.capacity) >= 1 &&
+               Object.keys(this.errors).filter(key => !key.startsWith('time_')).length === 0;
+    },
     validateName() {
         if (this.name.trim() === '') {
             this.errors.name = 'Name is required';
