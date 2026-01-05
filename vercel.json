@@ -1,22 +1,25 @@
 {
   "version": 2,
-  "framework": null,
-  "buildCommand": "composer install --no-dev --optimize-autoloader && npm install && npm run build",
-  "outputDirectory": "public",
-  "installCommand": "echo 'Skipping default install'",
-  "functions": {
-    "api/index.php": {
-      "runtime": "vercel-php@0.7.1",
-      "maxDuration": 10
+  "builds": [
+    {
+      "src": "api/index.php",
+      "use": "vercel-php@0.7.1"
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "public"
+      }
     }
-  },
+  ],
   "routes": [
     {
       "src": "/build/(.*)",
       "dest": "/build/$1"
     },
     {
-      "src": "/(css|js|images|fonts)/(.*)",
+      "src": "/(css|js|images|fonts|favicon.ico|robots.txt)/(.*)",
       "dest": "/$1/$2"
     },
     {
@@ -30,6 +33,7 @@
     "LOG_CHANNEL": "stderr",
     "SESSION_DRIVER": "cookie",
     "CACHE_DRIVER": "array",
-    "QUEUE_CONNECTION": "sync"
+    "QUEUE_CONNECTION": "sync",
+    "VIEW_COMPILED_PATH": "/tmp/views"
   }
 }
