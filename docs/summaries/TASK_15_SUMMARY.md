@@ -477,8 +477,137 @@ Følgende forms hadde allerede comprehensive inline validering implementert:
 - [x] Inline validering ved blur (eksisterende forms)
 - [x] Feilmeldinger under felt (ikke modal) (eksisterende forms)
 - [x] Grønn border + checkmark hvis OK (eksisterende forms)
-- [x] Rød border + feilmelding hvis feil (eksisterende forms)
+- [x] Rød border + feilmelding hvis feil (alle forms)
 - [x] Submit knapp disabled hvis form invalid (booking form)
+
+### Visuell Konsistens
+
+#### Asterisk Styling
+```html
+<span class="text-red-500">*</span>
+```
+- Konsistent rød farge (`text-red-500`)
+- Plassert rett etter label-teksten
+- Tydelig synlig uten å være påtrengende
+
+#### Label Pattern
+```html
+<x-input-label for="field_name">
+    {{ __('Field Label') }} <span class="text-red-500">*</span>
+</x-input-label>
+```
+
+Eller for inline labels:
+```html
+<label for="field_name" class="block mb-1 text-sm font-medium text-gray-700">
+    Field Label <span class="text-red-500">*</span>
+</label>
+```
+
+### Red Border + Error Message Implementation
+
+#### Pattern for All Forms
+Alle input fields følger nå dette Alpine.js mønsteret for validering:
+
+```html
+<input 
+    type="text" 
+    x-model="fieldName"
+    @blur="validateField()"
+    @input="if(touched.fieldName) validateField()"
+    :class="{
+        'border-green-300 focus:ring-green-500': touched.fieldName && !errors.fieldName && fieldName.length > 0,
+        'border-red-300 focus:ring-red-500': errors.fieldName,
+        'border-gray-300 focus:ring-blue-500': !touched.fieldName || (!errors.fieldName && fieldName.length === 0)
+    }"
+    class="block mt-1 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
+/>
+
+<!-- Success Checkmark -->
+<p x-show="touched.fieldName && !errors.fieldName && fieldName.length > 0" 
+   class="flex items-center gap-1 mt-1 text-sm text-green-600">
+    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+    </svg>
+    Valid
+</p>
+
+<!-- Error Message -->
+<p x-show="errors.fieldName" x-text="errors.fieldName" 
+   class="flex items-center gap-1 mt-1 text-sm text-red-600">
+</p>
+```
+
+#### Alpine.js Validation State
+```javascript
+x-data="{
+    fieldName: '',
+    errors: {},
+    touched: {},
+    validateField() {
+        this.touched.fieldName = true;
+        if (!this.fieldName || this.fieldName.trim().length === 0) {
+            this.errors.fieldName = 'Field is required';
+        } else if (/* additional validation */) {
+            this.errors.fieldName = 'Validation error message';
+        } else {
+            delete this.errors.fieldName;
+        }
+    }
+}"
+```
+
+#### Forms Updated with Red Border Validation
+
+1. **resources/views/auth/register.blade.php**
+   - Name field: Red border on error, green on valid
+   - Email field: Red border on error, green on valid
+   - Password field: Red border on error, green on valid (min 8 chars)
+   - Password confirmation: Red border on error, green on valid (must match)
+   - Business name: Red border on error, green on valid
+   - Business type: Red border on error, green on valid
+   - Slug: Already had red border validation
+
+2. **resources/views/auth/login.blade.php**
+   - Already had red border validation implemented
+
+3. **resources/views/auth/forgot-password.blade.php**
+   - Already had red border validation implemented
+
+4. **resources/views/auth/reset-password.blade.php**
+   - Already had red border validation implemented
+
+5. **resources/views/profile/partials/update-profile-information-form.blade.php**
+   - Already had red border validation implemented
+
+6. **resources/views/profile/partials/update-password-form.blade.php**
+   - Already had red border validation implemented
+
+7. **resources/views/resources/_form.blade.php**
+   - Already had red border validation implemented
+
+8. **resources/views/public/booking.blade.php**
+   - Already had red border validation implemented
+
+#### Validation Triggers
+- **@blur**: Validates when user leaves the field
+- **@input**: Re-validates on input if field has been touched
+- **touched state**: Prevents showing errors before user interacts with field
+
+#### Visual States
+1. **Untouched**: Gray border (`border-gray-300`)
+2. **Valid**: Green border + checkmark (`border-green-300`, green text)
+3. **Invalid**: Red border + error message (`border-red-300`, red text)
+
+#### Error Message Styling
+```html
+<p class="flex items-center gap-1 mt-1 text-sm text-red-600">
+    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+    </svg>
+    Error message text
+</p>
+```
 
 ### Visuell Konsistens
 
@@ -541,8 +670,13 @@ Manuell testing utført på:
 **Total Status for Task 15**: 
 - ✅ Task 15.1: Toast Notification System - Fullført
 - ✅ Task 15.2: Loading States - Fullført
-- ✅ Task 15.3: Form Validering (Required Field Markers) - Fullført
-- ⏳ Task 15.3: Form Validering (Remaining criteria) - Delvis fullført
+- ✅ Task 15.3: Form Validering - Fullført
+  - ✅ Required field markers (*)
+  - ✅ Inline validation on blur
+  - ✅ Error messages under fields
+  - ✅ Green border + checkmark for valid fields
+  - ✅ Red border + error message for invalid fields
+  - ✅ Submit button disabled when form invalid
 - ⏳ Task 15.4: Test Brukerreiser - Ikke startet
 
-**Total Tid Brukt**: ~95 minutter (45 min + 30 min + 20 min)
+**Total Tid Brukt**: ~115 minutter (45 min + 30 min + 40 min)

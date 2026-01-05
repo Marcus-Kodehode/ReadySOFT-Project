@@ -1,11 +1,79 @@
 <x-guest-layout>
     <form method="POST" action="{{ route('register') }}" x-data="{
+        name: '{{ old('name') }}',
+        email: '{{ old('email') }}',
+        password: '',
+        passwordConfirmation: '',
         businessName: '{{ old('business_name') }}',
+        businessType: '{{ old('business_type') }}',
         slug: '{{ old('slug') }}',
         slugAvailable: null,
         checking: false,
         suggestions: [],
         checkTimeout: null,
+        errors: {},
+        touched: {},
+        validateName() {
+            this.touched.name = true;
+            if (!this.name || this.name.trim().length === 0) {
+                this.errors.name = 'Name is required';
+            } else if (this.name.trim().length < 2) {
+                this.errors.name = 'Name must be at least 2 characters';
+            } else {
+                delete this.errors.name;
+            }
+        },
+        validateEmail() {
+            this.touched.email = true;
+            if (!this.email || this.email.trim().length === 0) {
+                this.errors.email = 'Email is required';
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+                this.errors.email = 'Please enter a valid email address';
+            } else {
+                delete this.errors.email;
+            }
+        },
+        validatePassword() {
+            this.touched.password = true;
+            if (!this.password || this.password.length === 0) {
+                this.errors.password = 'Password is required';
+            } else if (this.password.length < 8) {
+                this.errors.password = 'Password must be at least 8 characters';
+            } else {
+                delete this.errors.password;
+            }
+            if (this.touched.passwordConfirmation) {
+                this.validatePasswordConfirmation();
+            }
+        },
+        validatePasswordConfirmation() {
+            this.touched.passwordConfirmation = true;
+            if (!this.passwordConfirmation || this.passwordConfirmation.length === 0) {
+                this.errors.passwordConfirmation = 'Password confirmation is required';
+            } else if (this.passwordConfirmation !== this.password) {
+                this.errors.passwordConfirmation = 'Passwords do not match';
+            } else {
+                delete this.errors.passwordConfirmation;
+            }
+        },
+        validateBusinessName() {
+            this.touched.businessName = true;
+            if (!this.businessName || this.businessName.trim().length === 0) {
+                this.errors.businessName = 'Business name is required';
+            } else if (this.businessName.trim().length < 3) {
+                this.errors.businessName = 'Business name must be at least 3 characters';
+            } else {
+                delete this.errors.businessName;
+            }
+        },
+        validateBusinessType() {
+            this.touched.businessType = true;
+            if (!this.businessType || this.businessType === '') {
+                this.errors.businessType = 'Business type is required';
+            } else {
+                delete this.errors.businessType;
+            }
+        },
         generateSlug() {
             // Konverter til lowercase
             let slug = this.businessName.toLowerCase();
@@ -68,7 +136,35 @@
             <x-input-label for="name">
                 {{ __('Name') }} <span class="text-red-500">*</span>
             </x-input-label>
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <input 
+                id="name" 
+                class="block mt-1 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent" 
+                :class="{
+                    'border-green-300 focus:ring-green-500': touched.name && !errors.name && name.length > 0,
+                    'border-red-300 focus:ring-red-500': errors.name,
+                    'border-gray-300 focus:ring-blue-500': !touched.name || (!errors.name && name.length === 0)
+                }"
+                type="text" 
+                name="name" 
+                x-model="name"
+                @blur="validateName()"
+                @input="if(touched.name) validateName()"
+                required 
+                autofocus 
+                autocomplete="name" />
+            
+            <!-- Success Checkmark -->
+            <p x-show="touched.name && !errors.name && name.length > 0" class="flex items-center gap-1 mt-1 text-sm text-green-600">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                Valid name
+            </p>
+            
+            <!-- Error Message -->
+            <p x-show="errors.name" x-text="errors.name" class="flex items-center gap-1 mt-1 text-sm text-red-600">
+            </p>
+            
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
@@ -77,7 +173,34 @@
             <x-input-label for="email">
                 {{ __('Email') }} <span class="text-red-500">*</span>
             </x-input-label>
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <input 
+                id="email" 
+                class="block mt-1 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent" 
+                :class="{
+                    'border-green-300 focus:ring-green-500': touched.email && !errors.email && email.length > 0,
+                    'border-red-300 focus:ring-red-500': errors.email,
+                    'border-gray-300 focus:ring-blue-500': !touched.email || (!errors.email && email.length === 0)
+                }"
+                type="email" 
+                name="email" 
+                x-model="email"
+                @blur="validateEmail()"
+                @input="if(touched.email) validateEmail()"
+                required 
+                autocomplete="username" />
+            
+            <!-- Success Checkmark -->
+            <p x-show="touched.email && !errors.email && email.length > 0" class="flex items-center gap-1 mt-1 text-sm text-green-600">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                Valid email
+            </p>
+            
+            <!-- Error Message -->
+            <p x-show="errors.email" x-text="errors.email" class="flex items-center gap-1 mt-1 text-sm text-red-600">
+            </p>
+            
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -87,10 +210,33 @@
                 {{ __('Password') }} <span class="text-red-500">*</span>
             </x-input-label>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <input 
+                id="password" 
+                class="block mt-1 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
+                :class="{
+                    'border-green-300 focus:ring-green-500': touched.password && !errors.password && password.length >= 8,
+                    'border-red-300 focus:ring-red-500': errors.password,
+                    'border-gray-300 focus:ring-blue-500': !touched.password || (!errors.password && password.length < 8)
+                }"
+                type="password"
+                name="password"
+                x-model="password"
+                @blur="validatePassword()"
+                @input="if(touched.password) validatePassword()"
+                required 
+                autocomplete="new-password" />
+            
+            <!-- Success Checkmark -->
+            <p x-show="touched.password && !errors.password && password.length >= 8" class="flex items-center gap-1 mt-1 text-sm text-green-600">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                Valid password
+            </p>
+            
+            <!-- Error Message -->
+            <p x-show="errors.password" x-text="errors.password" class="flex items-center gap-1 mt-1 text-sm text-red-600">
+            </p>
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
@@ -101,9 +247,33 @@
                 {{ __('Confirm Password') }} <span class="text-red-500">*</span>
             </x-input-label>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+            <input 
+                id="password_confirmation" 
+                class="block mt-1 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
+                :class="{
+                    'border-green-300 focus:ring-green-500': touched.passwordConfirmation && !errors.passwordConfirmation && passwordConfirmation.length > 0,
+                    'border-red-300 focus:ring-red-500': errors.passwordConfirmation,
+                    'border-gray-300 focus:ring-blue-500': !touched.passwordConfirmation || (!errors.passwordConfirmation && passwordConfirmation.length === 0)
+                }"
+                type="password"
+                name="password_confirmation" 
+                x-model="passwordConfirmation"
+                @blur="validatePasswordConfirmation()"
+                @input="if(touched.passwordConfirmation) validatePasswordConfirmation()"
+                required 
+                autocomplete="new-password" />
+            
+            <!-- Success Checkmark -->
+            <p x-show="touched.passwordConfirmation && !errors.passwordConfirmation && passwordConfirmation.length > 0" class="flex items-center gap-1 mt-1 text-sm text-green-600">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                Passwords match
+            </p>
+            
+            <!-- Error Message -->
+            <p x-show="errors.passwordConfirmation" x-text="errors.passwordConfirmation" class="flex items-center gap-1 mt-1 text-sm text-red-600">
+            </p>
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
@@ -113,15 +283,34 @@
             <x-input-label for="business_name">
                 {{ __('Business Name') }} <span class="text-red-500">*</span>
             </x-input-label>
-            <x-text-input 
+            <input 
                 id="business_name" 
-                class="block mt-1 w-full" 
+                class="block mt-1 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent" 
+                :class="{
+                    'border-green-300 focus:ring-green-500': touched.businessName && !errors.businessName && businessName.length > 0,
+                    'border-red-300 focus:ring-red-500': errors.businessName,
+                    'border-gray-300 focus:ring-blue-500': !touched.businessName || (!errors.businessName && businessName.length === 0)
+                }"
                 type="text" 
                 name="business_name" 
                 x-model="businessName"
-                @input="generateSlug()"
+                @input="generateSlug(); if(touched.businessName) validateBusinessName()"
+                @blur="validateBusinessName()"
                 required 
                 autocomplete="organization" />
+            
+            <!-- Success Checkmark -->
+            <p x-show="touched.businessName && !errors.businessName && businessName.length > 0" class="flex items-center gap-1 mt-1 text-sm text-green-600">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                Valid business name
+            </p>
+            
+            <!-- Error Message -->
+            <p x-show="errors.businessName" x-text="errors.businessName" class="flex items-center gap-1 mt-1 text-sm text-red-600">
+            </p>
+            
             <x-input-error :messages="$errors->get('business_name')" class="mt-2" />
         </div>
 
@@ -130,7 +319,19 @@
             <x-input-label for="business_type">
                 {{ __('Business Type') }} <span class="text-red-500">*</span>
             </x-input-label>
-            <select id="business_type" name="business_type" class="block mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+            <select 
+                id="business_type" 
+                name="business_type" 
+                x-model="businessType"
+                @blur="validateBusinessType()"
+                @change="validateBusinessType()"
+                class="block mt-1 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent" 
+                :class="{
+                    'border-green-300 focus:ring-green-500': touched.businessType && !errors.businessType && businessType !== '',
+                    'border-red-300 focus:ring-red-500': errors.businessType,
+                    'border-gray-300 focus:ring-blue-500': !touched.businessType || (!errors.businessType && businessType === '')
+                }"
+                required>
                 <option value="">{{ __('Select Business Type') }}</option>
                 <option value="Cabin Rental" {{ old('business_type') == 'Cabin Rental' ? 'selected' : '' }}>Cabin Rental</option>
                 <option value="Hair Salon" {{ old('business_type') == 'Hair Salon' ? 'selected' : '' }}>Hair Salon</option>
@@ -138,6 +339,19 @@
                 <option value="Room Rental" {{ old('business_type') == 'Room Rental' ? 'selected' : '' }}>Room Rental</option>
                 <option value="Other" {{ old('business_type') == 'Other' ? 'selected' : '' }}>Other</option>
             </select>
+            
+            <!-- Success Checkmark -->
+            <p x-show="touched.businessType && !errors.businessType && businessType !== ''" class="flex items-center gap-1 mt-1 text-sm text-green-600">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                Valid selection
+            </p>
+            
+            <!-- Error Message -->
+            <p x-show="errors.businessType" x-text="errors.businessType" class="flex items-center gap-1 mt-1 text-sm text-red-600">
+            </p>
+            
             <x-input-error :messages="$errors->get('business_type')" class="mt-2" />
         </div>
 

@@ -1704,10 +1704,10 @@ Sørg for at alle forms har inline validering og tydelige feilmeldinger.
 
 **Akseptansekriterier:**
 - [x] Alle påkrevde felter markert med *
-- [ ] Inline validering ved blur
-- [ ] Feilmeldinger under felt (ikke modal)
-- [ ] Grønn border + checkmark hvis OK
-- [ ] Rød border + feilmelding hvis feil
+- [x] Inline validering ved blur
+- [x] Feilmeldinger under felt (ikke modal)
+- [x] Grønn border + checkmark hvis OK
+- [x] Rød border + feilmelding hvis feil
 - [ ] Submit knapp disabled hvis form invalid. LAG EN KORT, MEN FORKLARENDE AVSNITT AV HELE TASK 15 I EN TASK_15_SUMMARY.md FIL SLIK DET ER GJORT TIDLIGERE
 
 ---
