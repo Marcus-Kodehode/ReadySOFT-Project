@@ -53,52 +53,35 @@ Schedulo is a comprehensive SaaS solution designed for businesses that need to m
 
 ## 🔧 Installation
 
-### 1. Clone the repository
+For detailed installation instructions, see the **[Complete Installation Guide](INSTALLATION.md)**.
+
+### Quick Start
+
 ```bash
+# Clone repository
 git clone https://github.com/yourusername/schedulo.git
 cd schedulo
-```
 
-### 2. Install dependencies
-```bash
+# Install dependencies
 composer install
 npm install
-```
 
-### 3. Environment setup
-```bash
+# Setup environment
 cp .env.example .env
 php artisan key:generate
-```
 
-### 4. Configure database
-Edit `.env` file with your database credentials:
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=schedulo
-DB_USERNAME=root
-DB_PASSWORD=your_password
-```
-
-### 5. Run migrations and seeders
-```bash
+# Configure database in .env, then:
 php artisan migrate
 php artisan db:seed --class=PlanSeeder
-```
 
-### 6. Build frontend assets
-```bash
+# Build assets and start server
 npm run build
-```
-
-### 7. Start development server
-```bash
 php artisan serve
 ```
 
 Visit `http://127.0.0.1:8000` in your browser.
+
+**Need help?** Check the [Installation Guide](INSTALLATION.md) for troubleshooting and detailed steps.
 
 ---
 
@@ -158,7 +141,7 @@ php artisan test
 
 ## 🔐 Security
 
-This is a private project. Security vulnerabilities should be reported directly to the project maintainer at [marcusboerresen@gmail.com].
+This is a private project. Security vulnerabilities should be reported directly to the project maintainer at marcusboerresen@gmail.com.
 
 **Security measures implemented:**
 - CSRF protection on all forms
@@ -167,15 +150,19 @@ This is a private project. Security vulnerabilities should be reported directly 
 - XSS protection in Blade templates
 - Environment-based configuration
 
+**Please do not disclose security vulnerabilities publicly.**
+
 ---
 
 ## 📝 License
 
 **Proprietary License**
 
-Copyright (c) 2026 ReadySOFT. All rights reserved.
+Copyright (c) 2026 Marcus Boersnes. All rights reserved.
 
 This software is proprietary and confidential. Unauthorized copying, distribution, modification, or use of this software, via any medium, is strictly prohibited without explicit written permission from the copyright holder.
+
+See [LICENSE](LICENSE) for full terms.
 
 ---
 
@@ -183,13 +170,12 @@ This software is proprietary and confidential. Unauthorized copying, distributio
 
 This is a private project under strict control. Contributions are currently limited to authorized collaborators only.
 
-If you're interested in contributing:
-1. Contact the project maintainer for authorization
-2. Fork the repository (if granted access)
-3. Create a feature branch (`git checkout -b feature/amazing-feature`)
-4. Commit your changes (`git commit -m 'Add amazing feature'`)
-5. Push to the branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request for review
+**Interested in contributing?** Read the [Contributing Guidelines](CONTRIBUTING.md) for:
+- How to get authorization
+- Development workflow
+- Coding standards
+- Pull request process
+- Testing requirements
 
 All contributions must be reviewed and approved before merging.
 
@@ -219,9 +205,14 @@ php artisan view:clear
 
 ---
 
-## 📞 Support
+## 📞 Support & Documentation
 
-For support, contact the development team or open an issue in the repository (authorized users only).
+- **Installation Guide**: [INSTALLATION.md](INSTALLATION.md)
+- **Contributing Guide**: [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
+- **Email Support**: marcusboerresen@gmail.com
+
+For issues, contact the maintainer directly (authorized users only).
 
 ---
 
