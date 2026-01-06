@@ -158,7 +158,7 @@ php artisan test
 
 ## 🔐 Security
 
-This is a private project. Security vulnerabilities should be reported directly to the project maintainer at [your-email@example.com].
+This is a private project. Security vulnerabilities should be reported directly to the project maintainer at [marcusboerresen@gmail.com].
 
 **Security measures implemented:**
 - CSRF protection on all forms
@@ -238,4 +238,4 @@ For support, contact the development team or open an issue in the repository (au
 
 ---
 
-**Built with ❤️ by ReadySOFT**
+**Built with ❤️ by Marcus**
