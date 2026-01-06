@@ -121,7 +121,7 @@
                 </a>
             @endif
 
-            <x-primary-button class="ms-3" :disabled="!isFormValid()">
+            <x-primary-button class="ms-3" x-bind:disabled="!isFormValid()">
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
