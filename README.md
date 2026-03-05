@@ -158,7 +158,7 @@ This is a private project. Security vulnerabilities should be reported directly 
 
 **Proprietary License**
 
-Copyright (c) 2026 Marcus Boersnes. All rights reserved.
+Copyright (c) 2026 Marcus Børresen. All rights reserved.
 
 This software is proprietary and confidential. Unauthorized copying, distribution, modification, or use of this software, via any medium, is strictly prohibited without explicit written permission from the copyright holder.
 
